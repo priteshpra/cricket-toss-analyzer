@@ -1,0 +1,2610 @@
+{
+  "tossOverrides": {
+    "trinbago knight riders_antigua and barbuda falcons_2026-09-03": {
+      "tossWinner": "Trinbago Knight Riders",
+      "tossDecision": "bowl",
+      "matchWinner": "Trinbago Knight Riders",
+      "forcePending": false
+    },
+    "antigua and barbuda falcons_trinbago knight riders_2026-09-03": {
+      "tossWinner": "Trinbago Knight Riders",
+      "tossDecision": "bowl",
+      "matchWinner": "Trinbago Knight Riders",
+      "forcePending": false
+    },
+    "kuwait_united arab emirates_2026-09-03": {
+      "tossWinner": "United Arab Emirates",
+      "tossDecision": "bowl",
+      "matchWinner": "United Arab Emirates",
+      "forcePending": false
+    },
+    "united arab emirates_kuwait_2026-09-03": {
+      "tossWinner": "United Arab Emirates",
+      "tossDecision": "bowl",
+      "matchWinner": "United Arab Emirates",
+      "forcePending": false
+    },
+    "trivandrum royals_calicut globstars_2026-09-03": {
+      "tossWinner": "Trivandrum Royals",
+      "tossDecision": "bowl",
+      "matchWinner": "Trivandrum Royals",
+      "forcePending": false
+    },
+    "calicut globstars_trivandrum royals_2026-09-03": {
+      "tossWinner": "Trivandrum Royals",
+      "tossDecision": "bowl",
+      "matchWinner": "Trivandrum Royals",
+      "forcePending": false
+    },
+    "bathinda royals_jalandhar warriors_2026-09-03": {
+      "tossWinner": "Bathinda Royals",
+      "tossDecision": "bowl",
+      "matchWinner": "Bathinda Royals",
+      "forcePending": false
+    },
+    "jalandhar warriors_bathinda royals_2026-09-03": {
+      "tossWinner": "Bathinda Royals",
+      "tossDecision": "bowl",
+      "matchWinner": "Bathinda Royals",
+      "forcePending": false
+    },
+    "malaysia_nepal_2026-09-03": {
+      "tossWinner": "Malaysia",
+      "tossDecision": "bowl",
+      "matchWinner": "Malaysia",
+      "forcePending": false
+    },
+    "nepal_malaysia_2026-09-03": {
+      "tossWinner": "Malaysia",
+      "tossDecision": "bowl",
+      "matchWinner": "Malaysia",
+      "forcePending": false
+    },
+    "mussoorie thunder_selaqui strikers_2026-09-03": {
+      "tossWinner": "Selaqui Strikers",
+      "tossDecision": "bowl",
+      "matchWinner": "Selaqui Strikers",
+      "forcePending": false
+    },
+    "selaqui strikers_mussoorie thunder_2026-09-03": {
+      "tossWinner": "Selaqui Strikers",
+      "tossDecision": "bowl",
+      "matchWinner": "Selaqui Strikers",
+      "forcePending": false
+    },
+    "amsterdam flames_glasgow cosmic_2026-09-03": {
+      "tossWinner": "Glasgow Cosmic",
+      "tossDecision": "bowl",
+      "matchWinner": "Glasgow Cosmic",
+      "forcePending": false
+    },
+    "glasgow cosmic_amsterdam flames_2026-09-03": {
+      "tossWinner": "Glasgow Cosmic",
+      "tossDecision": "bowl",
+      "matchWinner": "Glasgow Cosmic",
+      "forcePending": false
+    },
+    "england women_ireland women_2026-09-03": {
+      "tossWinner": "England Women",
+      "tossDecision": "bowl",
+      "matchWinner": "England Women",
+      "forcePending": false
+    },
+    "ireland women_england women_2026-09-03": {
+      "tossWinner": "England Women",
+      "tossDecision": "bowl",
+      "matchWinner": "England Women",
+      "forcePending": false
+    },
+    "namibia_zimbabwe_2026-09-03": {
+      "tossWinner": "Zimbabwe",
+      "tossDecision": "bowl",
+      "matchWinner": "Zimbabwe",
+      "forcePending": false
+    },
+    "zimbabwe_namibia_2026-09-03": {
+      "tossWinner": "Zimbabwe",
+      "tossDecision": "bowl",
+      "matchWinner": "Zimbabwe",
+      "forcePending": false
+    },
+    "meerut mavericks_lucknow falcons_2026-09-03": {
+      "tossWinner": "Meerut Mavericks",
+      "tossDecision": "bowl",
+      "matchWinner": "Meerut Mavericks",
+      "forcePending": false
+    },
+    "lucknow falcons_meerut mavericks_2026-09-03": {
+      "tossWinner": "Meerut Mavericks",
+      "tossDecision": "bowl",
+      "matchWinner": "Meerut Mavericks",
+      "forcePending": false
+    },
+    "thrissur titans_alleppey ripples_2026-09-03": {
+      "tossWinner": "Thrissur Titans",
+      "tossDecision": "bowl",
+      "matchWinner": "Thrissur Titans",
+      "forcePending": false
+    },
+    "alleppey ripples_thrissur titans_2026-09-03": {
+      "tossWinner": "Thrissur Titans",
+      "tossDecision": "bowl",
+      "matchWinner": "Thrissur Titans",
+      "forcePending": false
+    },
+    "fazilka falcons_mohali kings_2026-09-03": {
+      "tossWinner": "Fazilka Falcons",
+      "tossDecision": "bowl",
+      "matchWinner": "Fazilka Falcons",
+      "forcePending": false
+    },
+    "mohali kings_fazilka falcons_2026-09-03": {
+      "tossWinner": "Fazilka Falcons",
+      "tossDecision": "bowl",
+      "matchWinner": "Fazilka Falcons",
+      "forcePending": false
+    },
+    "india women_hong kong, china women_2026-09-03": {
+      "tossWinner": "Hong Kong, China Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Hong Kong, China Women",
+      "forcePending": false
+    },
+    "hong kong, china women_india women_2026-09-03": {
+      "tossWinner": "Hong Kong, China Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Hong Kong, China Women",
+      "forcePending": false
+    },
+    "kashi rudras_noida super kings_2026-09-03": {
+      "tossWinner": "Kashi Rudras",
+      "tossDecision": "bowl",
+      "matchWinner": "Kashi Rudras",
+      "forcePending": false
+    },
+    "noida super kings_kashi rudras_2026-09-03": {
+      "tossWinner": "Kashi Rudras",
+      "tossDecision": "bowl",
+      "matchWinner": "Kashi Rudras",
+      "forcePending": false
+    },
+    "stack cc b_challenging stars_2026-09-03": {
+      "tossWinner": "Stack CC B",
+      "tossDecision": "bowl",
+      "matchWinner": "Stack CC B",
+      "forcePending": false
+    },
+    "challenging stars_stack cc b_2026-09-03": {
+      "tossWinner": "Stack CC B",
+      "tossDecision": "bowl",
+      "matchWinner": "Stack CC B",
+      "forcePending": false
+    },
+    "st kitts and nevis patriots_st lucia kings_2026-09-04": {
+      "tossWinner": "St Lucia Kings",
+      "tossDecision": "bowl",
+      "matchWinner": "St Lucia Kings",
+      "forcePending": false
+    },
+    "st lucia kings_st kitts and nevis patriots_2026-09-04": {
+      "tossWinner": "St Lucia Kings",
+      "tossDecision": "bowl",
+      "matchWinner": "St Lucia Kings",
+      "forcePending": false
+    },
+    "lexus_tally rangers_2026-09-04": {
+      "tossWinner": "Lexus",
+      "tossDecision": "bowl",
+      "matchWinner": "Lexus",
+      "forcePending": false
+    },
+    "tally rangers_lexus_2026-09-04": {
+      "tossWinner": "Lexus",
+      "tossDecision": "bowl",
+      "matchWinner": "Lexus",
+      "forcePending": false
+    },
+    "qatar_singapore_2026-09-04": {
+      "tossWinner": "Singapore",
+      "tossDecision": "bowl",
+      "matchWinner": "Singapore",
+      "forcePending": false
+    },
+    "singapore_qatar_2026-09-04": {
+      "tossWinner": "Singapore",
+      "tossDecision": "bowl",
+      "matchWinner": "Singapore",
+      "forcePending": false
+    },
+    "saudi arabia_bahrain_2026-09-04": {
+      "tossWinner": "Saudi Arabia",
+      "tossDecision": "bowl",
+      "matchWinner": "Saudi Arabia",
+      "forcePending": false
+    },
+    "bahrain_saudi arabia_2026-09-04": {
+      "tossWinner": "Saudi Arabia",
+      "tossDecision": "bowl",
+      "matchWinner": "Saudi Arabia",
+      "forcePending": false
+    },
+    "belgium women_portugal women_2026-09-04": {
+      "tossWinner": "Belgium women",
+      "tossDecision": "bowl",
+      "matchWinner": "Belgium women",
+      "forcePending": false
+    },
+    "portugal women_belgium women_2026-09-04": {
+      "tossWinner": "Belgium women",
+      "tossDecision": "bowl",
+      "matchWinner": "Belgium women",
+      "forcePending": false
+    },
+    "bathinda royals_amritsar soormas_2026-09-04": {
+      "tossWinner": "Bathinda Royals",
+      "tossDecision": "bowl",
+      "matchWinner": "Bathinda Royals",
+      "forcePending": false
+    },
+    "amritsar soormas_bathinda royals_2026-09-04": {
+      "tossWinner": "Bathinda Royals",
+      "tossDecision": "bowl",
+      "matchWinner": "Bathinda Royals",
+      "forcePending": false
+    },
+    "serbia women_croatia women_2026-09-04": {
+      "tossWinner": "Serbia Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Serbia Women",
+      "forcePending": false
+    },
+    "croatia women_serbia women_2026-09-04": {
+      "tossWinner": "Serbia Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Serbia Women",
+      "forcePending": false
+    },
+    "herbertpur knightriders_selaqui strikers_2026-09-04": {
+      "tossWinner": "Selaqui Strikers",
+      "tossDecision": "bowl",
+      "matchWinner": "Selaqui Strikers",
+      "forcePending": false
+    },
+    "selaqui strikers_herbertpur knightriders_2026-09-04": {
+      "tossWinner": "Selaqui Strikers",
+      "tossDecision": "bowl",
+      "matchWinner": "Selaqui Strikers",
+      "forcePending": false
+    },
+    "trivandrum royals_thrissur titans_2026-09-04": {
+      "tossWinner": "Trivandrum Royals",
+      "tossDecision": "bowl",
+      "matchWinner": "Trivandrum Royals",
+      "forcePending": false
+    },
+    "thrissur titans_trivandrum royals_2026-09-04": {
+      "tossWinner": "Trivandrum Royals",
+      "tossDecision": "bowl",
+      "matchWinner": "Trivandrum Royals",
+      "forcePending": false
+    },
+    "namibia_south africa_2026-09-04": {
+      "tossWinner": "Namibia",
+      "tossDecision": "bowl",
+      "matchWinner": "Namibia",
+      "forcePending": false
+    },
+    "south africa_namibia_2026-09-04": {
+      "tossWinner": "Namibia",
+      "tossDecision": "bowl",
+      "matchWinner": "Namibia",
+      "forcePending": false
+    },
+    "mussoorie thunder_doiwala kings_2026-09-04": {
+      "tossWinner": "Doiwala Kings",
+      "tossDecision": "bowl",
+      "matchWinner": "Doiwala Kings",
+      "forcePending": false
+    },
+    "doiwala kings_mussoorie thunder_2026-09-04": {
+      "tossWinner": "Doiwala Kings",
+      "tossDecision": "bowl",
+      "matchWinner": "Doiwala Kings",
+      "forcePending": false
+    },
+    "alleppey ripples_calicut globstars_2026-09-04": {
+      "tossWinner": "Alleppey Ripples",
+      "tossDecision": "bowl",
+      "matchWinner": "Alleppey Ripples",
+      "forcePending": false
+    },
+    "calicut globstars_alleppey ripples_2026-09-04": {
+      "tossWinner": "Alleppey Ripples",
+      "tossDecision": "bowl",
+      "matchWinner": "Alleppey Ripples",
+      "forcePending": false
+    },
+    "ludhiana lions_jalandhar warriors_2026-09-04": {
+      "tossWinner": "Jalandhar Warriors",
+      "tossDecision": "bowl",
+      "matchWinner": "Jalandhar Warriors",
+      "forcePending": false
+    },
+    "jalandhar warriors_ludhiana lions_2026-09-04": {
+      "tossWinner": "Jalandhar Warriors",
+      "tossDecision": "bowl",
+      "matchWinner": "Jalandhar Warriors",
+      "forcePending": false
+    },
+    "glasgow cosmic_belfast wolves_2026-09-04": {
+      "tossWinner": "Glasgow Cosmic",
+      "tossDecision": "bowl",
+      "matchWinner": "Glasgow Cosmic",
+      "forcePending": false
+    },
+    "belfast wolves_glasgow cosmic_2026-09-04": {
+      "tossWinner": "Glasgow Cosmic",
+      "tossDecision": "bowl",
+      "matchWinner": "Glasgow Cosmic",
+      "forcePending": false
+    },
+    "selaqui strikers_rishikesh dragons_2026-09-04": {
+      "tossWinner": "Rishikesh Dragons",
+      "tossDecision": "bowl",
+      "matchWinner": "Rishikesh Dragons",
+      "forcePending": false
+    },
+    "rishikesh dragons_selaqui strikers_2026-09-04": {
+      "tossWinner": "Rishikesh Dragons",
+      "tossDecision": "bowl",
+      "matchWinner": "Rishikesh Dragons",
+      "forcePending": false
+    },
+    "noida super kings_meerut mavericks_2026-09-04": {
+      "tossWinner": "Meerut Mavericks",
+      "tossDecision": "bowl",
+      "matchWinner": "Meerut Mavericks",
+      "forcePending": false
+    },
+    "meerut mavericks_noida super kings_2026-09-04": {
+      "tossWinner": "Meerut Mavericks",
+      "tossDecision": "bowl",
+      "matchWinner": "Meerut Mavericks",
+      "forcePending": false
+    },
+    "united arab emirates women_indonesia women_2026-09-04": {
+      "tossWinner": "United Arab Emirates Women",
+      "tossDecision": "bowl",
+      "matchWinner": "United Arab Emirates Women",
+      "forcePending": false
+    },
+    "indonesia women_united arab emirates women_2026-09-04": {
+      "tossWinner": "United Arab Emirates Women",
+      "tossDecision": "bowl",
+      "matchWinner": "United Arab Emirates Women",
+      "forcePending": false
+    },
+    "royal lions cc_salwa boys_2026-09-04": {
+      "tossWinner": "Salwa Boys",
+      "tossDecision": "bowl",
+      "matchWinner": "Salwa Boys",
+      "forcePending": false
+    },
+    "salwa boys_royal lions cc_2026-09-04": {
+      "tossWinner": "Salwa Boys",
+      "tossDecision": "bowl",
+      "matchWinner": "Salwa Boys",
+      "forcePending": false
+    },
+    "guyana amazon warriors_jamaica kingsmen_2026-09-05": {
+      "tossWinner": "Guyana Amazon Warriors",
+      "tossDecision": "bowl",
+      "matchWinner": "Guyana Amazon Warriors",
+      "forcePending": false
+    },
+    "jamaica kingsmen_guyana amazon warriors_2026-09-05": {
+      "tossWinner": "Guyana Amazon Warriors",
+      "tossDecision": "bowl",
+      "matchWinner": "Guyana Amazon Warriors",
+      "forcePending": false
+    },
+    "kuwait_oman_2026-09-05": {
+      "tossWinner": "Oman",
+      "tossDecision": "bowl",
+      "matchWinner": "Oman",
+      "forcePending": false
+    },
+    "oman_kuwait_2026-09-05": {
+      "tossWinner": "Oman",
+      "tossDecision": "bowl",
+      "matchWinner": "Oman",
+      "forcePending": false
+    },
+    "malaysia_hong kong, china_2026-09-05": {
+      "tossWinner": "Hong Kong, China",
+      "tossDecision": "bowl",
+      "matchWinner": "Hong Kong, China",
+      "forcePending": false
+    },
+    "hong kong, china_malaysia_2026-09-05": {
+      "tossWinner": "Hong Kong, China",
+      "tossDecision": "bowl",
+      "matchWinner": "Hong Kong, China",
+      "forcePending": false
+    },
+    "belgium women_portugal women_2026-09-05": {
+      "tossWinner": "Belgium Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Belgium Women",
+      "forcePending": false
+    },
+    "portugal women_belgium women_2026-09-05": {
+      "tossWinner": "Belgium Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Belgium Women",
+      "forcePending": false
+    },
+    "fazilka falcons_bathinda royals_2026-09-05": {
+      "tossWinner": "Bathinda Royals",
+      "tossDecision": "bowl",
+      "matchWinner": "Bathinda Royals",
+      "forcePending": false
+    },
+    "bathinda royals_fazilka falcons_2026-09-05": {
+      "tossWinner": "Bathinda Royals",
+      "tossDecision": "bowl",
+      "matchWinner": "Bathinda Royals",
+      "forcePending": false
+    },
+    "bulgaria women_croatia women_2026-09-05": {
+      "tossWinner": "Bulgaria Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Bulgaria Women",
+      "forcePending": false
+    },
+    "croatia women_bulgaria women_2026-09-05": {
+      "tossWinner": "Bulgaria Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Bulgaria Women",
+      "forcePending": false
+    },
+    "rotterdam dockers_edinburgh castle rockers_2026-09-05": {
+      "tossWinner": "Rotterdam Dockers",
+      "tossDecision": "bowl",
+      "matchWinner": "Rotterdam Dockers",
+      "forcePending": false
+    },
+    "edinburgh castle rockers_rotterdam dockers_2026-09-05": {
+      "tossWinner": "Rotterdam Dockers",
+      "tossDecision": "bowl",
+      "matchWinner": "Rotterdam Dockers",
+      "forcePending": false
+    },
+    "serbia woman_bulgaria women_2026-09-05": {
+      "tossWinner": "Bulgaria Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Bulgaria Women",
+      "forcePending": false
+    },
+    "bulgaria women_serbia woman_2026-09-05": {
+      "tossWinner": "Bulgaria Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Bulgaria Women",
+      "forcePending": false
+    },
+    "dublin guardians_amsterdam flames_2026-09-05": {
+      "tossWinner": "Dublin Guardians",
+      "tossDecision": "bowl",
+      "matchWinner": "Dublin Guardians",
+      "forcePending": false
+    },
+    "amsterdam flames_dublin guardians_2026-09-05": {
+      "tossWinner": "Dublin Guardians",
+      "tossDecision": "bowl",
+      "matchWinner": "Dublin Guardians",
+      "forcePending": false
+    },
+    "calicut globstars_thrissur titans_2026-09-05": {
+      "tossWinner": "Calicut Globstars",
+      "tossDecision": "bowl",
+      "matchWinner": "Calicut Globstars",
+      "forcePending": false
+    },
+    "thrissur titans_calicut globstars_2026-09-05": {
+      "tossWinner": "Calicut Globstars",
+      "tossDecision": "bowl",
+      "matchWinner": "Calicut Globstars",
+      "forcePending": false
+    },
+    "india women_pakistan women_2026-09-05": {
+      "tossWinner": "Pakistan Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Pakistan Women",
+      "forcePending": false
+    },
+    "pakistan women_india women_2026-09-05": {
+      "tossWinner": "Pakistan Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Pakistan Women",
+      "forcePending": false
+    },
+    "mohali kings_jalandhar warriors_2026-09-05": {
+      "tossWinner": "Mohali Kings",
+      "tossDecision": "bowl",
+      "matchWinner": "Mohali Kings",
+      "forcePending": false
+    },
+    "jalandhar warriors_mohali kings_2026-09-05": {
+      "tossWinner": "Mohali Kings",
+      "tossDecision": "bowl",
+      "matchWinner": "Mohali Kings",
+      "forcePending": false
+    },
+    "super xi kuwait_royal lions club_2026-09-05": {
+      "tossWinner": null,
+      "tossDecision": null,
+      "matchWinner": null,
+      "status": "UPCOMING",
+      "forcePending": true
+    },
+    "royal lions club_super xi kuwait_2026-09-05": {
+      "tossWinner": null,
+      "tossDecision": null,
+      "matchWinner": null,
+      "status": "UPCOMING",
+      "forcePending": true
+    },
+    "barbados tridents women_trinbago knight riders women_2026-09-06": {
+      "tossWinner": "Barbados Tridents Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Barbados Tridents Women",
+      "forcePending": false
+    },
+    "trinbago knight riders women_barbados tridents women_2026-09-06": {
+      "tossWinner": "Barbados Tridents Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Barbados Tridents Women",
+      "forcePending": false
+    },
+    "barbados tridents_trinbago knight riders_2026-09-06": {
+      "tossWinner": "Barbados Tridents",
+      "tossDecision": "bowl",
+      "matchWinner": "Barbados Tridents",
+      "forcePending": false
+    },
+    "trinbago knight riders_barbados tridents_2026-09-06": {
+      "tossWinner": "Barbados Tridents",
+      "tossDecision": "bowl",
+      "matchWinner": "Barbados Tridents",
+      "forcePending": false
+    },
+    "nepal_saudi arabia_2026-09-06": {
+      "tossWinner": "Saudi Arabia",
+      "tossDecision": "bowl",
+      "matchWinner": "Saudi Arabia",
+      "forcePending": false
+    },
+    "saudi arabia_nepal_2026-09-06": {
+      "tossWinner": "Saudi Arabia",
+      "tossDecision": "bowl",
+      "matchWinner": "Saudi Arabia",
+      "forcePending": false
+    },
+    "singapore_united arab emirates_2026-09-06": {
+      "tossWinner": "Singapore",
+      "tossDecision": "bowl",
+      "matchWinner": "Singapore",
+      "forcePending": false
+    },
+    "united arab emirates_singapore_2026-09-06": {
+      "tossWinner": "Singapore",
+      "tossDecision": "bowl",
+      "matchWinner": "Singapore",
+      "forcePending": false
+    },
+    "bathinda royals_jalandhar warriors_2026-09-06": {
+      "tossWinner": "Jalandhar Warriors",
+      "tossDecision": "bowl",
+      "matchWinner": "Jalandhar Warriors",
+      "forcePending": false
+    },
+    "jalandhar warriors_bathinda royals_2026-09-06": {
+      "tossWinner": "Jalandhar Warriors",
+      "tossDecision": "bowl",
+      "matchWinner": "Jalandhar Warriors",
+      "forcePending": false
+    },
+    "glasgow cosmic_edinburgh castle rockers_2026-09-06": {
+      "tossWinner": "Edinburgh Castle Rockers",
+      "tossDecision": "bowl",
+      "matchWinner": "Edinburgh Castle Rockers",
+      "forcePending": false
+    },
+    "edinburgh castle rockers_glasgow cosmic_2026-09-06": {
+      "tossWinner": "Edinburgh Castle Rockers",
+      "tossDecision": "bowl",
+      "matchWinner": "Edinburgh Castle Rockers",
+      "forcePending": false
+    },
+    "england women_ireland women_2026-09-06": {
+      "tossWinner": "Ireland Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Ireland Women",
+      "forcePending": false
+    },
+    "ireland women_england women_2026-09-06": {
+      "tossWinner": "Ireland Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Ireland Women",
+      "forcePending": false
+    },
+    "south africa a_bangladesh a_2026-09-06": {
+      "tossWinner": "South Africa A",
+      "tossDecision": "bowl",
+      "matchWinner": "South Africa A",
+      "forcePending": false
+    },
+    "bangladesh a_south africa a_2026-09-06": {
+      "tossWinner": "South Africa A",
+      "tossDecision": "bowl",
+      "matchWinner": "South Africa A",
+      "forcePending": false
+    },
+    "south africa_zimbabwe_2026-09-06": {
+      "tossWinner": "South Africa",
+      "tossDecision": "bowl",
+      "matchWinner": "South Africa",
+      "forcePending": false
+    },
+    "zimbabwe_south africa_2026-09-06": {
+      "tossWinner": "South Africa",
+      "tossDecision": "bowl",
+      "matchWinner": "South Africa",
+      "forcePending": false
+    },
+    "amsterdam flames_rotterdam dockers_2026-09-06": {
+      "tossWinner": "Amsterdam Flames",
+      "tossDecision": "bowl",
+      "matchWinner": "Amsterdam Flames",
+      "forcePending": false
+    },
+    "rotterdam dockers_amsterdam flames_2026-09-06": {
+      "tossWinner": "Amsterdam Flames",
+      "tossDecision": "bowl",
+      "matchWinner": "Amsterdam Flames",
+      "forcePending": false
+    },
+    "ludhiana lions_fazilka falcons_2026-09-06": {
+      "tossWinner": "Ludhiana Lions",
+      "tossDecision": "bowl",
+      "matchWinner": "Ludhiana Lions",
+      "forcePending": false
+    },
+    "fazilka falcons_ludhiana lions_2026-09-06": {
+      "tossWinner": "Ludhiana Lions",
+      "tossDecision": "bowl",
+      "matchWinner": "Ludhiana Lions",
+      "forcePending": false
+    },
+    "jamaica empress women_guyana amazon warriors women_2026-09-06": {
+      "tossWinner": "Jamaica Empress Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Jamaica Empress Women",
+      "forcePending": false
+    },
+    "guyana amazon warriors women_jamaica empress women_2026-09-06": {
+      "tossWinner": "Jamaica Empress Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Jamaica Empress Women",
+      "forcePending": false
+    },
+    "lucknow falcons_meerut mavericks_2026-09-06": {
+      "tossWinner": "Meerut Mavericks",
+      "tossDecision": "bowl",
+      "matchWinner": "Meerut Mavericks",
+      "forcePending": false
+    },
+    "meerut mavericks_lucknow falcons_2026-09-06": {
+      "tossWinner": "Meerut Mavericks",
+      "tossDecision": "bowl",
+      "matchWinner": "Meerut Mavericks",
+      "forcePending": false
+    },
+    "sri lanka women_bangladesh women_2026-09-06": {
+      "tossWinner": "Bangladesh Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Bangladesh Women",
+      "forcePending": false
+    },
+    "bangladesh women_sri lanka women_2026-09-06": {
+      "tossWinner": "Bangladesh Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Bangladesh Women",
+      "forcePending": false
+    },
+    "antigua and barbuda falcons_saint lucia kings_2026-09-07": {
+      "tossWinner": "Antigua and Barbuda Falcons",
+      "tossDecision": "bowl",
+      "matchWinner": "Antigua and Barbuda Falcons",
+      "forcePending": false
+    },
+    "saint lucia kings_antigua and barbuda falcons_2026-09-07": {
+      "tossWinner": "Antigua and Barbuda Falcons",
+      "tossDecision": "bowl",
+      "matchWinner": "Antigua and Barbuda Falcons",
+      "forcePending": false
+    },
+    "antigua and barbuda falcons_trinbago knight riders_2026-09-07": {
+      "tossWinner": "Antigua and Barbuda Falcons",
+      "tossDecision": "bowl",
+      "matchWinner": "Antigua and Barbuda Falcons",
+      "forcePending": false
+    },
+    "trinbago knight riders_antigua and barbuda falcons_2026-09-07": {
+      "tossWinner": "Antigua and Barbuda Falcons",
+      "tossDecision": "bowl",
+      "matchWinner": "Antigua and Barbuda Falcons",
+      "forcePending": false
+    },
+    "mohali kings_ludhiana lions_2026-09-07": {
+      "tossWinner": "Mohali Kings",
+      "tossDecision": "bowl",
+      "matchWinner": "Mohali Kings",
+      "forcePending": false
+    },
+    "ludhiana lions_mohali kings_2026-09-07": {
+      "tossWinner": "Mohali Kings",
+      "tossDecision": "bowl",
+      "matchWinner": "Mohali Kings",
+      "forcePending": false
+    },
+    "hong kong women_pakistan women_2026-09-07": {
+      "tossWinner": "Pakistan Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Pakistan Women",
+      "forcePending": false
+    },
+    "pakistan women_hong kong women_2026-09-07": {
+      "tossWinner": "Pakistan Women",
+      "tossDecision": "bowl",
+      "matchWinner": "Pakistan Women",
+      "forcePending": false
+    },
+    "selaqui strikers_vikasnagar dhamaka_2026-09-07": {
+      "tossWinner": "Vikasnagar Dhamaka",
+      "tossDecision": "bowl",
+      "matchWinner": "Vikasnagar Dhamaka",
+      "forcePending": false
+    },
+    "vikasnagar dhamaka_selaqui strikers_2026-09-07": {
+      "tossWinner": "Vikasnagar Dhamaka",
+      "tossDecision": "bowl",
+      "matchWinner": "Vikasnagar Dhamaka",
+      "forcePending": false
+    },
+    "mohali kings_fazilka falcons_2026-09-07": {
+      "tossWinner": "Mohali Kings",
+      "tossDecision": "bowl",
+      "matchWinner": "Mohali Kings",
+      "forcePending": false
+    },
+    "fazilka falcons_mohali kings_2026-09-07": {
+      "tossWinner": "Mohali Kings",
+      "tossDecision": "bowl",
+      "matchWinner": "Mohali Kings",
+      "forcePending": false
+    },
+    "hong kong, china_nepal_2026-09-08": {
+      "tossWinner": "Hong Kong, China",
+      "tossDecision": "bowl",
+      "matchWinner": "Hong Kong, China",
+      "forcePending": false
+    },
+    "nepal_hong kong, china_2026-09-08": {
+      "tossWinner": "Hong Kong, China",
+      "tossDecision": "bowl",
+      "matchWinner": "Hong Kong, China",
+      "forcePending": false
+    },
+    "oman_united arab emirates_2026-09-08": {
+      "tossWinner": "Oman",
+      "tossDecision": "bowl",
+      "matchWinner": "Oman",
+      "forcePending": false
+    },
+    "united arab emirates_oman_2026-09-08": {
+      "tossWinner": "Oman",
+      "tossDecision": "bowl",
+      "matchWinner": "Oman",
+      "forcePending": false
+    },
+    "amritsar soormas_mohali kings_2026-09-08": {
+      "tossWinner": "Mohali Kings",
+      "tossDecision": "bowl",
+      "matchWinner": "Mohali Kings",
+      "forcePending": false
+    },
+    "mohali kings_amritsar soormas_2026-09-08": {
+      "tossWinner": "Mohali Kings",
+      "tossDecision": "bowl",
+      "matchWinner": "Mohali Kings",
+      "forcePending": false
+    },
+    "rwanda_botswana_2026-09-08": {
+      "tossWinner": "Botswana",
+      "tossDecision": "bowl",
+      "matchWinner": "Botswana",
+      "forcePending": false
+    },
+    "botswana_rwanda_2026-09-08": {
+      "tossWinner": "Botswana",
+      "tossDecision": "bowl",
+      "matchWinner": "Botswana",
+      "forcePending": false
+    },
+    "kenya_sierra leone_2026-09-08": {
+      "tossWinner": "Kenya",
+      "tossDecision": "bowl",
+      "matchWinner": "Kenya",
+      "forcePending": false
+    },
+    "sierra leone_kenya_2026-09-08": {
+      "tossWinner": "Kenya",
+      "tossDecision": "bowl",
+      "matchWinner": "Kenya",
+      "forcePending": false
+    },
+    "bangladesh women_united arab emirates women_2026-09-08": {
+      "tossWinner": "United Arab Emirates Women",
+      "tossDecision": "bowl",
+      "matchWinner": "United Arab Emirates Women",
+      "forcePending": false
+    },
+    "united arab emirates women_bangladesh women_2026-09-08": {
+      "tossWinner": "United Arab Emirates Women",
+      "tossDecision": "bowl",
+      "matchWinner": "United Arab Emirates Women",
+      "forcePending": false
+    },
+    "ludhiana lions_jalandhar warriors_2026-09-08": {
+      "tossWinner": "Ludhiana Lions",
+      "tossDecision": "bowl",
+      "matchWinner": "Ludhiana Lions",
+      "forcePending": false
+    },
+    "jalandhar warriors_ludhiana lions_2026-09-08": {
+      "tossWinner": "Ludhiana Lions",
+      "tossDecision": "bowl",
+      "matchWinner": "Ludhiana Lions",
+      "forcePending": false
+    },
+    "guyana amazon warriors_antigua and barbuda falcons_2026-09-09": {
+      "tossWinner": "Guyana Amazon Warriors",
+      "tossDecision": "bowl",
+      "matchWinner": "Guyana Amazon Warriors",
+      "forcePending": false
+    },
+    "antigua and barbuda falcons_guyana amazon warriors_2026-09-09": {
+      "tossWinner": "Guyana Amazon Warriors",
+      "tossDecision": "bowl",
+      "matchWinner": "Guyana Amazon Warriors",
+      "forcePending": false
+    },
+    "ludhiana lions_fazilka falcons_2026-09-09": {
+      "tossWinner": "Fazilka Falcons",
+      "tossDecision": "bowl",
+      "matchWinner": "Fazilka Falcons",
+      "forcePending": false
+    },
+    "fazilka falcons_ludhiana lions_2026-09-09": {
+      "tossWinner": "Fazilka Falcons",
+      "tossDecision": "bowl",
+      "matchWinner": "Fazilka Falcons",
+      "forcePending": false
+    },
+    "namibia_south africa_2026-09-09": {
+      "tossWinner": "Namibia",
+      "tossDecision": "bowl",
+      "matchWinner": "Namibia",
+      "forcePending": false
+    },
+    "south africa_namibia_2026-09-09": {
+      "tossWinner": "Namibia",
+      "tossDecision": "bowl",
+      "matchWinner": "Namibia",
+      "forcePending": false
+    },
+    "england_pakistan_2026-09-09": {
+      "tossWinner": "England",
+      "tossDecision": "bowl",
+      "matchWinner": "England",
+      "forcePending": false
+    },
+    "pakistan_england_2026-09-09": {
+      "tossWinner": "England",
+      "tossDecision": "bowl",
+      "matchWinner": "England",
+      "forcePending": false
+    },
+    "dublin guardians_belfast wolves_2026-09-09": {
+      "tossWinner": "Dublin Guardians",
+      "tossDecision": "bowl",
+      "matchWinner": "Dublin Guardians",
+      "forcePending": false
+    },
+    "belfast wolves_dublin guardians_2026-09-09": {
+      "tossWinner": "Dublin Guardians",
+      "tossDecision": "bowl",
+      "matchWinner": "Dublin Guardians",
+      "forcePending": false
+    },
+    "mohali kings_bathinda royals_2026-09-09": {
+      "tossWinner": "Mohali Kings",
+      "tossDecision": "bowl",
+      "matchWinner": "Mohali Kings",
+      "forcePending": false
+    },
+    "bathinda royals_mohali kings_2026-09-09": {
+      "tossWinner": "Mohali Kings",
+      "tossDecision": "bowl",
+      "matchWinner": "Mohali Kings",
+      "forcePending": false
+    }
+  },
+  "deletedMatches": [
+    "rotterdam dockers_hornchurch cricket club_2026-09-03",
+    "hornchurch cricket club_rotterdam dockers_2026-09-03",
+    "dreux cricket club_pak i care badalona_2026-09-03",
+    "pak i care badalona_dreux cricket club_2026-09-03",
+    "haridwar spring elmas_nainital sg pipers_2026-09-03",
+    "nainital sg pipers_haridwar spring elmas_2026-09-03",
+    "dublin guardians_belfast wolves_2026-09-03",
+    "belfast wolves_dublin guardians_2026-09-03",
+    "doiwala kings_rishikesh dragons_2026-09-03",
+    "rishikesh dragons_doiwala kings_2026-09-03",
+    "brescia cricket club_clontarf cricket club_2026-09-03",
+    "clontarf cricket club_brescia cricket club_2026-09-03",
+    "olten cricket club_svanholm cricket club_2026-09-03",
+    "svanholm cricket club_olten cricket club_2026-09-03",
+    "pak i care badalona_brescia cricket club_2026-09-04",
+    "brescia cricket club_pak i care badalona_2026-09-04",
+    "intersoft titans_trident stallions_2026-09-04",
+    "trident stallions_intersoft titans_2026-09-04",
+    "jk super strikers_agri king's knights_2026-09-04",
+    "agri king's knights_jk super strikers_2026-09-04",
+    "edinburgh castle rockers_amsterdam flames_2026-09-04",
+    "amsterdam flames_edinburgh castle rockers_2026-09-04",
+    "forfarshire cricket club_hornchurch cricket club_2026-09-04",
+    "hornchurch cricket club_forfarshire cricket club_2026-09-04",
+    "glasgow cosmics_belfast wolves_2026-09-04",
+    "belfast wolves_glasgow cosmics_2026-09-04",
+    "dublin guardians_rotterdam dockers_2026-09-04",
+    "rotterdam dockers_dublin guardians_2026-09-04",
+    "pakistan women_sri lanka women_2026-09-04",
+    "sri lanka women_pakistan women_2026-09-04",
+    "australia women_new zealand women_2026-09-04",
+    "new zealand women_australia women_2026-09-04",
+    "south africa_zimbabwe_2026-09-04",
+    "zimbabwe_south africa_2026-09-04",
+    "dreux cricket club_olten cricket club_2026-09-04",
+    "olten cricket club_dreux cricket club_2026-09-04",
+    "mec study group_tally rangers_2026-09-04",
+    "tally rangers_mec study group_2026-09-04",
+    "clontarf cricket club_pak i care badalona_2026-09-05",
+    "pak i care badalona_clontarf cricket club_2026-09-05",
+    "hornchurch cricket club_brescia cricket club_2026-09-05",
+    "brescia cricket club_hornchurch cricket club_2026-09-05",
+    "dehradun warriors_mussoorie thunder_2026-09-05",
+    "mussoorie thunder_dehradun warriors_2026-09-05",
+    "bangladesh women_india women_2026-09-05",
+    "india women_bangladesh women_2026-09-05",
+    "england women_ireland women_2026-09-05",
+    "ireland women_england women_2026-09-05",
+    "haridwar spring elmas_pithoragarh hurricanes_2026-09-05",
+    "pithoragarh hurricanes_haridwar spring elmas_2026-09-05",
+    "ias invincibles_muscat thunderers_2026-09-05",
+    "muscat thunderers_ias invincibles_2026-09-05",
+    "svanholm cricket club_dreux cricket club_2026-09-05",
+    "dreux cricket club_svanholm cricket club_2026-09-05",
+    "kuwait swedish_amg tigers_2026-09-05",
+    "amg tigers_kuwait swedish_2026-09-05",
+    "meerut mavericks_lucknow falcons_2026-09-05",
+    "lucknow falcons_meerut mavericks_2026-09-05",
+    "czech republic women_portugal women_2026-09-05",
+    "portugal women_czech republic women_2026-09-05",
+    "doiwala kings_rishikesh dragons_2026-09-05",
+    "rishikesh dragons_doiwala kings_2026-09-05",
+    "czech republic women_belgium women_2026-09-05",
+    "belgium women_czech republic women_2026-09-05",
+    "australia women_indonesia women_2026-09-06",
+    "indonesia women_australia women_2026-09-06",
+    "amsterdam flames_glasgow cosmic_2026-09-06",
+    "glasgow cosmic_amsterdam flames_2026-09-06",
+    "herbertpur knightriders_dehradun warriors_2026-09-06",
+    "dehradun warriors_herbertpur knightriders_2026-09-06",
+    "jalandhar warriors_amritsar kings_2026-09-06",
+    "amritsar kings_jalandhar warriors_2026-09-06",
+    "new zealand women_australia women_2026-09-06",
+    "australia women_new zealand women_2026-09-06",
+    "thrissur titans_aries kollam sailors_2026-09-06",
+    "aries kollam sailors_thrissur titans_2026-09-06",
+    "guyana amazon warriors_st kitts and nevis patriots_2026-09-07",
+    "st kitts and nevis patriots_guyana amazon warriors_2026-09-07",
+    "united arab emirates women_sri lanka women_2026-09-07",
+    "sri lanka women_united arab emirates women_2026-09-07",
+    "australia women_new zealand women_2026-09-07",
+    "new zealand women_australia women_2026-09-07",
+    "amritsar kings_trident stallions_2026-09-07",
+    "trident stallions_amritsar kings_2026-09-07",
+    "aries kollam sailors_kochi blue tigers_2026-09-07",
+    "kochi blue tigers_aries kollam sailors_2026-09-07",
+    "dreux cricket club_amsterdam flames_2026-09-07",
+    "amsterdam flames_dreux cricket club_2026-09-07",
+    "krm panthers_royal lions cc_2026-09-07",
+    "royal lions cc_krm panthers_2026-09-07",
+    "meerut mavericks_noida super kings_2026-09-07",
+    "noida super kings_meerut mavericks_2026-09-07",
+    "dehradun warriors_pithoragarh hurricanes_2026-09-07",
+    "pithoragarh hurricanes_dehradun warriors_2026-09-07",
+    "super xi_salwa boys_2026-09-07",
+    "salwa boys_super xi_2026-09-07",
+    "amritsar soormas_jalandhar warriors_2026-09-07",
+    "jalandhar warriors_amritsar soormas_2026-09-07",
+    "meerut mavericks_noida super kings_2026-09-09",
+    "noida super kings_meerut mavericks_2026-09-09",
+    "mussoorie thunder_herbertpur knight riders_2026-09-07",
+    "herbertpur knight riders_mussoorie thunder_2026-09-07",
+    "mussoorie thunder_dehradun warriors_2026-09-07",
+    "dehradun warriors_mussoorie thunder_2026-09-07",
+    "guyana amazon warriors_trinbago knight riders_2026-09-08",
+    "trinbago knight riders_guyana amazon warriors_2026-09-08",
+    "trinbago knight riders women_barbados royals women_2026-09-08",
+    "barbados royals women_trinbago knight riders women_2026-09-08",
+    "saint lucia kings_antigua and barbuda falcons_2026-09-08",
+    "antigua and barbuda falcons_saint lucia kings_2026-09-08",
+    "vikasnagar dhamaka_doiwala kings_2026-09-08",
+    "doiwala kings_vikasnagar dhamaka_2026-09-08",
+    "stack cc_al mulla exchange_2026-09-08",
+    "al mulla exchange_stack cc_2026-09-08",
+    "guyana amazon warriors women_barbados royals women_2026-09-08",
+    "barbados royals women_guyana amazon warriors women_2026-09-08",
+    "calicut globstars_aries kollam sailors_2026-09-08",
+    "aries kollam sailors_calicut globstars_2026-09-08",
+    "bathinda royals_fazilka falcons_2026-09-08",
+    "fazilka falcons_bathinda royals_2026-09-08",
+    "mussoorie thunder_herbertpur knightriders_2026-09-08",
+    "herbertpur knightriders_mussoorie thunder_2026-09-08",
+    "rotterdam dockers_belfast wolves_2026-09-08",
+    "belfast wolves_rotterdam dockers_2026-09-08",
+    "amsterdam flames_dublin guardians_2026-09-08",
+    "dublin guardians_amsterdam flames_2026-09-08",
+    "ludhiana lions_mohali kings_2026-09-08",
+    "mohali kings_ludhiana lions_2026-09-08",
+    "haridwar spring elmas_selaqui strikers_2026-09-08",
+    "selaqui strikers_haridwar spring elmas_2026-09-08",
+    "ireland women_england women_2026-09-08",
+    "england women_ireland women_2026-09-08",
+    "kashi rudras_gorakhpur lions_2026-09-08",
+    "gorakhpur lions_kashi rudras_2026-09-08",
+    "mohali champions_punjab senior (pca)_2026-09-08",
+    "punjab senior (pca)_mohali champions_2026-09-08",
+    "new zealand women_australia women_2026-09-08",
+    "australia women_new zealand women_2026-09-08",
+    "royal lions cc_artech cc_2026-09-08",
+    "artech cc_royal lions cc_2026-09-08",
+    "svanholm cricket club_pak i care badalona_2026-09-08",
+    "pak i care badalona_svanholm cricket club_2026-09-08",
+    "thrissur titans_trivandrum royals_2026-09-08",
+    "trivandrum royals_thrissur titans_2026-09-08",
+    "barbados royals_trinbago knight riders_2026-09-09",
+    "trinbago knight riders_barbados royals_2026-09-09",
+    "guyana amazon warriors women_trinbago knight riders women_2026-09-09",
+    "trinbago knight riders women_guyana amazon warriors women_2026-09-09",
+    "amritsar soormas_bathinda royals_2026-09-09",
+    "bathinda royals_amritsar soormas_2026-09-09",
+    "doiwala kings_selaqui strikers_2026-09-09",
+    "selaqui strikers_doiwala kings_2026-09-09",
+    "jalandhar warriors_fazilka falcons_2026-09-09",
+    "fazilka falcons_jalandhar warriors_2026-09-09",
+    "mussoorie thunder_rishikesh dragons_2026-09-09",
+    "rishikesh dragons_mussoorie thunder_2026-09-09",
+    "ceylinco express cc_krm panthers_2026-09-09",
+    "krm panthers_ceylinco express cc_2026-09-09",
+    "agri king's knights_bathinda royals_2026-09-09",
+    "bathinda royals_agri king's knights_2026-09-09",
+    "apex xi_krm panthers_2026-09-09",
+    "krm panthers_apex xi_2026-09-09",
+    "aries kollam sailors_thrissur titans_2026-09-09",
+    "thrissur titans_aries kollam sailors_2026-09-09",
+    "barbados royals women_guyana amazon warriors women_2026-09-09",
+    "guyana amazon warriors women_barbados royals women_2026-09-09",
+    "barbados tridents_antigua and barbuda falcons_2026-09-09",
+    "antigua and barbuda falcons_barbados tridents_2026-09-09",
+    "england women_ireland women_2026-09-09",
+    "ireland women_england women_2026-09-09",
+    "glasgow cosmic_rotterdam dockers_2026-09-09",
+    "rotterdam dockers_glasgow cosmic_2026-09-09",
+    "meerut mavericks_kashi rudras_2026-09-09",
+    "kashi rudras_meerut mavericks_2026-09-09",
+    "udham singh nagar tigers_dehradun warriors_2026-09-09",
+    "dehradun warriors_udham singh nagar tigers_2026-09-09",
+    "south africa a_bangladesh a_2026-09-09",
+    "bangladesh a_south africa a_2026-09-09",
+    "rwanda_kenya_2026-09-09",
+    "kenya_rwanda_2026-09-09"
+  ],
+  "customMatches": {
+    "2026-09-04": [
+      {
+        "id": "custom_2026-09-04_1788443279572",
+        "date": "2026-09-04",
+        "teamA": "Qatar",
+        "teamB": "Singapore",
+        "league": "all",
+        "tournament": "Qatar vs Singapore Match",
+        "format": "T20",
+        "time": "06:30 AM IST",
+        "tossTime": "07:00 PM IST",
+        "venue": "Bayuemas Oval, Kuala Lumpur",
+        "status": "UPCOMING",
+        "tossWinner": null,
+        "tossDecision": null,
+        "matchWinner": null
+      },
+      {
+        "id": "custom_2026-09-04_1788443769808",
+        "date": "2026-09-04",
+        "teamA": "Namibia",
+        "teamB": "South Africa",
+        "league": "t20i",
+        "tournament": "Namibia vs South Africa Match",
+        "format": "T20",
+        "time": "05:30 PM IST",
+        "tossTime": "05:00 PM IST",
+        "venue": "Namibia Cricket Ground, Windhoek",
+        "status": "UPCOMING",
+        "tossWinner": null,
+        "tossDecision": null,
+        "matchWinner": null
+      },
+      {
+        "id": "custom_2026-09-04_1788443852599",
+        "date": "2026-09-04",
+        "teamA": "Bathinda Royals",
+        "teamB": "Amritsar Soormas",
+        "league": "all",
+        "tournament": "Bathinda Royals vs Amritsar Soormas Match",
+        "format": "T20",
+        "time": "01:00 PM IST",
+        "tossTime": "12:30 AM IST",
+        "venue": "Punjab Cricket Association IS Bindra Stadium, Mohali",
+        "status": "UPCOMING",
+        "tossWinner": null,
+        "tossDecision": null,
+        "matchWinner": null
+      },
+      {
+        "id": "custom_2026-09-04_1788443888019",
+        "date": "2026-09-04",
+        "teamA": "Ludhiana Lions",
+        "teamB": "Jalandhar Warriors",
+        "league": "pca",
+        "tournament": "Ludhiana Lions vs Jalandhar Warriors Match",
+        "format": "T20",
+        "time": "07:00 PM IST",
+        "tossTime": "06:30 PM IST",
+        "venue": "Punjab Cricket Association IS Bindra Stadium, Mohali",
+        "status": "UPCOMING",
+        "tossWinner": null,
+        "tossDecision": null,
+        "matchWinner": null
+      },
+      {
+        "id": "custom_2026-09-04_1788444078532",
+        "date": "2026-09-04",
+        "teamA": "United Arab Emirates Women",
+        "teamB": "Indonesia Women",
+        "league": "womens_asia_cup",
+        "tournament": "United Arab Emirates Women vs Indonesia Women Match",
+        "format": "T20",
+        "time": "8:00 PM IST",
+        "tossTime": "07:30 PM IST",
+        "venue": "Dubai International Cricket Stadium, Dubai",
+        "status": "UPCOMING",
+        "tossWinner": null,
+        "tossDecision": null,
+        "matchWinner": null
+      },
+      {
+        "id": "custom_2026-09-04_1788454629392",
+        "date": "2026-09-04",
+        "teamA": "Lexus",
+        "teamB": "Tally Rangers",
+        "league": "kcc",
+        "tournament": "Lexus vs Tally Rangers Match",
+        "format": "T20",
+        "time": "07:30 AM IST",
+        "tossTime": "07:00 AM IST",
+        "venue": "Sulabiya Ground",
+        "status": "UPCOMING",
+        "tossWinner": null,
+        "tossDecision": null,
+        "matchWinner": null
+      },
+      {
+        "id": "custom_2026-09-04_1788501888140",
+        "date": "2026-09-04",
+        "teamA": "Belgium women",
+        "teamB": "Portugal women",
+        "league": "odi",
+        "tournament": "Belgium women vs Portugal women Match",
+        "format": "T20",
+        "time": "12:30 PM IST",
+        "tossTime": "12:00 PM IST",
+        "venue": "International Cricket Stadium",
+        "status": "UPCOMING",
+        "tossWinner": null,
+        "tossDecision": null,
+        "matchWinner": null
+      },
+      {
+        "id": "custom_2026-09-04_1788501916753",
+        "date": "2026-09-04",
+        "teamA": "Serbia Women",
+        "teamB": "Croatia Women",
+        "league": "odi",
+        "tournament": "Serbia Women vs Croatia Women Match",
+        "format": "T20",
+        "time": "12:55 PM IST",
+        "tossTime": "12:25 PM IST",
+        "venue": "International Cricket Stadium",
+        "status": "UPCOMING",
+        "tossWinner": null,
+        "tossDecision": null,
+        "matchWinner": null
+      },
+      {
+        "id": "custom_2026-09-04_1788508543005",
+        "date": "2026-09-04",
+        "teamA": "Mussoorie Thunder",
+        "teamB": "Doiwala Kings",
+        "league": "dehradun_t20",
+        "tournament": "Mussoorie Thunder vs Doiwala Kings Match",
+        "format": "T20",
+        "time": "03:00 PM IST",
+        "tossTime": "02:30 PM IST",
+        "venue": "International Cricket Stadium",
+        "status": "UPCOMING",
+        "tossWinner": null,
+        "tossDecision": null,
+        "matchWinner": null
+      }
+    ],
+    "2026-09-05": [
+      {
+        "id": "custom_2026-09-05_1788546059322",
+        "date": "2026-09-05",
+        "teamA": "Malaysia",
+        "teamB": "Hong Kong, China",
+        "league": "all",
+        "tournament": "Malaysia vs Hong Kong, China Match",
+        "format": "T20",
+        "time": "06:30 AM IST",
+        "tossTime": "06:00 PM IST",
+        "venue": "International Cricket Stadium",
+        "status": "UPCOMING",
+        "tossWinner": null,
+        "tossDecision": null,
+        "matchWinner": null
+      },
+      {
+        "id": "custom_2026-09-05_1788581958635",
+        "date": "2026-09-05",
+        "teamA": "Belgium Women",
+        "teamB": "Portugal Women",
+        "league": "womens_asia_cup",
+        "tournament": "Belgium Women vs Portugal Women Match",
+        "format": "T20",
+        "time": "11:30 AM IST",
+        "tossTime": "11:00 AM IST",
+        "venue": "Scott Page Field, Vinor, Prague",
+        "status": "UPCOMING",
+        "tossWinner": null,
+        "tossDecision": null,
+        "matchWinner": null
+      },
+      {
+        "id": "custom_2026-09-05_1788582310239",
+        "date": "2026-09-05",
+        "teamA": "Bulgaria Women",
+        "teamB": "Croatia Women",
+        "league": "womens_asia_cup",
+        "tournament": "Bulgaria Women vs Croatia Women Match",
+        "format": "T20",
+        "time": "01:30 PM IST",
+        "tossTime": "01:00 PM IST",
+        "venue": "Lisicji Jarak Cricket Ground, Belgrade",
+        "status": "UPCOMING",
+        "tossWinner": null,
+        "tossDecision": null,
+        "matchWinner": null
+      },
+      {
+        "id": "custom_2026-09-05_1788582340832",
+        "date": "2026-09-05",
+        "teamA": "Serbia Woman",
+        "teamB": "Bulgaria Women",
+        "league": "all",
+        "tournament": "Serbia Women vs Bulgaria Women Match",
+        "format": "T20",
+        "time": "03:30 PM IST",
+        "tossTime": "01:00 PM IST",
+        "venue": "Lisicji Jarak Cricket Ground, Belgrade",
+        "status": "UPCOMING",
+        "tossWinner": null,
+        "tossDecision": null,
+        "matchWinner": null
+      },
+      {
+        "id": "custom_2026-09-05_1788582379250",
+        "date": "2026-09-05",
+        "teamA": "India Women",
+        "teamB": "Pakistan Women",
+        "league": "womens_asia_cup",
+        "tournament": "India Women vs Pakistan Women Match",
+        "format": "T20",
+        "time": "08:00 PM IST",
+        "tossTime": "07:30 PM IST",
+        "venue": "Dubai International Cricket Stadium, Dubai",
+        "status": "UPCOMING",
+        "tossWinner": null,
+        "tossDecision": null,
+        "matchWinner": null
+      }
+    ],
+    "2026-09-06": [
+      {
+        "id": "custom_2026-09-06_1788617381203",
+        "date": "2026-09-06",
+        "teamA": "Barbados Tridents Women",
+        "teamB": "Trinbago Knight Riders Women",
+        "league": "cpl",
+        "tournament": "Barbados Tridents Women vs Trinbago Knight Riders Women Match",
+        "format": "T20",
+        "time": "12:30 AM IST",
+        "tossTime": "12:00 AM IST",
+        "venue": "Kensington Oval, Bridgetown, Barbados",
+        "status": "COMPLETED",
+        "tossWinner": "Barbados Tridents Women",
+        "tossDecision": "bowl",
+        "matchWinner": "Barbados Tridents Women"
+      },
+      {
+        "id": "custom_2026-09-06_1788619735388",
+        "date": "2026-09-06",
+        "teamA": "Jamaica Empress Women",
+        "teamB": "Guyana Amazon Warriors Women",
+        "league": "cpl",
+        "tournament": "Jamaica Empress Women vs Guyana Amazon Warriors Women Match",
+        "format": "T20",
+        "time": "07:30 PM IST",
+        "tossTime": "07:00 PM IST",
+        "venue": "Kensington Oval, Bridgetown, Barbados",
+        "status": "COMPLETED",
+        "tossWinner": "Jamaica Empress Women",
+        "tossDecision": "bowl",
+        "matchWinner": "Jamaica Empress Women"
+      },
+      {
+        "id": "custom_2026-09-06_1788622110774",
+        "date": "2026-09-06",
+        "teamA": "Bathinda Royals",
+        "teamB": "Jalandhar Warriors",
+        "league": "pca",
+        "tournament": "Bathinda Royals vs Jalandhar Warriors Match",
+        "format": "T20",
+        "time": "01:00 PM IST",
+        "tossTime": "12:30 AM IST",
+        "venue": "Punjab Cricket Association IS Bindra Stadium, Mohali",
+        "status": "COMPLETED",
+        "tossWinner": "Jalandhar Warriors",
+        "tossDecision": "bowl",
+        "matchWinner": "Jalandhar Warriors"
+      },
+      {
+        "id": "custom_2026-09-06_1788622158694",
+        "date": "2026-09-06",
+        "teamA": "Ludhiana Lions",
+        "teamB": "Fazilka Falcons",
+        "league": "pca",
+        "tournament": "Ludhiana Lions vs Fazilka Falcons Match",
+        "format": "T20",
+        "time": "07:00 PM IST",
+        "tossTime": "06:30 PM IST",
+        "venue": "Punjab Cricket Association IS Bindra Stadium, Mohali",
+        "status": "COMPLETED",
+        "tossWinner": "Ludhiana Lions",
+        "tossDecision": "bowl",
+        "matchWinner": "Ludhiana Lions"
+      },
+      {
+        "id": "custom_2026-09-06_1788622229704",
+        "date": "2026-09-06",
+        "teamA": "South Africa A",
+        "teamB": "Bangladesh A",
+        "league": "odi",
+        "tournament": "South Africa A vs Bangladesh A Match",
+        "format": "T20",
+        "time": "01:30 PM IST",
+        "tossTime": "01:00 PM IST",
+        "venue": "Mangaung Oval, Bloemfontein",
+        "status": "COMPLETED",
+        "tossWinner": "South Africa A",
+        "tossDecision": "bowl",
+        "matchWinner": "South Africa A"
+      },
+      {
+        "id": "custom_2026-09-06_1788622288207",
+        "date": "2026-09-06",
+        "teamA": "Glasgow Cosmic",
+        "teamB": "Edinburgh Castle Rockers",
+        "league": "etpl",
+        "tournament": "Glasgow Cosmic vs Edinburgh Castle Rockers Match",
+        "format": "T20",
+        "time": "03:00 PM IST",
+        "tossTime": "02:30 PM IST",
+        "venue": "Sportpark Duivesteijn, Voorburg",
+        "status": "COMPLETED",
+        "tossWinner": "Edinburgh Castle Rockers",
+        "tossDecision": "bowl",
+        "matchWinner": "Edinburgh Castle Rockers"
+      },
+      {
+        "id": "custom_2026-09-06_1788622351107",
+        "date": "2026-09-06",
+        "teamA": "Amsterdam Flames",
+        "teamB": "Rotterdam Dockers",
+        "league": "etpl",
+        "tournament": "Amsterdam Flames vs Rotterdam Dockers Match",
+        "format": "T20",
+        "time": "06:40 PM IST",
+        "tossTime": "06:10 PM IST",
+        "venue": "Sportpark Duivesteijn, Voorburg",
+        "status": "COMPLETED",
+        "tossWinner": "Amsterdam Flames",
+        "tossDecision": "bowl",
+        "matchWinner": "Amsterdam Flames"
+      },
+      {
+        "id": "custom_2026-09-06_1788622408610",
+        "date": "2026-09-06",
+        "teamA": "England Women",
+        "teamB": "Ireland Women",
+        "league": "womens_asia_cup",
+        "tournament": "England Women vs Ireland Women Match",
+        "format": "T20",
+        "time": "03:30 PM IST",
+        "tossTime": "03:00 PM IST",
+        "venue": "New Road, Worcester",
+        "status": "COMPLETED",
+        "tossWinner": "Ireland Women",
+        "tossDecision": "bowl",
+        "matchWinner": "Ireland Women"
+      },
+      {
+        "id": "custom_2026-09-06_1788622453793",
+        "date": "2026-09-06",
+        "teamA": "South Africa",
+        "teamB": "Zimbabwe",
+        "league": "t20i",
+        "tournament": "South Africa vs Zimbabwe Match",
+        "format": "T20",
+        "time": "05:30 PM IST",
+        "tossTime": "05:00 PM IST",
+        "venue": "Namibia Cricket Ground, Windhoek",
+        "status": "COMPLETED",
+        "tossWinner": "South Africa",
+        "tossDecision": "bowl",
+        "matchWinner": "South Africa"
+      },
+      {
+        "id": "custom_2026-09-06_1788622600688",
+        "date": "2026-09-06",
+        "teamA": "Sri Lanka Women",
+        "teamB": "Bangladesh Women",
+        "league": "womens_asia_cup",
+        "tournament": "Sri Lanka Women vs Bangladesh Women Match",
+        "format": "T20",
+        "time": "08:00 PM IST",
+        "tossTime": "07:30 PM IST",
+        "venue": "Dubai International Cricket Stadium, Dubai",
+        "status": "COMPLETED",
+        "tossWinner": "Bangladesh Women",
+        "tossDecision": "bowl",
+        "matchWinner": "Bangladesh Women"
+      },
+      {
+        "id": "custom_2026-09-06_1788623018881",
+        "date": "2026-09-06",
+        "teamA": "Singapore",
+        "teamB": "United Arab Emirates",
+        "league": "odi",
+        "tournament": "Singapore vs United Arab Emirates Match",
+        "format": "T20",
+        "time": "07:00 AM IST",
+        "tossTime": "06:30 AM IST",
+        "venue": "YSD-UKM Cricket Oval, Bangi",
+        "status": "COMPLETED",
+        "tossWinner": "Singapore",
+        "tossDecision": "bowl",
+        "matchWinner": "Singapore"
+      },
+      {
+        "id": "custom_2026-09-06_1788623051925",
+        "date": "2026-09-06",
+        "teamA": "Nepal",
+        "teamB": "Saudi Arabia",
+        "league": "odi",
+        "tournament": "Nepal vs Saudi Arabia Match",
+        "format": "T20",
+        "time": "07:00 AM IST",
+        "tossTime": "06:30 AM IST",
+        "venue": "Bayuemas Oval, Kuala Lumpur",
+        "status": "COMPLETED",
+        "tossWinner": "Saudi Arabia",
+        "tossDecision": "bowl",
+        "matchWinner": "Saudi Arabia"
+      },
+      {
+        "id": "custom_2026-09-06_1788702394066",
+        "date": "2026-09-06",
+        "teamA": "Guyana Amazon Warriors",
+        "teamB": "St Kitts and Nevis Patriots",
+        "league": "cpl",
+        "tournament": "Guyana Amazon Warriors vs St Kitts and Nevis Patriots Match",
+        "format": "T20",
+        "time": "11:30 PM IST",
+        "tossTime": "11:00 PM IST",
+        "venue": "International Cricket Stadium",
+        "status": "UPCOMING",
+        "tossWinner": null,
+        "tossDecision": null,
+        "matchWinner": null
+      }
+    ],
+    "2026-09-07": [
+      {
+        "id": "custom_2026-09-07_1788753105848",
+        "date": "2026-09-07",
+        "teamA": "Hong Kong Women",
+        "teamB": "Pakistan Women",
+        "league": "womens_asia_cup",
+        "tournament": "Hong Kong Women vs Pakistan Women Match",
+        "format": "T20",
+        "time": "08:00 PM IST",
+        "tossTime": "07:30 PM IST",
+        "venue": "Dubai International Cricket Stadium, Dubai",
+        "status": "COMPLETED",
+        "tossWinner": "Pakistan Women",
+        "tossDecision": "bowl",
+        "matchWinner": "Pakistan Women"
+      },
+      {
+        "id": "custom_2026-09-07_1788753242554",
+        "date": "2026-09-07",
+        "teamA": "Mohali Kings",
+        "teamB": "Ludhiana Lions",
+        "league": "pca",
+        "tournament": "Mohali Kings vs Ludhiana Lions Match",
+        "format": "T20",
+        "time": "01:00 PM IST",
+        "tossTime": "12:30 AM IST",
+        "venue": "Punjab Cricket Association IS Bindra Stadium, Mohali",
+        "status": "COMPLETED",
+        "tossWinner": "Mohali Kings",
+        "tossDecision": "bowl",
+        "matchWinner": "Mohali Kings"
+      },
+      {
+        "id": "custom_2026-09-07_1788753316607",
+        "date": "2026-09-07",
+        "teamA": "Avengers",
+        "teamB": "Tally Rangers",
+        "league": "kcc",
+        "tournament": "Avengers vs Tally Rangers Match",
+        "format": "T20",
+        "time": "10:25 PM IST",
+        "tossTime": "09:55 PM IST",
+        "venue": "Sulabiya Ground  Kuwait",
+        "status": "UPCOMING",
+        "tossWinner": null,
+        "tossDecision": null,
+        "matchWinner": null
+      }
+    ],
+    "2026-09-09": [
+      {
+        "id": "custom_2026-09-09_1788877125374",
+        "date": "2026-09-09",
+        "teamA": "Guyana Amazon Warriors",
+        "teamB": "Antigua and Barbuda Falcons",
+        "league": "cpl",
+        "tournament": "Guyana Amazon Warriors vs Antigua and Barbuda Falcons Match",
+        "format": "T20",
+        "time": "04:30 AM IST",
+        "tossTime": "04:00 AM IST",
+        "venue": "Providence Stadium, Guyana",
+        "status": "COMPLETED",
+        "tossWinner": "Guyana Amazon Warriors",
+        "tossDecision": "bowl",
+        "matchWinner": "Guyana Amazon Warriors"
+      },
+      {
+        "id": "custom_2026-09-09_1788877161968",
+        "date": "2026-09-09",
+        "teamA": "Ludhiana Lions",
+        "teamB": "Fazilka Falcons",
+        "league": "pca",
+        "tournament": "Ludhiana Lions vs Fazilka Falcons Match",
+        "format": "T20",
+        "time": "01:00 PM IST",
+        "tossTime": "12:30 AM IST",
+        "venue": "Punjab Cricket Association IS Bindra Stadium, Mohali",
+        "status": "COMPLETED",
+        "tossWinner": "Fazilka Falcons",
+        "tossDecision": "bowl",
+        "matchWinner": "Fazilka Falcons"
+      },
+      {
+        "id": "custom_2026-09-09_1788877208122",
+        "date": "2026-09-09",
+        "teamA": "Mohali Kings",
+        "teamB": "Bathinda Royals",
+        "league": "pca",
+        "tournament": "Mohali Kings vs Bathinda Royals Match",
+        "format": "T20",
+        "time": "07:00 PM IST",
+        "tossTime": "06:30 PM IST",
+        "venue": "Punjab Cricket Association IS Bindra Stadium, Mohali",
+        "status": "COMPLETED",
+        "tossWinner": "Mohali Kings",
+        "tossDecision": "bowl",
+        "matchWinner": "Mohali Kings"
+      },
+      {
+        "id": "custom_2026-09-09_1788877255178",
+        "date": "2026-09-09",
+        "teamA": "Namibia",
+        "teamB": "South Africa",
+        "league": "odi",
+        "tournament": "Namibia vs South Africa Match",
+        "format": "T20",
+        "time": "01:00 PM IST",
+        "tossTime": "12:30 AM IST",
+        "venue": "Namibia Cricket Ground, Windhoek",
+        "status": "COMPLETED",
+        "tossWinner": "Namibia",
+        "tossDecision": "bowl",
+        "matchWinner": "Namibia"
+      },
+      {
+        "id": "custom_2026-09-09_1788877325673",
+        "date": "2026-09-09",
+        "teamA": "England",
+        "teamB": "Pakistan",
+        "league": "odi",
+        "tournament": "England vs Pakistan Match",
+        "format": "T20",
+        "time": "03:30 PM IST",
+        "tossTime": "03:00 PM IST",
+        "venue": "Diamond Oval, Kimberley",
+        "status": "COMPLETED",
+        "tossWinner": "England",
+        "tossDecision": "bowl",
+        "matchWinner": "England"
+      },
+      {
+        "id": "custom_2026-09-09_1788877362142",
+        "date": "2026-09-09",
+        "teamA": "Dublin Guardians",
+        "teamB": "Belfast Wolves",
+        "league": "etpl",
+        "tournament": "Dublin Guardians vs Belfast Wolves Match",
+        "format": "T20",
+        "time": "06:45 PM IST",
+        "tossTime": "06:15 PM IST",
+        "venue": "The Village, Dublin",
+        "status": "COMPLETED",
+        "tossWinner": "Dublin Guardians",
+        "tossDecision": "bowl",
+        "matchWinner": "Dublin Guardians"
+      }
+    ],
+    "2026-09-08": [
+      {
+        "id": "custom_2026-09-08_1788793776094",
+        "date": "2026-09-08",
+        "teamA": "Hong Kong, China",
+        "teamB": "Nepal",
+        "league": "t20i",
+        "tournament": "Hong Kong, China vs Nepal Match",
+        "format": "T20",
+        "time": "07:00 AM IST",
+        "tossTime": "06:30 AM IST",
+        "venue": "Bayuemas Oval, Kuala Lumpur",
+        "status": "COMPLETED",
+        "tossWinner": "Hong Kong, China",
+        "tossDecision": "bowl",
+        "matchWinner": "Hong Kong, China"
+      },
+      {
+        "id": "custom_2026-09-08_1788793801545",
+        "date": "2026-09-08",
+        "teamA": "Oman",
+        "teamB": "United Arab Emirates",
+        "league": "t20i",
+        "tournament": "Oman vs United Arab Emirates Match",
+        "format": "T20",
+        "time": "07:00 AM IST",
+        "tossTime": "06:30 AM IST",
+        "venue": "YSD-UKM Cricket Oval, Bangi",
+        "status": "COMPLETED",
+        "tossWinner": "Oman",
+        "tossDecision": "bowl",
+        "matchWinner": "Oman"
+      },
+      {
+        "id": "custom_2026-09-08_1788793838312",
+        "date": "2026-09-08",
+        "teamA": "Amritsar Soormas",
+        "teamB": "Mohali Kings",
+        "league": "pca",
+        "tournament": "Amritsar Soormas vs Mohali Kings Match",
+        "format": "T20",
+        "time": "01:00 PM IST",
+        "tossTime": "12:30 AM IST",
+        "venue": "Punjab Cricket Association IS Bindra Stadium, Mohali",
+        "status": "COMPLETED",
+        "tossWinner": "Mohali Kings",
+        "tossDecision": "bowl",
+        "matchWinner": "Mohali Kings"
+      },
+      {
+        "id": "custom_2026-09-08_1788793878347",
+        "date": "2026-09-08",
+        "teamA": "Ludhiana Lions",
+        "teamB": "Jalandhar Warriors",
+        "league": "pca",
+        "tournament": "Ludhiana Lions vs Jalandhar Warriors Match",
+        "format": "T20",
+        "time": "07:00 PM IST",
+        "tossTime": "06:30 PM IST",
+        "venue": "Punjab Cricket Association IS Bindra Stadium, Mohali",
+        "status": "COMPLETED",
+        "tossWinner": "Ludhiana Lions",
+        "tossDecision": "bowl",
+        "matchWinner": "Ludhiana Lions"
+      },
+      {
+        "id": "custom_2026-09-08_1788793951906",
+        "date": "2026-09-08",
+        "teamA": "Kenya",
+        "teamB": "Sierra Leone",
+        "league": "t20i",
+        "tournament": "Kenya vs Sierra Leone Match",
+        "format": "T20",
+        "time": "01:00 PM IST",
+        "tossTime": "12:30 AM IST",
+        "venue": "Gahanga B Ground, Kigali City",
+        "status": "COMPLETED",
+        "tossWinner": "Kenya",
+        "tossDecision": "bowl",
+        "matchWinner": "Kenya"
+      },
+      {
+        "id": "custom_2026-09-08_1788793990088",
+        "date": "2026-09-08",
+        "teamA": "Rwanda",
+        "teamB": "Botswana",
+        "league": "t20i",
+        "tournament": "Rwanda vs Botswana Match",
+        "format": "T20",
+        "time": "05:30 PM IST",
+        "tossTime": "05:00 PM IST",
+        "venue": "Gahanga B Ground, Kigali City",
+        "status": "COMPLETED",
+        "tossWinner": "Botswana",
+        "tossDecision": "bowl",
+        "matchWinner": "Botswana"
+      },
+      {
+        "id": "custom_2026-09-08_1788794031691",
+        "date": "2026-09-08",
+        "teamA": "Bangladesh Women",
+        "teamB": "United Arab Emirates Women",
+        "league": "t20i",
+        "tournament": "Bangladesh Women vs United Arab Emirates Women Match",
+        "format": "T20",
+        "time": "08:00 PM IST",
+        "tossTime": "07:30 PM IST",
+        "venue": "Dubai International Cricket Stadium, Dubai",
+        "status": "COMPLETED",
+        "tossWinner": "United Arab Emirates Women",
+        "tossDecision": "bowl",
+        "matchWinner": "United Arab Emirates Women"
+      }
+    ],
+    "2026-09-10": [
+      {
+        "id": "custom_2026-09-10_1788947007410",
+        "date": "2026-09-10",
+        "teamA": "India Women",
+        "teamB": "Bangladesh Women",
+        "league": "womens_asia_cup",
+        "tournament": "India Women vs Bangladesh Women Match",
+        "format": "T20",
+        "time": "08:00 PM IST",
+        "tossTime": "07:30 PM IST",
+        "venue": "Dubai International Cricket Stadium, Dubai",
+        "status": "UPCOMING",
+        "tossWinner": null,
+        "tossDecision": null,
+        "matchWinner": null
+      },
+      {
+        "id": "custom_2026-09-10_1788963059037",
+        "date": "2026-09-10",
+        "teamA": "Rotterdam Dockers",
+        "teamB": "Glasgow Cosmic",
+        "league": "etpl",
+        "tournament": "Rotterdam Dockers vs Glasgow Cosmic Match",
+        "format": "T20",
+        "time": "03:00 PM IST",
+        "tossTime": "02:30 PM IST",
+        "venue": "The Village, Dublin",
+        "status": "UPCOMING",
+        "tossWinner": null,
+        "tossDecision": null,
+        "matchWinner": null
+      },
+      {
+        "id": "custom_2026-09-10_1788963084235",
+        "date": "2026-09-10",
+        "teamA": "Belfast Wolves",
+        "teamB": "Amsterdam Flames",
+        "league": "etpl",
+        "tournament": "Belfast Wolves vs Amsterdam Flames Match",
+        "format": "T20",
+        "time": "06:45 PM IST",
+        "tossTime": "06:15 PM IST",
+        "venue": "The Village, Dublin",
+        "status": "UPCOMING",
+        "tossWinner": null,
+        "tossDecision": null,
+        "matchWinner": null
+      },
+      {
+        "id": "custom_2026-09-10_1788963286176",
+        "date": "2026-09-10",
+        "teamA": "Hong Kong, China",
+        "teamB": "United Arab Emirates",
+        "league": "odi",
+        "tournament": "Hong Kong, China vs United Arab Emirates Match",
+        "format": "T20",
+        "time": "07:00 PM IST",
+        "tossTime": "06:30 PM IST",
+        "venue": "YSD-UKM Cricket Oval, Bangi",
+        "status": "UPCOMING",
+        "tossWinner": null,
+        "tossDecision": null,
+        "matchWinner": null
+      },
+      {
+        "id": "custom_2026-09-10_1788963306879",
+        "date": "2026-09-10",
+        "teamA": "Nepal",
+        "teamB": "Oman",
+        "league": "odi",
+        "tournament": "Nepal vs Oman Match",
+        "format": "T20",
+        "time": "07:00 PM IST",
+        "tossTime": "06:30 PM IST",
+        "venue": "Bayuemas Oval, Kuala Lumpur",
+        "status": "UPCOMING",
+        "tossWinner": null,
+        "tossDecision": null,
+        "matchWinner": null
+      }
+    ]
+  },
+  "editedMatches": {
+    "stack cc_ceylinco express cc_2026-09-03": {
+      "teamA": "Stack CC B",
+      "teamB": "Challenging Stars",
+      "time": "10:30 PM IST",
+      "venue": "Sulaibiya Cricket Ground, Kuwait",
+      "league": "all",
+      "tournament": "Stack CC B vs Challenging Stars Match"
+    },
+    "ceylinco express cc_stack cc_2026-09-03": {
+      "teamA": "Stack CC B",
+      "teamB": "Challenging Stars",
+      "time": "10:30 PM IST",
+      "venue": "Sulaibiya Cricket Ground, Kuwait",
+      "league": "all",
+      "tournament": "Stack CC B vs Challenging Stars Match"
+    },
+    "al mulla exchange_krm panthers_2026-09-03": {
+      "teamA": "Cochin Hurricanes",
+      "teamB": "Royal Lions CC",
+      "time": "11:45 PM IST",
+      "venue": "Sulaibiya Cricket Ground, Kuwait",
+      "league": "all",
+      "tournament": "Cochin Hurricanes vs Royal Lions CC Match"
+    },
+    "krm panthers_al mulla exchange_2026-09-03": {
+      "teamA": "Cochin Hurricanes",
+      "teamB": "Royal Lions CC",
+      "time": "11:45 PM IST",
+      "venue": "Sulaibiya Cricket Ground, Kuwait",
+      "league": "all",
+      "tournament": "Cochin Hurricanes vs Royal Lions CC Match"
+    },
+    "barbados royals_guyana amazon warriors_2026-09-04": {
+      "teamA": "St Kitts and Nevis Patriots",
+      "teamB": "St Lucia Kings",
+      "time": "04:30 AM IST",
+      "venue": "Warner Park, Basseterre, St Kitts",
+      "league": "all",
+      "tournament": "St Kitts and Nevis Patriots vs St Lucia Kings Match"
+    },
+    "guyana amazon warriors_barbados royals_2026-09-04": {
+      "teamA": "St Kitts and Nevis Patriots",
+      "teamB": "St Lucia Kings",
+      "time": "04:30 AM IST",
+      "venue": "Warner Park, Basseterre, St Kitts",
+      "league": "all",
+      "tournament": "St Kitts and Nevis Patriots vs St Lucia Kings Match"
+    },
+    "oman_bahrain_2026-09-04": {
+      "teamA": "Saudi Arabia",
+      "teamB": "Bahrain",
+      "time": "11:00 AM IST",
+      "venue": "Group A at Bangi",
+      "league": "all",
+      "tournament": "Saudi Arabia vs Bahrain Match"
+    },
+    "bahrain_oman_2026-09-04": {
+      "teamA": "Saudi Arabia",
+      "teamB": "Bahrain",
+      "time": "11:00 AM IST",
+      "venue": "Group A at Bangi",
+      "league": "all",
+      "tournament": "Saudi Arabia vs Bahrain Match"
+    },
+    "qatar_singapore_2026-09-04": {
+      "teamA": "Qatar",
+      "teamB": "Singapore",
+      "time": "06:30 AM IST",
+      "venue": "Bayuemas Oval, Kuala Lumpur",
+      "league": "all",
+      "tournament": "Qatar vs Singapore Match"
+    },
+    "singapore_qatar_2026-09-04": {
+      "teamA": "Qatar",
+      "teamB": "Singapore",
+      "time": "06:30 AM IST",
+      "venue": "Bayuemas Oval, Kuala Lumpur",
+      "league": "all",
+      "tournament": "Qatar vs Singapore Match"
+    },
+    "saudi arabia_bahrain_2026-09-04": {
+      "teamA": "Saudi Arabia",
+      "teamB": "Bahrain",
+      "time": "5:30 AM IST",
+      "venue": "Group A at Bangi",
+      "league": "all",
+      "tournament": "Saudi Arabia vs Bahrain Match"
+    },
+    "bahrain_saudi arabia_2026-09-04": {
+      "teamA": "Saudi Arabia",
+      "teamB": "Bahrain",
+      "time": "5:30 AM IST",
+      "venue": "Group A at Bangi",
+      "league": "all",
+      "tournament": "Saudi Arabia vs Bahrain Match"
+    },
+    "bathinda royals_amritsar soormas_2026-09-04": {
+      "teamA": "Bathinda Royals",
+      "teamB": "Amritsar Soormas",
+      "time": "01:00 PM IST",
+      "venue": "Punjab Cricket Association IS Bindra Stadium, Mohali",
+      "league": "all",
+      "tournament": "Bathinda Royals vs Amritsar Soormas Match"
+    },
+    "amritsar soormas_bathinda royals_2026-09-04": {
+      "teamA": "Bathinda Royals",
+      "teamB": "Amritsar Soormas",
+      "time": "01:00 PM IST",
+      "venue": "Punjab Cricket Association IS Bindra Stadium, Mohali",
+      "league": "all",
+      "tournament": "Bathinda Royals vs Amritsar Soormas Match"
+    },
+    "vikasnagar dhamaka_rishikesh dragons_2026-09-04": {
+      "teamA": "Selaqui Strikers",
+      "teamB": "Rishikesh Dragons",
+      "time": "06:55 PM IST",
+      "venue": "Abhimanyu Cricket Academy, Dehradun",
+      "league": "all",
+      "tournament": "Selaqui Strikers vs Rishikesh Dragons Match"
+    },
+    "rishikesh dragons_vikasnagar dhamaka_2026-09-04": {
+      "teamA": "Selaqui Strikers",
+      "teamB": "Rishikesh Dragons",
+      "time": "06:55 PM IST",
+      "venue": "Abhimanyu Cricket Academy, Dehradun",
+      "league": "all",
+      "tournament": "Selaqui Strikers vs Rishikesh Dragons Match"
+    },
+    "trivandrum royals_alleppey ripples_2026-09-04": {
+      "teamA": "Trivandrum Royals",
+      "teamB": "Thrissur Titans",
+      "time": "02:30 PM IST",
+      "venue": "Greenfield International Stadium, Thiruvananthapuram",
+      "league": "all",
+      "tournament": "Trivandrum Royals vs Thrissur Titans Match"
+    },
+    "alleppey ripples_trivandrum royals_2026-09-04": {
+      "teamA": "Trivandrum Royals",
+      "teamB": "Thrissur Titans",
+      "time": "02:30 PM IST",
+      "venue": "Greenfield International Stadium, Thiruvananthapuram",
+      "league": "all",
+      "tournament": "Trivandrum Royals vs Thrissur Titans Match"
+    },
+    "aries kollam sailors_calicut globstars_2026-09-04": {
+      "teamA": "Alleppey Ripples",
+      "teamB": "Calicut Globstars",
+      "time": "06:15 PM IST",
+      "venue": "Greenfield International Stadium, Thiruvananthapuram",
+      "league": "all",
+      "tournament": "Alleppey Ripples vs Calicut Globstars Match"
+    },
+    "calicut globstars_aries kollam sailors_2026-09-04": {
+      "teamA": "Alleppey Ripples",
+      "teamB": "Calicut Globstars",
+      "time": "06:15 PM IST",
+      "venue": "Greenfield International Stadium, Thiruvananthapuram",
+      "league": "all",
+      "tournament": "Alleppey Ripples vs Calicut Globstars Match"
+    },
+    "noida super kings_lucknow falcons_2026-09-04": {
+      "teamA": "Noida Super Kings",
+      "teamB": "Meerut Mavericks",
+      "time": "07:30 PM IST",
+      "venue": "BRSABV Ekana Cricket Stadium, Lucknow",
+      "league": "all",
+      "tournament": "Noida Super Kings vs Meerut Mavericks Match"
+    },
+    "lucknow falcons_noida super kings_2026-09-04": {
+      "teamA": "Noida Super Kings",
+      "teamB": "Meerut Mavericks",
+      "time": "07:30 PM IST",
+      "venue": "BRSABV Ekana Cricket Stadium, Lucknow",
+      "league": "all",
+      "tournament": "Noida Super Kings vs Meerut Mavericks Match"
+    },
+    "royal lions cc_bader & nie cricket club_2026-09-04": {
+      "teamA": "Royal Lions CC",
+      "teamB": "Salwa Boys",
+      "time": "10:30 PM IST",
+      "venue": "Sulaibiya Cricket Ground, Kuwait",
+      "league": "all",
+      "tournament": "Royal Lions CC vs Salwa Boys Match"
+    },
+    "bader & nie cricket club_royal lions cc_2026-09-04": {
+      "teamA": "Royal Lions CC",
+      "teamB": "Salwa Boys",
+      "time": "10:30 PM IST",
+      "venue": "Sulaibiya Cricket Ground, Kuwait",
+      "league": "all",
+      "tournament": "Royal Lions CC vs Salwa Boys Match"
+    },
+    "saint lucia kings_trinbago knight riders_2026-09-05": {
+      "teamA": "Guyana Amazon Warriors",
+      "teamB": "Jamaica Kingsmen",
+      "time": "03:50 AM IST",
+      "venue": "Guyana National Stadium",
+      "league": "all",
+      "tournament": "Guyana Amazon Warriors vs Jamaica Kingsmen Match"
+    },
+    "trinbago knight riders_saint lucia kings_2026-09-05": {
+      "teamA": "Guyana Amazon Warriors",
+      "teamB": "Jamaica Kingsmen",
+      "time": "03:50 AM IST",
+      "venue": "Guyana National Stadium",
+      "league": "all",
+      "tournament": "Guyana Amazon Warriors vs Jamaica Kingsmen Match"
+    },
+    "kuwait_qatar_2026-09-05": {
+      "teamA": "Kuwait",
+      "teamB": "Oman",
+      "time": "06:25 AM IST",
+      "venue": "Bayuemas Oval",
+      "league": "all",
+      "tournament": "Kuwait vs Oman Match"
+    },
+    "qatar_kuwait_2026-09-05": {
+      "teamA": "Kuwait",
+      "teamB": "Oman",
+      "time": "06:25 AM IST",
+      "venue": "Bayuemas Oval",
+      "league": "all",
+      "tournament": "Kuwait vs Oman Match"
+    },
+    "malaysia_hong kong, china_2026-09-05": {
+      "teamA": "Malaysia",
+      "teamB": "Hong Kong, China",
+      "time": "06:30 AM IST",
+      "venue": "International Cricket Stadium",
+      "league": "all",
+      "tournament": "Malaysia vs Hong Kong, China Match"
+    },
+    "hong kong, china_malaysia_2026-09-05": {
+      "teamA": "Malaysia",
+      "teamB": "Hong Kong, China",
+      "time": "06:30 AM IST",
+      "venue": "International Cricket Stadium",
+      "league": "all",
+      "tournament": "Malaysia vs Hong Kong, China Match"
+    },
+    "mohali kings_bathinda royals_2026-09-05": {
+      "teamA": "Fazilka Falcons",
+      "teamB": "Bathinda Royals",
+      "time": "12:30 PM IST",
+      "venue": "PCA IS Bindra Stadium, Punjab",
+      "league": "all",
+      "tournament": "Fazilka Falcons vs Bathinda Royals Match"
+    },
+    "bathinda royals_mohali kings_2026-09-05": {
+      "teamA": "Fazilka Falcons",
+      "teamB": "Bathinda Royals",
+      "time": "12:30 PM IST",
+      "venue": "PCA IS Bindra Stadium, Punjab",
+      "league": "all",
+      "tournament": "Fazilka Falcons vs Bathinda Royals Match"
+    },
+    "calicut globstars_trivandrum royals_2026-09-05": {
+      "teamA": "Calicut Globstars",
+      "teamB": "Thrissur Titans",
+      "time": "06:55 PM IST",
+      "venue": "Greenfield International Stadium, Thiruvananthapuram",
+      "league": "all",
+      "tournament": "Calicut Globstars vs Thrissur Titans Match"
+    },
+    "trivandrum royals_calicut globstars_2026-09-05": {
+      "teamA": "Calicut Globstars",
+      "teamB": "Thrissur Titans",
+      "time": "06:55 PM IST",
+      "venue": "Greenfield International Stadium, Thiruvananthapuram",
+      "league": "all",
+      "tournament": "Calicut Globstars vs Thrissur Titans Match"
+    },
+    "fazilka falcons_bathinda royals_2026-09-05": {
+      "teamA": "Fazilka Falcons",
+      "teamB": "Bathinda Royals",
+      "time": "12:30 PM IST",
+      "venue": "Punjab Cricket Association IS Bindra Stadium, Mohali",
+      "league": "all",
+      "tournament": "Fazilka Falcons vs Bathinda Royals Match"
+    },
+    "bathinda royals_fazilka falcons_2026-09-05": {
+      "teamA": "Fazilka Falcons",
+      "teamB": "Bathinda Royals",
+      "time": "12:30 PM IST",
+      "venue": "Punjab Cricket Association IS Bindra Stadium, Mohali",
+      "league": "all",
+      "tournament": "Fazilka Falcons vs Bathinda Royals Match"
+    },
+    "ludhiana lions_jalandhar warriors_2026-09-05": {
+      "teamA": "Mohali Kings",
+      "teamB": "Jalandhar Warriors",
+      "time": "06:30 PM IST",
+      "venue": "Punjab Cricket Association IS Bindra Stadium, Mohali",
+      "league": "all",
+      "tournament": "Mohali Kings vs Jalandhar Warriors Match"
+    },
+    "jalandhar warriors_ludhiana lions_2026-09-05": {
+      "teamA": "Mohali Kings",
+      "teamB": "Jalandhar Warriors",
+      "time": "06:30 PM IST",
+      "venue": "Punjab Cricket Association IS Bindra Stadium, Mohali",
+      "league": "all",
+      "tournament": "Mohali Kings vs Jalandhar Warriors Match"
+    },
+    "rotterdam dockers_glasgow cosmic_2026-09-05": {
+      "teamA": "Rotterdam Dockers",
+      "teamB": "Edinburgh Castle Rockers",
+      "time": "03:00 PM IST",
+      "venue": "Sportpark Duivesteijn, Voorburg",
+      "league": "all",
+      "tournament": "Rotterdam Dockers vs Edinburgh Castle Rockers Match"
+    },
+    "glasgow cosmic_rotterdam dockers_2026-09-05": {
+      "teamA": "Rotterdam Dockers",
+      "teamB": "Edinburgh Castle Rockers",
+      "time": "03:00 PM IST",
+      "venue": "Sportpark Duivesteijn, Voorburg",
+      "league": "all",
+      "tournament": "Rotterdam Dockers vs Edinburgh Castle Rockers Match"
+    },
+    "belfast wolves_amsterdam flames_2026-09-05": {
+      "teamA": "Dublin Guardians",
+      "teamB": "Amsterdam Flames",
+      "time": "06:40 PM IST",
+      "venue": "Sportpark Duivesteijn, Voorburg",
+      "league": "all",
+      "tournament": "Dublin Guardians vs Amsterdam Flames Match"
+    },
+    "amsterdam flames_belfast wolves_2026-09-05": {
+      "teamA": "Dublin Guardians",
+      "teamB": "Amsterdam Flames",
+      "time": "06:40 PM IST",
+      "venue": "Sportpark Duivesteijn, Voorburg",
+      "league": "all",
+      "tournament": "Dublin Guardians vs Amsterdam Flames Match"
+    },
+    "serbia women_bulgaria women_2026-09-05": {
+      "teamA": "Czech Republic Women",
+      "teamB": "Bulgaria Women",
+      "time": "03:30 PM IST",
+      "venue": "Lisicji Jarak Cricket Ground, Belgrade",
+      "league": "all",
+      "tournament": "Czech Republic Women vs Bulgaria Women Match"
+    },
+    "bulgaria women_serbia women_2026-09-05": {
+      "teamA": "Czech Republic Women",
+      "teamB": "Bulgaria Women",
+      "time": "03:30 PM IST",
+      "venue": "Lisicji Jarak Cricket Ground, Belgrade",
+      "league": "all",
+      "tournament": "Czech Republic Women vs Bulgaria Women Match"
+    },
+    "czech republic women_bulgaria women_2026-09-05": {
+      "teamA": "Serbia Woman",
+      "teamB": "Bulgaria Women",
+      "time": "03:30 PM IST",
+      "venue": "Lisicji Jarak Cricket Ground, Belgrade",
+      "league": "all",
+      "tournament": "Serbia Woman vs Bulgaria Women Match"
+    },
+    "bulgaria women_czech republic women_2026-09-05": {
+      "teamA": "Serbia Woman",
+      "teamB": "Bulgaria Women",
+      "time": "03:30 PM IST",
+      "venue": "Lisicji Jarak Cricket Ground, Belgrade",
+      "league": "all",
+      "tournament": "Serbia Woman vs Bulgaria Women Match"
+    },
+    "ncm investment_stack cc_2026-09-05": {
+      "teamA": "Super XI Kuwait",
+      "teamB": "Royal Lions Club",
+      "time": "11:15 PM IST",
+      "venue": "Sulaibiya Cricket Ground, Kuwait",
+      "league": "all",
+      "tournament": "Super XI Kuwait vs Royal Lions Club Match"
+    },
+    "stack cc_ncm investment_2026-09-05": {
+      "teamA": "Super XI Kuwait",
+      "teamB": "Royal Lions Club",
+      "time": "11:15 PM IST",
+      "venue": "Sulaibiya Cricket Ground, Kuwait",
+      "league": "all",
+      "tournament": "Super XI Kuwait vs Royal Lions Club Match"
+    },
+    "barbados tridents_trinbago knight riders_2026-09-06": {
+      "teamA": "Barbados Tridents",
+      "teamB": "Trinbago Knight Riders",
+      "time": "04:30 AM IST",
+      "venue": "Warner Park, Basseterre, St Kitts",
+      "league": "all",
+      "tournament": "Barbados Tridents vs Trinbago Knight Riders Match"
+    },
+    "trinbago knight riders_barbados tridents_2026-09-06": {
+      "teamA": "Barbados Tridents",
+      "teamB": "Trinbago Knight Riders",
+      "time": "04:30 AM IST",
+      "venue": "Warner Park, Basseterre, St Kitts",
+      "league": "all",
+      "tournament": "Barbados Tridents vs Trinbago Knight Riders Match"
+    },
+    "jalandhar warriors_amritsar kings_2026-09-06": {
+      "teamA": "Jalandhar Warriors",
+      "teamB": "Bathinda Royals",
+      "time": "01:00 PM IST",
+      "venue": "PCA IS Bindra Stadium, Mohali",
+      "league": "all",
+      "tournament": "Jalandhar Warriors vs Bathinda Royals Match"
+    },
+    "amritsar kings_jalandhar warriors_2026-09-06": {
+      "teamA": "Jalandhar Warriors",
+      "teamB": "Bathinda Royals",
+      "time": "01:00 PM IST",
+      "venue": "PCA IS Bindra Stadium, Mohali",
+      "league": "all",
+      "tournament": "Jalandhar Warriors vs Bathinda Royals Match"
+    },
+    "amsterdam flames_glasgow cosmic_2026-09-06": {
+      "teamA": "Edinburgh Castle Rockers",
+      "teamB": "Glasgow Cosmic",
+      "time": "03:00 PM IST",
+      "venue": "Sportpark Westvliet, The Hague",
+      "league": "all",
+      "tournament": "Edinburgh Castle Rockers vs Glasgow Cosmic Match"
+    },
+    "glasgow cosmic_amsterdam flames_2026-09-06": {
+      "teamA": "Edinburgh Castle Rockers",
+      "teamB": "Glasgow Cosmic",
+      "time": "03:00 PM IST",
+      "venue": "Sportpark Westvliet, The Hague",
+      "league": "all",
+      "tournament": "Edinburgh Castle Rockers vs Glasgow Cosmic Match"
+    },
+    "super xi_royal lions cc_2026-09-05": {
+      "teamA": "Super XI Kuwait",
+      "teamB": "Royal Lions Club",
+      "time": "11:15 PM IST",
+      "venue": "Sulaibiya Cricket Ground, Kuwait",
+      "league": "all",
+      "tournament": "Super XI Kuwait vs Royal Lions Club Match"
+    },
+    "royal lions cc_super xi_2026-09-05": {
+      "teamA": "Super XI Kuwait",
+      "teamB": "Royal Lions Club",
+      "time": "11:15 PM IST",
+      "venue": "Sulaibiya Cricket Ground, Kuwait",
+      "league": "all",
+      "tournament": "Super XI Kuwait vs Royal Lions Club Match"
+    },
+    "super xi kuwait_royal lions club_2026-09-05": {
+      "teamA": "Super XI Kuwait",
+      "teamB": "Royal Lions Club",
+      "time": "11:15 PM IST",
+      "venue": "Sulaibiya Cricket Ground, Kuwait",
+      "league": "all",
+      "tournament": "Super XI Kuwait vs Royal Lions Club Match"
+    },
+    "royal lions club_super xi kuwait_2026-09-05": {
+      "teamA": "Super XI Kuwait",
+      "teamB": "Royal Lions Club",
+      "time": "11:15 PM IST",
+      "venue": "Sulaibiya Cricket Ground, Kuwait",
+      "league": "all",
+      "tournament": "Super XI Kuwait vs Royal Lions Club Match"
+    },
+    "kashi rudras_meerut mavericks_2026-09-06": {
+      "teamA": "Lucknow Falcons",
+      "teamB": "Meerut Mavericks",
+      "time": "07:30 PM IST",
+      "venue": "BRSABV Ekana Cricket Stadium, Lucknow",
+      "league": "all",
+      "tournament": "Lucknow Falcons vs Meerut Mavericks Match"
+    },
+    "meerut mavericks_kashi rudras_2026-09-06": {
+      "teamA": "Lucknow Falcons",
+      "teamB": "Meerut Mavericks",
+      "time": "07:30 PM IST",
+      "venue": "BRSABV Ekana Cricket Stadium, Lucknow",
+      "league": "all",
+      "tournament": "Lucknow Falcons vs Meerut Mavericks Match"
+    },
+    "lucknow falcons_meerut mavericks_2026-09-06": {
+      "teamA": "Lucknow Falcons",
+      "teamB": "Meerut Mavericks",
+      "time": "07:30 PM IST",
+      "venue": "BRSABV Ekana Cricket Stadium, Lucknow",
+      "league": "all",
+      "tournament": "Lucknow Falcons vs Meerut Mavericks Match"
+    },
+    "meerut mavericks_lucknow falcons_2026-09-06": {
+      "teamA": "Lucknow Falcons",
+      "teamB": "Meerut Mavericks",
+      "time": "07:30 PM IST",
+      "venue": "BRSABV Ekana Cricket Stadium, Lucknow",
+      "league": "all",
+      "tournament": "Lucknow Falcons vs Meerut Mavericks Match"
+    },
+    "selaqui strikers_rishikesh dragons_2026-09-07": {
+      "teamA": "Selaqui Strikers",
+      "teamB": "Vikasnagar Dhamaka",
+      "time": "02:00 PM IST",
+      "venue": "Abhimanyu Cricket Academy, Dehradun",
+      "league": "dehradun_t20",
+      "tournament": "Selaqui Strikers vs Vikasnagar Dhamaka Match"
+    },
+    "rishikesh dragons_selaqui strikers_2026-09-07": {
+      "teamA": "Selaqui Strikers",
+      "teamB": "Vikasnagar Dhamaka",
+      "time": "02:00 PM IST",
+      "venue": "Abhimanyu Cricket Academy, Dehradun",
+      "league": "dehradun_t20",
+      "tournament": "Selaqui Strikers vs Vikasnagar Dhamaka Match"
+    },
+    "selaqui strikers_vikasnagar dhamaka_2026-09-07": {
+      "teamA": "Selaqui Strikers",
+      "teamB": "Vikasnagar Dhamaka",
+      "time": "02:00 PM IST",
+      "venue": "Abhimanyu Cricket Academy, Dehradun",
+      "league": "dehradun_t20",
+      "tournament": "Selaqui Strikers vs Vikasnagar Dhamaka Match"
+    },
+    "vikasnagar dhamaka_selaqui strikers_2026-09-07": {
+      "teamA": "Selaqui Strikers",
+      "teamB": "Vikasnagar Dhamaka",
+      "time": "02:00 PM IST",
+      "venue": "Abhimanyu Cricket Academy, Dehradun",
+      "league": "dehradun_t20",
+      "tournament": "Selaqui Strikers vs Vikasnagar Dhamaka Match"
+    },
+    "amritsar soormas_jalandhar warriors_2026-09-07": {
+      "teamA": "Amritsar Soormas",
+      "teamB": "Jalandhar Warriors",
+      "time": "06:30 PM IST",
+      "venue": "PCA IS Bindra Stadium, Mohali",
+      "league": "pca",
+      "tournament": "Amritsar Soormas vs Jalandhar Warriors Match"
+    },
+    "jalandhar warriors_amritsar soormas_2026-09-07": {
+      "teamA": "Amritsar Soormas",
+      "teamB": "Jalandhar Warriors",
+      "time": "06:30 PM IST",
+      "venue": "PCA IS Bindra Stadium, Mohali",
+      "league": "pca",
+      "tournament": "Amritsar Soormas vs Jalandhar Warriors Match"
+    },
+    "mussoorie thunder_dehradun warriors_2026-09-07": {
+      "teamA": "Mussoorie Thunder",
+      "teamB": "Herbertpur Knight Riders",
+      "time": "07:00 PM IST",
+      "venue": "Rajiv Gandhi International Cricket Stadium, Dehradun",
+      "league": "dehradun_t20",
+      "tournament": "Mussoorie Thunder vs Herbertpur Knight Riders Match"
+    },
+    "dehradun warriors_mussoorie thunder_2026-09-07": {
+      "teamA": "Mussoorie Thunder",
+      "teamB": "Herbertpur Knight Riders",
+      "time": "07:00 PM IST",
+      "venue": "Rajiv Gandhi International Cricket Stadium, Dehradun",
+      "league": "dehradun_t20",
+      "tournament": "Mussoorie Thunder vs Herbertpur Knight Riders Match"
+    },
+    "mussoorie thunder_herbertpur knight riders_2026-09-07": {
+      "teamA": "Mussoorie Thunder",
+      "teamB": "Herbertpur Knight Riders",
+      "time": "07:00 PM IST",
+      "venue": "Rajiv Gandhi International Cricket Stadium, Dehradun",
+      "league": "dehradun_t20",
+      "tournament": "Mussoorie Thunder vs Herbertpur Knight Riders Match"
+    },
+    "herbertpur knight riders_mussoorie thunder_2026-09-07": {
+      "teamA": "Mussoorie Thunder",
+      "teamB": "Herbertpur Knight Riders",
+      "time": "07:00 PM IST",
+      "venue": "Rajiv Gandhi International Cricket Stadium, Dehradun",
+      "league": "dehradun_t20",
+      "tournament": "Mussoorie Thunder vs Herbertpur Knight Riders Match"
+    },
+    "ludhiana lions_fazilka falcons_2026-09-09": {
+      "teamA": "Ludhiana Lions",
+      "teamB": "Fazilka Falcons",
+      "time": "01:00 PM IST",
+      "venue": "Punjab Cricket Association IS Bindra Stadium, Mohali",
+      "league": "pca",
+      "tournament": "Ludhiana Lions vs Fazilka Falcons Match"
+    },
+    "fazilka falcons_ludhiana lions_2026-09-09": {
+      "teamA": "Ludhiana Lions",
+      "teamB": "Fazilka Falcons",
+      "time": "01:00 PM IST",
+      "venue": "Punjab Cricket Association IS Bindra Stadium, Mohali",
+      "league": "pca",
+      "tournament": "Ludhiana Lions vs Fazilka Falcons Match"
+    },
+    "barbados royals women_trinbago knight riders women_2026-09-10": {
+      "teamA": "Jamaica Empress Women",
+      "teamB": "Trinbago Knight Riders Women",
+      "time": "07:30 PM IST",
+      "venue": "Kensington Oval, Bridgetown, Barbados",
+      "league": "wcpl",
+      "tournament": "Jamaica Empress Women vs Trinbago Knight Riders Women Match"
+    },
+    "trinbago knight riders women_barbados royals women_2026-09-10": {
+      "teamA": "Jamaica Empress Women",
+      "teamB": "Trinbago Knight Riders Women",
+      "time": "07:30 PM IST",
+      "venue": "Kensington Oval, Bridgetown, Barbados",
+      "league": "wcpl",
+      "tournament": "Jamaica Empress Women vs Trinbago Knight Riders Women Match"
+    },
+    "jamaica empress women_trinbago knight riders women_2026-09-10": {
+      "teamA": "Jamaica Empress Women",
+      "teamB": "Trinbago Knight Riders Women",
+      "time": "07:30 PM IST",
+      "venue": "Kensington Oval, Bridgetown, Barbados",
+      "league": "wcpl",
+      "tournament": "Jamaica Empress Women vs Trinbago Knight Riders Women Match"
+    },
+    "trinbago knight riders women_jamaica empress women_2026-09-10": {
+      "teamA": "Jamaica Empress Women",
+      "teamB": "Trinbago Knight Riders Women",
+      "time": "07:30 PM IST",
+      "venue": "Kensington Oval, Bridgetown, Barbados",
+      "league": "wcpl",
+      "tournament": "Jamaica Empress Women vs Trinbago Knight Riders Women Match"
+    },
+    "mohali kings_amritsar soormas_2026-09-10": {
+      "teamA": "Jalandhar Warriors",
+      "teamB": "Amritsar Soormas",
+      "time": "01:00 PM IST",
+      "venue": "Punjab Cricket Association IS Bindra Stadium, Mohali",
+      "league": "pca",
+      "tournament": "Jalandhar Warriors vs Amritsar Soormas Match"
+    },
+    "amritsar soormas_mohali kings_2026-09-10": {
+      "teamA": "Jalandhar Warriors",
+      "teamB": "Amritsar Soormas",
+      "time": "01:00 PM IST",
+      "venue": "Punjab Cricket Association IS Bindra Stadium, Mohali",
+      "league": "pca",
+      "tournament": "Jalandhar Warriors vs Amritsar Soormas Match"
+    },
+    "jalandhar warriors_amritsar soormas_2026-09-10": {
+      "teamA": "Jalandhar Warriors",
+      "teamB": "Amritsar Soormas",
+      "time": "01:00 PM IST",
+      "venue": "Punjab Cricket Association IS Bindra Stadium, Mohali",
+      "league": "pca",
+      "tournament": "Jalandhar Warriors vs Amritsar Soormas Match"
+    },
+    "amritsar soormas_jalandhar warriors_2026-09-10": {
+      "teamA": "Jalandhar Warriors",
+      "teamB": "Amritsar Soormas",
+      "time": "01:00 PM IST",
+      "venue": "Punjab Cricket Association IS Bindra Stadium, Mohali",
+      "league": "pca",
+      "tournament": "Jalandhar Warriors vs Amritsar Soormas Match"
+    },
+    "bathinda royals_ludhiana lions_2026-09-10": {
+      "teamA": "Bathinda Royals",
+      "teamB": "Fazilka Falcons",
+      "time": "07:00 PM IST",
+      "venue": "PCA IS Bindra Stadium, Mohali",
+      "league": "pca",
+      "tournament": "Bathinda Royals vs Fazilka Falcons Match"
+    },
+    "ludhiana lions_bathinda royals_2026-09-10": {
+      "teamA": "Bathinda Royals",
+      "teamB": "Fazilka Falcons",
+      "time": "07:00 PM IST",
+      "venue": "PCA IS Bindra Stadium, Mohali",
+      "league": "pca",
+      "tournament": "Bathinda Royals vs Fazilka Falcons Match"
+    },
+    "bathinda royals_fazilka falcons_2026-09-10": {
+      "teamA": "Bathinda Royals",
+      "teamB": "Fazilka Falcons",
+      "time": "07:00 PM IST",
+      "venue": "PCA IS Bindra Stadium, Mohali",
+      "league": "pca",
+      "tournament": "Bathinda Royals vs Fazilka Falcons Match"
+    },
+    "fazilka falcons_bathinda royals_2026-09-10": {
+      "teamA": "Bathinda Royals",
+      "teamB": "Fazilka Falcons",
+      "time": "07:00 PM IST",
+      "venue": "PCA IS Bindra Stadium, Mohali",
+      "league": "pca",
+      "tournament": "Bathinda Royals vs Fazilka Falcons Match"
+    }
+  }
+}
