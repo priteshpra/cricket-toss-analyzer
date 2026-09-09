@@ -5,11 +5,17 @@
   --font-body: 'Plus Jakarta Sans', sans-serif;
 }
 
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   font-family: var(--font-body);
   background-color: #0b0f19;
   color: #f1f5f9;
   min-height: 100vh;
+  -webkit-text-size-adjust: 100%;
 }
 
 h1, h2, h3, h4, h5, h6, .font-heading {
@@ -18,8 +24,8 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: #0f172a;
@@ -30,6 +36,20 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #475569;
+}
+
+/* Utilities for touch and horizontal scroll without visible scrollbar */
+.touch-scroll {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Glassmorphic card styling */
@@ -84,4 +104,24 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 .modal-backdrop {
   background: rgba(3, 7, 18, 0.85);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Mobile interactive improvements */
+@media (max-width: 640px) {
+  /* Prevent iOS auto zoom on input focus */
+  input[type="text"],
+  input[type="date"],
+  select {
+    font-size: 16px !important;
+  }
+  
+  .glass-card:hover {
+    transform: none; /* Disable transform hover jump on touch devices */
+  }
+
+  /* Safe touch tap targets */
+  button, a {
+    touch-action: manipulation;
+  }
 }

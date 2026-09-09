@@ -549,7 +549,7 @@ function filterAndRenderMatches() {
 // Create Match Card Element
 function createMatchCardElement(match) {
   const card = document.createElement('div');
-  card.className = 'glass-panel rounded-2xl p-5 border border-slate-800/80 hover:border-slate-700 transition-all duration-300 relative flex flex-col justify-between shadow-xl';
+  card.className = 'glass-panel rounded-2xl p-4 sm:p-5 border border-slate-800/80 hover:border-slate-700 transition-all duration-300 relative flex flex-col justify-between shadow-xl';
 
   const matchKey = `${match.teamA}_${match.teamB}_${match.date || currentDate}`;
   const isSelected = bulkSelectedMatchKeys.has(matchKey);
@@ -557,8 +557,8 @@ function createMatchCardElement(match) {
   // Status Badge
   const isDone = !!match.tossWinner || match.status === 'COMPLETED';
   const statusBadge = isDone
-    ? `<span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold">🪙 Toss Done</span>`
-    : `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-bold animate-pulse">⏳ Toss Pending</span>`;
+    ? `<span class="px-2 sm:px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[9px] sm:text-[10px] font-bold shrink-0">🪙 Toss Done</span>`
+    : `<span class="px-2 sm:px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[9px] sm:text-[10px] font-bold animate-pulse shrink-0">⏳ Toss Pending</span>`;
 
   // Format League Label
   const leagueNameMap = {
@@ -598,13 +598,13 @@ function createMatchCardElement(match) {
                    favoredWinner.toLowerCase().includes(match.tossWinner.toLowerCase());
     if (isPass) {
       tossVerificationBadge = `<div class="mt-2.5 p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/60 flex items-center justify-between text-xs">
-        <span class="text-emerald-300 font-bold flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-emerald-400"></i> Toss Won: <strong>${match.tossWinner}</strong></span>
-        <span class="px-2 py-0.5 rounded-md bg-emerald-500 text-slate-950 text-[10px] font-black uppercase tracking-wider">🟢 PASS (SAHI)</span>
+        <span class="text-emerald-300 font-bold flex items-center gap-1.5 truncate mr-2"><i class="fa-solid fa-circle-check text-emerald-400 shrink-0"></i> Toss Won: <strong class="truncate">${match.tossWinner}</strong></span>
+        <span class="px-2 py-0.5 rounded-md bg-emerald-500 text-slate-950 text-[9px] sm:text-[10px] font-black uppercase tracking-wider shrink-0">🟢 PASS</span>
       </div>`;
     } else {
       tossVerificationBadge = `<div class="mt-2.5 p-2 rounded-xl bg-rose-950/80 border border-rose-500/60 flex items-center justify-between text-xs">
-        <span class="text-rose-300 font-bold flex items-center gap-1.5"><i class="fa-solid fa-circle-xmark text-rose-400"></i> Toss Won: <strong>${match.tossWinner}</strong></span>
-        <span class="px-2 py-0.5 rounded-md bg-rose-500 text-white text-[10px] font-black uppercase tracking-wider">🔴 FAIL (GALAT)</span>
+        <span class="text-rose-300 font-bold flex items-center gap-1.5 truncate mr-2"><i class="fa-solid fa-circle-xmark text-rose-400 shrink-0"></i> Toss Won: <strong class="truncate">${match.tossWinner}</strong></span>
+        <span class="px-2 py-0.5 rounded-md bg-rose-500 text-white text-[9px] sm:text-[10px] font-black uppercase tracking-wider shrink-0">🔴 FAIL</span>
       </div>`;
     }
   }
@@ -619,14 +619,14 @@ function createMatchCardElement(match) {
     const backOdds = isTeamAHeavy ? ml.betfairOdds.teamA.back : ml.betfairOdds.teamB.back;
 
     marketLoadStrip = `
-      <div class="mt-3 p-2.5 rounded-xl bg-slate-950/90 border border-emerald-500/30 space-y-2">
-        <div class="flex items-center justify-between text-[11px]">
-          <span class="text-slate-400 font-medium flex items-center gap-1">
-            <i class="fa-solid fa-coins text-yellow-400"></i> Orbit Toss Matched: <strong class="text-emerald-300 font-mono">${totalInr}</strong>
-            ${ml.timing ? `<span class="ml-1 px-1.5 py-0.2 rounded bg-slate-900 ${ml.timing.isPeak ? 'text-amber-300 border-amber-500/50' : 'text-slate-400 border-slate-800'} text-[9px] font-bold border">${ml.timing.badge}</span>` : ''}
+      <div class="mt-2.5 sm:mt-3 p-2.5 rounded-xl bg-slate-950/90 border border-emerald-500/30 space-y-2">
+        <div class="flex flex-wrap items-center justify-between gap-1 text-[11px]">
+          <span class="text-slate-400 font-medium flex items-center gap-1 min-w-0">
+            <i class="fa-solid fa-coins text-yellow-400 shrink-0"></i> <span class="truncate">Orbit: <strong class="text-emerald-300 font-mono">${totalInr}</strong></span>
+            ${ml.timing ? `<span class="ml-1 px-1.5 py-0.2 rounded bg-slate-900 ${ml.timing.isPeak ? 'text-amber-300 border-amber-500/50' : 'text-slate-400 border-slate-800'} text-[9px] font-bold border shrink-0">${ml.timing.badge}</span>` : ''}
           </span>
-          <span class="px-2 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-extrabold border border-emerald-500/40">
-            ${heavyPercent}% Toss Load on ${heavyTeam.split(' ')[0]}
+          <span class="px-2 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 text-[9px] sm:text-[10px] font-extrabold border border-emerald-500/40 shrink-0">
+            ${heavyPercent}% Load on ${heavyTeam.split(' ')[0]}
           </span>
         </div>
 
@@ -637,32 +637,32 @@ function createMatchCardElement(match) {
             <div class="bg-orange-500 h-full transition-all" style="width: ${ml.orbitLoad.teamB.percent}%" title="${match.teamB}: ${ml.orbitLoad.teamB.percent}%"></div>
           </div>
           <div class="flex items-center justify-between text-[9px] font-mono text-slate-400">
-            <span class="text-blue-400 font-bold">${match.teamA.split(' ')[0]}: ${ml.orbitLoad.teamA.percent}%</span>
-            <span class="text-amber-300 font-bold">Toss Odds: ${ml.betfairOdds.teamA.back} / ${ml.betfairOdds.teamB.back}</span>
-            <span class="text-orange-400 font-bold">${match.teamB.split(' ')[0]}: ${ml.orbitLoad.teamB.percent}%</span>
+            <span class="text-blue-400 font-bold truncate max-w-[32%]">${match.teamA.split(' ')[0]}: ${ml.orbitLoad.teamA.percent}%</span>
+            <span class="text-amber-300 font-bold shrink-0">Odds: ${ml.betfairOdds.teamA.back}/${ml.betfairOdds.teamB.back}</span>
+            <span class="text-orange-400 font-bold truncate max-w-[32%] text-right">${match.teamB.split(' ')[0]}: ${ml.orbitLoad.teamB.percent}%</span>
           </div>
         </div>
 
         <!-- 🎯 Ultra-Clear Direct Bet Advisory Banner -->
         <div class="p-2 rounded-lg ${ml.aiConvergence.isAligned ? 'bg-emerald-950/90 border border-emerald-500/60' : 'bg-amber-950/90 border border-amber-500/60'} flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs">
-          <div class="${ml.aiConvergence.isAligned ? 'text-emerald-300' : 'text-amber-300'} font-bold flex items-center gap-1.5">
-            <i class="fa-solid ${ml.aiConvergence.isAligned ? 'fa-circle-check text-emerald-400' : 'fa-triangle-exclamation text-amber-400'}"></i> 
-            <span>Toss Advisory: <strong class="text-white underline">${ml.aiConvergence.isAligned ? 'BET ON ' + ml.orbitLoad.heavyTeam : 'SKIP / PASS (Risky Load)'}</strong></span>
+          <div class="${ml.aiConvergence.isAligned ? 'text-emerald-300' : 'text-amber-300'} font-bold flex items-center gap-1.5 min-w-0">
+            <i class="fa-solid ${ml.aiConvergence.isAligned ? 'fa-circle-check text-emerald-400' : 'fa-triangle-exclamation text-amber-400'} shrink-0"></i> 
+            <span class="truncate text-[11px] sm:text-xs">Toss: <strong class="text-white underline">${ml.aiConvergence.isAligned ? 'BET ON ' + ml.orbitLoad.heavyTeam : 'SKIP / PASS (Risky Load)'}</strong></span>
           </div>
-          <span class="px-2 py-0.5 rounded-md ${ml.aiConvergence.isAligned ? 'bg-emerald-500 text-slate-950' : 'bg-amber-500 text-slate-950'} text-[10px] font-black uppercase tracking-wider self-start sm:self-auto shrink-0">
+          <span class="px-2 py-0.5 rounded-md ${ml.aiConvergence.isAligned ? 'bg-emerald-500 text-slate-950' : 'bg-amber-500 text-slate-950'} text-[9px] sm:text-[10px] font-black uppercase tracking-wider self-start sm:self-auto shrink-0">
             ${ml.aiConvergence.isAligned ? '🟢 99.9% SAFE' : '⚠️ SKIP'}
           </span>
         </div>
 
         <!-- 1-Click Direct Exchange Buttons -->
         <div class="grid grid-cols-3 gap-1.5 pt-0.5">
-          <a href="https://orbitxch.com/customer/sport/4" target="_blank" rel="noopener noreferrer" class="py-1 px-1.5 rounded-lg bg-blue-950/60 hover:bg-blue-900 border border-blue-500/40 text-blue-300 hover:text-white text-[10px] font-bold text-center flex items-center justify-center gap-1 transition-all" title="Open Orbit Exchange Live">
+          <a href="https://orbitxch.com/customer/sport/4" target="_blank" rel="noopener noreferrer" class="py-1.5 px-1 rounded-lg bg-blue-950/60 hover:bg-blue-900 border border-blue-500/40 text-blue-300 hover:text-white text-[10px] font-bold text-center flex items-center justify-center gap-1 transition-all" title="Open Orbit Exchange Live">
             🌐 Orbit
           </a>
-          <a href="https://www.betfair.com/exchange/plus/cricket" target="_blank" rel="noopener noreferrer" class="py-1 px-1.5 rounded-lg bg-amber-950/60 hover:bg-amber-900 border border-amber-500/40 text-amber-300 hover:text-white text-[10px] font-bold text-center flex items-center justify-center gap-1 transition-all" title="Open Betfair Cricket Market">
+          <a href="https://www.betfair.com/exchange/plus/cricket" target="_blank" rel="noopener noreferrer" class="py-1.5 px-1 rounded-lg bg-amber-950/60 hover:bg-amber-900 border border-amber-500/40 text-amber-300 hover:text-white text-[10px] font-bold text-center flex items-center justify-center gap-1 transition-all" title="Open Betfair Cricket Market">
             📈 Betfair
           </a>
-          <a href="https://www.oddschecker.com/cricket" target="_blank" rel="noopener noreferrer" class="py-1 px-1.5 rounded-lg bg-purple-950/60 hover:bg-purple-900 border border-purple-500/40 text-purple-300 hover:text-white text-[10px] font-bold text-center flex items-center justify-center gap-1 transition-all" title="Open Oddschecker Market Movement">
+          <a href="https://www.oddschecker.com/cricket" target="_blank" rel="noopener noreferrer" class="py-1.5 px-1 rounded-lg bg-purple-950/60 hover:bg-purple-900 border border-purple-500/40 text-purple-300 hover:text-white text-[10px] font-bold text-center flex items-center justify-center gap-1 transition-all" title="Open Oddschecker Market Movement">
             🔍 Odds
           </a>
         </div>
@@ -673,8 +673,8 @@ function createMatchCardElement(match) {
   card.innerHTML = `
     <div>
       <!-- Top Header Row -->
-      <div class="flex items-center justify-between gap-2 mb-2.5">
-        <div class="flex items-center gap-2">
+      <div class="flex items-center justify-between gap-1.5 sm:gap-2 mb-2 sm:mb-2.5 flex-wrap">
+        <div class="flex items-center gap-1.5 sm:gap-2">
           <input type="checkbox" class="match-bulk-checkbox w-4 h-4 rounded bg-slate-900 border-slate-700 text-rose-500 focus:ring-0 cursor-pointer" data-match-key="${matchKey}" ${isSelected ? 'checked' : ''}>
           <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 border border-slate-700 text-[10px] font-extrabold uppercase">
             ${leagueBadge}
@@ -689,23 +689,23 @@ function createMatchCardElement(match) {
       </div>
 
       <!-- Match Tournament & Venue -->
-      <div class="mb-3">
+      <div class="mb-2.5 sm:mb-3">
         <h4 class="text-xs text-slate-400 truncate" title="${match.tournament || ''}">
           ${match.tournament || 'Match Fixture'}
         </h4>
         <p class="text-[11px] text-slate-500 flex items-center gap-1 truncate mt-0.5" title="${match.venue}">
-          <i class="fa-solid fa-location-dot text-emerald-400 text-[10px]"></i> ${match.venue}
+          <i class="fa-solid fa-location-dot text-emerald-400 text-[10px] shrink-0"></i> <span class="truncate">${match.venue}</span>
         </p>
       </div>
 
       <!-- Teams Row -->
-      <div class="space-y-2 bg-slate-900/90 p-3 rounded-xl border border-slate-800/80 mb-3">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full bg-blue-500 shrink-0"></span>
-            <span class="text-sm font-bold text-white">${match.teamA}</span>
+      <div class="space-y-1.5 sm:space-y-2 bg-slate-900/90 p-2.5 sm:p-3 rounded-xl border border-slate-800/80 mb-2.5 sm:mb-3">
+        <div class="flex items-center justify-between min-w-0 gap-2">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-blue-500 shrink-0"></span>
+            <span class="text-xs sm:text-sm font-bold text-white truncate" title="${match.teamA}">${match.teamA}</span>
           </div>
-          <span class="text-xs font-bold ${isFavA ? 'text-emerald-400 font-mono' : 'text-slate-500'}">
+          <span class="text-xs font-bold shrink-0 ${isFavA ? 'text-emerald-400 font-mono' : 'text-slate-500'}">
             ${isFavA ? favoredProbability + '% AI Fav' : ''}
           </span>
         </div>
@@ -714,12 +714,12 @@ function createMatchCardElement(match) {
           <span>VS</span>
         </div>
 
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full bg-orange-500 shrink-0"></span>
-            <span class="text-sm font-bold text-white">${match.teamB}</span>
+        <div class="flex items-center justify-between min-w-0 gap-2">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-orange-500 shrink-0"></span>
+            <span class="text-xs sm:text-sm font-bold text-white truncate" title="${match.teamB}">${match.teamB}</span>
           </div>
-          <span class="text-xs font-bold ${isFavB ? 'text-emerald-400 font-mono' : 'text-slate-500'}">
+          <span class="text-xs font-bold shrink-0 ${isFavB ? 'text-emerald-400 font-mono' : 'text-slate-500'}">
             ${isFavB ? favoredProbability + '% AI Fav' : ''}
           </span>
         </div>
@@ -727,11 +727,11 @@ function createMatchCardElement(match) {
 
       <!-- Timing Strip -->
       <div class="flex items-center justify-between text-xs text-slate-400 px-1">
-        <span class="flex items-center gap-1 font-mono">
-          <i class="fa-regular fa-clock text-amber-400"></i> ${match.time}
+        <span class="flex items-center gap-1 font-mono text-[11px] sm:text-xs">
+          <i class="fa-regular fa-clock text-amber-400 shrink-0"></i> ${match.time}
         </span>
-        <span class="text-[11px] font-semibold text-emerald-400">
-          🪙 Toss: ${match.tossTime || '30 mins before'}
+        <span class="text-[10px] sm:text-[11px] font-semibold text-emerald-400">
+          🪙 Toss: ${match.tossTime || '30m before'}
         </span>
       </div>
 
@@ -740,20 +740,20 @@ function createMatchCardElement(match) {
     </div>
 
     <!-- Bottom Actions Row -->
-    <div class="pt-3 mt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
-      <button class="btn-open-analysis flex-1 py-2 px-3 rounded-xl bg-gradient-to-r from-emerald-500/20 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/30 text-emerald-300 border border-emerald-500/40 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+    <div class="pt-2.5 sm:pt-3 mt-2.5 sm:mt-3 border-t border-slate-800/80 flex items-center justify-between gap-1.5 sm:gap-2">
+      <button class="btn-open-analysis flex-1 py-2 px-2.5 sm:px-3 rounded-xl bg-gradient-to-r from-emerald-500/20 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/30 text-emerald-300 border border-emerald-500/40 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer">
         <i class="fa-solid fa-chart-line"></i> Deep Analysis
       </button>
 
-      <button class="btn-open-edit-toss p-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/40 text-xs font-bold transition-all cursor-pointer" title="Update Real Ground Toss Result">
+      <button class="btn-open-edit-toss p-2 min-w-[36px] min-h-[36px] rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/40 text-xs font-bold transition-all flex items-center justify-center cursor-pointer" title="Update Real Ground Toss Result">
         <i class="fa-solid fa-coins text-yellow-400"></i>
       </button>
 
-      <button class="btn-open-edit-details p-2 rounded-xl bg-blue-500/15 hover:bg-blue-500/25 text-blue-300 border border-blue-500/40 text-xs font-bold transition-all cursor-pointer" title="Edit Match Details">
+      <button class="btn-open-edit-details p-2 min-w-[36px] min-h-[36px] rounded-xl bg-blue-500/15 hover:bg-blue-500/25 text-blue-300 border border-blue-500/40 text-xs font-bold transition-all flex items-center justify-center cursor-pointer" title="Edit Match Details">
         <i class="fa-solid fa-pen-to-square"></i>
       </button>
 
-      <button class="btn-delete-match p-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/40 text-xs font-bold transition-all cursor-pointer" title="Delete Match">
+      <button class="btn-delete-match p-2 min-w-[36px] min-h-[36px] rounded-xl bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/40 text-xs font-bold transition-all flex items-center justify-center cursor-pointer" title="Delete Match">
         <i class="fa-solid fa-trash-can"></i>
       </button>
     </div>
@@ -1145,16 +1145,16 @@ function renderMarketLoadMatches(marketLoads = []) {
     card.innerHTML = `
       <!-- Card Header -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
-        <div>
-          <div class="flex items-center gap-2 mb-1">
+        <div class="min-w-0">
+          <div class="flex flex-wrap items-center gap-2 mb-1">
             ${convergenceBadge}
             <span class="text-[10px] text-slate-400 font-mono">${ml.time}</span>
           </div>
-          <h4 class="text-base font-extrabold text-white font-heading">
+          <h4 class="text-base font-extrabold text-white font-heading truncate">
             ${ml.teamA} <span class="text-slate-500 font-normal">vs</span> ${ml.teamB}
           </h4>
         </div>
-        <div class="text-right">
+        <div class="text-left sm:text-right shrink-0">
           <span class="text-[10px] text-slate-400 block">Total Matched Liquidity</span>
           <span class="text-sm font-extrabold text-emerald-400 font-mono">${ml.totalMatchedInr} (${ml.totalMatchedGbp})</span>
         </div>
@@ -1172,15 +1172,15 @@ function renderMarketLoadMatches(marketLoads = []) {
             <span class="text-[10px] text-slate-400 font-mono">Matched Flow</span>
           </div>
           <div class="space-y-1">
-            <div class="flex justify-between text-[11px] font-bold">
-              <span class="text-blue-300 truncate mr-2">${ml.teamA}: ${ml.orbitLoad.teamA.percent}% (${ml.orbitLoad.teamA.volumeInr})</span>
-              <span class="text-orange-300 truncate">${ml.teamB}: ${ml.orbitLoad.teamB.percent}% (${ml.orbitLoad.teamB.volumeInr})</span>
+            <div class="flex justify-between text-[11px] font-bold gap-2">
+              <span class="text-blue-300 truncate min-w-0">${ml.teamA}: ${ml.orbitLoad.teamA.percent}% (${ml.orbitLoad.teamA.volumeInr})</span>
+              <span class="text-orange-300 truncate min-w-0 text-right">${ml.teamB}: ${ml.orbitLoad.teamB.percent}% (${ml.orbitLoad.teamB.volumeInr})</span>
             </div>
             <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden flex">
               <div class="bg-blue-500 h-full" style="width: ${ml.orbitLoad.teamA.percent}%"></div>
               <div class="bg-orange-500 h-full" style="width: ${ml.orbitLoad.teamB.percent}%"></div>
             </div>
-            <p class="text-[10px] text-emerald-400 font-semibold pt-0.5">
+            <p class="text-[10px] text-emerald-400 font-semibold pt-0.5 truncate">
               🔥 Heavy Load Side: <strong>${ml.orbitLoad.heavyTeam} (${ml.orbitLoad.heavyPercent}%)</strong>
             </p>
           </div>
@@ -1217,13 +1217,13 @@ function renderMarketLoadMatches(marketLoads = []) {
             <span class="text-[10px] text-purple-300 font-mono font-bold">Smart Money</span>
           </div>
           <div class="space-y-1 text-[11px]">
-            <div class="flex justify-between">
-              <span class="text-slate-300 truncate">${ml.teamA}:</span>
-              <span class="font-bold ${ml.oddscheckerTrend.teamA.direction === 'steam' ? 'text-blue-400' : 'text-rose-400'}">${ml.oddscheckerTrend.teamA.movement}</span>
+            <div class="flex justify-between gap-2">
+              <span class="text-slate-300 truncate min-w-0">${ml.teamA}:</span>
+              <span class="font-bold shrink-0 ${ml.oddscheckerTrend.teamA.direction === 'steam' ? 'text-blue-400' : 'text-rose-400'}">${ml.oddscheckerTrend.teamA.movement}</span>
             </div>
-            <div class="flex justify-between">
-              <span class="text-slate-300 truncate">${ml.teamB}:</span>
-              <span class="font-bold ${ml.oddscheckerTrend.teamB.direction === 'steam' ? 'text-blue-400' : 'text-rose-400'}">${ml.oddscheckerTrend.teamB.movement}</span>
+            <div class="flex justify-between gap-2">
+              <span class="text-slate-300 truncate min-w-0">${ml.teamB}:</span>
+              <span class="font-bold shrink-0 ${ml.oddscheckerTrend.teamB.direction === 'steam' ? 'text-blue-400' : 'text-rose-400'}">${ml.oddscheckerTrend.teamB.movement}</span>
             </div>
           </div>
         </div>
@@ -1248,7 +1248,7 @@ function renderMarketLoadMatches(marketLoads = []) {
 
       <!-- Verdict Banner -->
       <div class="p-3 rounded-xl ${isAligned ? 'bg-emerald-950/40 border border-emerald-500/50' : 'bg-amber-950/40 border border-amber-500/50'} text-xs space-y-1">
-        <div class="flex items-center justify-between font-bold">
+        <div class="flex flex-wrap items-center justify-between gap-1 font-bold">
           <span class="${isAligned ? 'text-emerald-300' : 'text-amber-300'} flex items-center gap-1.5">
             <i class="fa-solid fa-brain"></i> AI + Market Consensus Verdict:
           </span>
@@ -1329,45 +1329,45 @@ function renderSimulationResult(analysis, marketLoad, teamA, teamB, venue) {
   const isAligned = ml.aiConvergence ? ml.aiConvergence.isAligned : true;
 
   simResultContainer.innerHTML = `
-    <div class="glass-panel rounded-2xl p-6 sm:p-8 border border-slate-800 shadow-2xl space-y-6">
+    <div class="glass-panel rounded-2xl p-4 sm:p-8 border border-slate-800 shadow-2xl space-y-5 sm:space-y-6">
       
       <!-- Top Prediction Banner -->
-      <div class="bg-gradient-to-r from-emerald-950/60 via-slate-900 to-teal-950/60 p-6 rounded-2xl border-2 border-emerald-500/60 text-center relative overflow-hidden shadow-xl">
-        <div class="flex items-center justify-center gap-2 mb-2">
-          <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-black uppercase tracking-wider">
+      <div class="bg-gradient-to-r from-emerald-950/60 via-slate-900 to-teal-950/60 p-4 sm:p-6 rounded-2xl border-2 border-emerald-500/60 text-center relative overflow-hidden shadow-xl">
+        <div class="flex flex-wrap items-center justify-center gap-2 mb-2">
+          <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] sm:text-xs font-black uppercase tracking-wider">
             AI TOSS WINNER FORECAST
           </span>
-          ${isAligned ? '<span class="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/40 text-xs font-black uppercase tracking-wider">99.9% MARKET ALIGNED 🎯</span>' : ''}
+          ${isAligned ? '<span class="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/40 text-[10px] sm:text-xs font-black uppercase tracking-wider">99.9% MARKET ALIGNED 🎯</span>' : ''}
         </div>
 
-        <h3 class="text-2xl sm:text-4xl font-extrabold text-white font-heading my-2">
+        <h3 class="text-xl sm:text-3xl md:text-4xl font-extrabold text-white font-heading my-2 break-words">
           🪙 Favored Toss Winner: <span class="text-emerald-400">${winner}</span>
         </h3>
 
-        <div class="flex flex-wrap items-center justify-center gap-4 mt-3 font-mono text-sm">
-          <span class="px-3.5 py-1.5 rounded-xl bg-slate-950/80 border border-emerald-500/40 text-emerald-300 font-bold">
-            🎯 Probability: <strong class="text-white text-base">${prob}%</strong>
+        <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mt-3 font-mono text-xs sm:text-sm">
+          <span class="px-3 py-1.5 rounded-xl bg-slate-950/80 border border-emerald-500/40 text-emerald-300 font-bold">
+            🎯 Probability: <strong class="text-white text-sm sm:text-base">${prob}%</strong>
           </span>
-          <span class="px-3.5 py-1.5 rounded-xl bg-slate-950/80 border border-amber-500/40 text-amber-300 font-bold">
-            🏏 Likely Decision: <strong class="text-white text-base">${decision}</strong>
+          <span class="px-3 py-1.5 rounded-xl bg-slate-950/80 border border-amber-500/40 text-amber-300 font-bold">
+            🏏 Likely Decision: <strong class="text-white text-sm sm:text-base">${decision}</strong>
           </span>
         </div>
       </div>
 
       <!-- Simulated Exchange Market Load Breakdown -->
       ${ml.orbitLoad ? `
-        <div class="p-5 rounded-2xl bg-slate-950/90 border border-blue-500/40 space-y-3">
-          <div class="flex items-center justify-between">
-            <h4 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+        <div class="p-4 sm:p-5 rounded-2xl bg-slate-950/90 border border-blue-500/40 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+            <h4 class="text-xs sm:text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
               <i class="fa-solid fa-chart-pie text-blue-400"></i> Simulated Orbit & Betfair Market Load
             </h4>
             <span class="text-xs text-emerald-400 font-mono font-bold">Estimated Matched: ${ml.totalMatchedInr}</span>
           </div>
 
           <div class="space-y-1.5">
-            <div class="flex justify-between text-xs font-bold">
-              <span class="text-blue-400">${teamA}: ${ml.orbitLoad.teamA.percent}% (${ml.betfairOdds.teamA.back} Odds)</span>
-              <span class="text-orange-400">${teamB}: ${ml.orbitLoad.teamB.percent}% (${ml.betfairOdds.teamB.back} Odds)</span>
+            <div class="flex justify-between text-xs font-bold gap-2">
+              <span class="text-blue-400 truncate min-w-0">${teamA}: ${ml.orbitLoad.teamA.percent}% (${ml.betfairOdds.teamA.back} Odds)</span>
+              <span class="text-orange-400 truncate min-w-0 text-right">${teamB}: ${ml.orbitLoad.teamB.percent}% (${ml.betfairOdds.teamB.back} Odds)</span>
             </div>
             <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden flex">
               <div class="bg-blue-500 h-full" style="width: ${ml.orbitLoad.teamA.percent}%"></div>
@@ -1383,7 +1383,7 @@ function renderSimulationResult(analysis, marketLoad, teamA, teamB, venue) {
 
       <!-- Detailed AI Factors & Insights -->
       <div class="space-y-3">
-        <h4 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+        <h4 class="text-xs sm:text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
           <i class="fa-solid fa-lightbulb text-yellow-400"></i> AI Ground & Historical Factors
         </h4>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1504,31 +1504,31 @@ function renderDeepDiveTossModal(analysis, marketLoad, teamA, teamB, venue) {
   const ml = marketLoad || {};
 
   modalContent.innerHTML = `
-    <div class="space-y-6">
+    <div class="space-y-5 sm:space-y-6">
       <!-- Modal Header -->
-      <div class="border-b border-slate-800 pb-4">
-        <div class="flex items-center gap-2 mb-1">
-          <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-extrabold uppercase tracking-wider">
+      <div class="border-b border-slate-800 pb-4 pr-10 sm:pr-12">
+        <div class="flex flex-wrap items-center gap-2 mb-1">
+          <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-extrabold uppercase tracking-wider shrink-0">
             DEEP GROUND & MARKET ANALYSIS
           </span>
-          <span class="text-xs text-slate-400 font-mono">${venue}</span>
+          <span class="text-xs text-slate-400 font-mono truncate max-w-[200px] sm:max-w-none">${venue}</span>
         </div>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-heading">
+        <h2 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-white font-heading break-words">
           ${teamA} <span class="text-slate-500 font-normal">vs</span> ${teamB}
         </h2>
       </div>
 
       <!-- Top Result Callout -->
-      <div class="bg-gradient-to-r from-emerald-950/60 via-slate-900 to-teal-950/60 p-5 sm:p-6 rounded-2xl border-2 border-emerald-500/60 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
-        <div>
+      <div class="bg-gradient-to-r from-emerald-950/60 via-slate-900 to-teal-950/60 p-4 sm:p-6 rounded-2xl border-2 border-emerald-500/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl">
+        <div class="min-w-0 w-full sm:w-auto">
           <span class="text-xs text-emerald-300 font-bold uppercase tracking-wider block mb-1">AI Toss Pick:</span>
-          <h3 class="text-2xl sm:text-3xl font-extrabold text-white font-heading">${favoredWinner}</h3>
+          <h3 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-white font-heading break-words">${favoredWinner}</h3>
           <p class="text-xs text-slate-300 mt-1">Expected Toss Decision: <strong class="text-amber-300">${decision}</strong></p>
         </div>
-        <div class="flex items-center gap-3">
-          <div class="text-center p-3 rounded-xl bg-slate-950/80 border border-emerald-500/40">
+        <div class="flex items-center gap-3 self-end sm:self-auto shrink-0">
+          <div class="text-center p-2.5 sm:p-3 rounded-xl bg-slate-950/80 border border-emerald-500/40">
             <span class="text-[10px] text-slate-400 block uppercase font-bold">Confidence</span>
-            <span class="text-2xl font-black text-emerald-400 font-mono">${prob}%</span>
+            <span class="text-xl sm:text-2xl font-black text-emerald-400 font-mono">${prob}%</span>
           </div>
         </div>
       </div>
@@ -1536,7 +1536,7 @@ function renderDeepDiveTossModal(analysis, marketLoad, teamA, teamB, venue) {
       <!-- Exchange Market Load Strip in Modal -->
       ${ml.orbitLoad ? `
         <div class="p-4 rounded-2xl bg-slate-950/90 border border-blue-500/40 space-y-2.5">
-          <div class="flex items-center justify-between text-xs">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs">
             <span class="text-blue-400 font-bold flex items-center gap-1.5 uppercase tracking-wider">
               <i class="fa-solid fa-chart-pie"></i> Orbit & Betfair Live Market Load
             </span>
@@ -1544,9 +1544,9 @@ function renderDeepDiveTossModal(analysis, marketLoad, teamA, teamB, venue) {
           </div>
 
           <div class="space-y-1">
-            <div class="flex justify-between text-xs font-bold font-mono">
-              <span class="text-blue-400">${teamA}: ${ml.orbitLoad.teamA.percent}% (${ml.betfairOdds.teamA.back} Odds)</span>
-              <span class="text-orange-400">${teamB}: ${ml.orbitLoad.teamB.percent}% (${ml.betfairOdds.teamB.back} Odds)</span>
+            <div class="flex justify-between text-xs font-bold font-mono gap-2">
+              <span class="text-blue-400 truncate min-w-0">${teamA}: ${ml.orbitLoad.teamA.percent}% (${ml.betfairOdds.teamA.back} Odds)</span>
+              <span class="text-orange-400 truncate min-w-0 text-right">${teamB}: ${ml.orbitLoad.teamB.percent}% (${ml.betfairOdds.teamB.back} Odds)</span>
             </div>
             <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden flex">
               <div class="bg-blue-500 h-full" style="width: ${ml.orbitLoad.teamA.percent}%"></div>
@@ -1555,14 +1555,14 @@ function renderDeepDiveTossModal(analysis, marketLoad, teamA, teamB, venue) {
           </div>
 
           <div class="grid grid-cols-3 gap-2 pt-1">
-            <a href="https://orbitxch.com/customer/sport/4" target="_blank" rel="noopener noreferrer" class="py-1.5 px-2 rounded-xl bg-blue-950/80 hover:bg-blue-900 border border-blue-500/40 text-blue-200 text-xs font-bold text-center">
-              🌐 Orbit Live
+            <a href="https://orbitxch.com/customer/sport/4" target="_blank" rel="noopener noreferrer" class="py-1.5 px-2 rounded-xl bg-blue-950/80 hover:bg-blue-900 border border-blue-500/40 text-blue-200 text-[11px] sm:text-xs font-bold text-center flex items-center justify-center gap-1 truncate">
+              <i class="fa-solid fa-globe shrink-0"></i> <span class="truncate">Orbit Live</span>
             </a>
-            <a href="https://www.betfair.com/exchange/plus/cricket" target="_blank" rel="noopener noreferrer" class="py-1.5 px-2 rounded-xl bg-amber-950/80 hover:bg-amber-900 border border-amber-500/40 text-amber-200 text-xs font-bold text-center">
-              📈 Betfair
+            <a href="https://www.betfair.com/exchange/plus/cricket" target="_blank" rel="noopener noreferrer" class="py-1.5 px-2 rounded-xl bg-amber-950/80 hover:bg-amber-900 border border-amber-500/40 text-amber-200 text-[11px] sm:text-xs font-bold text-center flex items-center justify-center gap-1 truncate">
+              <i class="fa-solid fa-chart-line shrink-0"></i> <span class="truncate">Betfair</span>
             </a>
-            <a href="https://www.oddschecker.com/cricket" target="_blank" rel="noopener noreferrer" class="py-1.5 px-2 rounded-xl bg-purple-950/80 hover:bg-purple-900 border border-purple-500/40 text-purple-200 text-xs font-bold text-center">
-              🔍 Oddschecker
+            <a href="https://www.oddschecker.com/cricket" target="_blank" rel="noopener noreferrer" class="py-1.5 px-2 rounded-xl bg-purple-950/80 hover:bg-purple-900 border border-purple-500/40 text-purple-200 text-[11px] sm:text-xs font-bold text-center flex items-center justify-center gap-1 truncate">
+              <i class="fa-solid fa-bolt shrink-0"></i> <span class="truncate">Oddschecker</span>
             </a>
           </div>
         </div>
