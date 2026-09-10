@@ -130,7 +130,7 @@ class MarketLoadService {
       if (match.tossAnalysis) {
         aiForecast = { prediction: match.tossAnalysis };
       } else {
-        aiForecast = tossAnalytics.analyzeToss(match.teamA, match.teamB, match.venue || '', dateStr, match.tossWinner || null, match.tossDecision || null);
+        aiForecast = tossAnalytics.analyzeToss(match.teamA, match.teamB, match.venue || '', dateStr);
       }
     } catch (e) {
       aiForecast = null;
@@ -138,7 +138,7 @@ class MarketLoadService {
 
     const aiPreferredTeam = (aiForecast && aiForecast.prediction && aiForecast.prediction.favoredWinner) 
       ? aiForecast.prediction.favoredWinner 
-      : (match.tossWinner || match.teamA);
+      : match.teamA;
     const aiConfidence = (aiForecast && aiForecast.prediction && aiForecast.prediction.favoredProbability) 
       ? aiForecast.prediction.favoredProbability 
       : 79;

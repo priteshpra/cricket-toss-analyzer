@@ -436,6 +436,12 @@ function setDate(dateStr) {
     if (displayDateLabel) displayDateLabel.textContent = currentDate;
   }
 
+  // If navigating to a past date (like yesterday), auto switch to 'all' so completed matches aren't hidden by 'pending' filter
+  if (currentDate < todayStr && currentTossStatus === 'pending') {
+    currentTossStatus = 'all';
+    updateTossStatusFilterUI();
+  }
+
   bulkSelectedMatchesMap.clear();
   if (bulkSelectAllCheckbox) bulkSelectAllCheckbox.checked = false;
   updateBulkActionBarUI();
@@ -538,8 +544,15 @@ function filterAndRenderMatches() {
   if (inlinePassCount) inlinePassCount.textContent = passCount;
   if (inlineFailCount) inlineFailCount.textContent = failCount;
 
+  // If currently on 'pending' view, but pending matches are 0 and done matches exist (e.g. yesterday or completed day),
+  // auto-switch to 'all' so that matches are immediately visible instead of an empty screen
+  if (currentTossStatus === 'pending' && pendingMatches.length === 0 && doneMatches.length > 0) {
+    currentTossStatus = 'all';
+    updateTossStatusFilterUI();
+  }
+
   if (tossDoneStatsBanner) {
-    if (currentTossStatus === 'done' && doneMatches.length > 0) {
+    if ((currentTossStatus === 'done' || currentTossStatus === 'all') && doneMatches.length > 0) {
       tossDoneStatsBanner.classList.remove('hidden');
     } else {
       tossDoneStatsBanner.classList.add('hidden');

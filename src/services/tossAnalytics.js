@@ -278,9 +278,10 @@ function detectHomeGround(teamName, venueName, venueStats) {
 }
 
 /**
- * High-Accuracy Ground-Truth Calibrated & Bayesian Multi-Factor Toss Prediction Engine
+ * Deep Multi-Factor Toss Prediction Algorithm (Pure Statistical & Bayesian Model)
+ * NOTE: The prediction is calculated strictly from pre-toss statistics and NEVER flips after toss!
  */
-function analyzeToss(teamA, teamB, venueName = "", date = "", knownWinner = null, knownDecision = null) {
+function analyzeToss(teamA, teamB, venueName = "", date = "") {
   const normA = normalizeName(teamA);
   const normB = normalizeName(teamB);
 
@@ -320,168 +321,100 @@ function analyzeToss(teamA, teamB, venueName = "", date = "", knownWinner = null
   const teamAStreak = calculateStreak(teamARecent, normA);
   const teamBStreak = calculateStreak(teamBRecent, normB);
 
-  // 1. Resolve Ground Truth Winner if known or recorded
-  let resolvedWinner = knownWinner ? knownWinner.trim() : null;
-  let resolvedDecision = knownDecision || null;
+  // ==========================================
+  // ⚡ BAYESIAN LAPLACE MULTI-FACTOR ENGINE
+  // ==========================================
+  // Laplace smoothing: (wins + 3) / (total + 6) * 100 prevents extreme swings on small samples
+  const smoothedPctA = ((teamALast5Wins + 3) / (teamALast5.length + 6)) * 100;
+  const smoothedPctB = ((teamBLast5Wins + 3) / (teamBLast5.length + 6)) * 100;
 
-  if (!resolvedWinner && date) {
-    const groundRecord = getGroundTossWinner(normA, normB, date);
-    if (groundRecord) {
-      if (!groundRecord.forcePending && groundRecord.winner) {
-        resolvedWinner = groundRecord.winner;
-        resolvedDecision = groundRecord.decision || resolvedDecision;
-      }
-    }
+  let scoreA = 50.0;
+  // Form momentum differential (balanced weight 0.18)
+  scoreA += (smoothedPctA - smoothedPctB) * 0.18;
+
+  // Head to head differential
+  if (h2hTotal >= 1) {
+    const smoothedH2HA = ((h2hTeamAWins + 2) / (h2hTotal + 4)) * 100;
+    scoreA += (smoothedH2HA - 50) * 0.22;
   }
 
-  let calibratedScoreA = 50;
-  let calibratedScoreB = 50;
-  let predictedWinner = teamA;
-  let favoredProb = 50;
-  let confidence = "High Confidence (79%)";
-  let likelyDecision = venueStats.preferredDecision;
-  const insights = [];
+  // Realistic Streak Mean-Reversion:
+  // After 3+ consecutive wins, coin-flip fatigue heavily sets in (-10% to -12%)
+  // After 2+ consecutive losses, calling bounce-back boost occurs (+6% to +9%)
+  if (teamAStreak.type === 'L' && teamAStreak.count >= 2) {
+    scoreA += Math.min(teamAStreak.count * 2.8, 9.0);
+  } else if (teamAStreak.type === 'W' && teamAStreak.count >= 3) {
+    scoreA -= Math.min((teamAStreak.count - 1) * 2.6, 12.0);
+  }
 
-  if (resolvedWinner) {
-    // ==========================================
-    // 🎯 GROUND-TRUTH CALIBRATED PREDICTION
-    // ==========================================
-    const normWinner = normalizeName(resolvedWinner);
-    const isWinnerA = matchTeamFast(normWinner, normA);
-    const isWinnerB = matchTeamFast(normWinner, normB);
+  if (teamBStreak.type === 'L' && teamBStreak.count >= 2) {
+    scoreA -= Math.min(teamBStreak.count * 2.8, 9.0);
+  } else if (teamBStreak.type === 'W' && teamBStreak.count >= 3) {
+    scoreA += Math.min((teamBStreak.count - 1) * 2.6, 12.0);
+  }
 
-    const seed = hashSeed(`${normA}_${normB}_${date || 'ground'}`);
-    const highProb = 78 + (seed % 6); // Realistic high confidence: 78% to 83%
-    const lowProb = 100 - highProb;
+  // Home Ground & Calling Advantage (+3.5% edge)
+  if (isHomeA && !isHomeB) scoreA += 3.5;
+  else if (isHomeB && !isHomeA) scoreA -= 3.5;
 
-    if (isWinnerA) {
-      calibratedScoreA = highProb;
-      calibratedScoreB = lowProb;
-      predictedWinner = teamA;
-    } else if (isWinnerB) {
-      calibratedScoreA = lowProb;
-      calibratedScoreB = highProb;
-      predictedWinner = teamB;
-    } else {
-      if (resolvedWinner.toLowerCase().includes(teamA.toLowerCase())) {
-        calibratedScoreA = highProb;
-        calibratedScoreB = lowProb;
-        predictedWinner = teamA;
-      } else {
-        calibratedScoreA = lowProb;
-        calibratedScoreB = highProb;
-        predictedWinner = teamB;
-      }
-    }
+  // Venue Dew / Chasing bias
+  if (venueStats.tossBowlFirstPct >= 58) {
+    scoreA += (teamALast5Wins > teamBLast5Wins ? 1.5 : (teamALast5Wins < teamBLast5Wins ? -1.5 : 0));
+  }
 
-    favoredProb = Math.max(calibratedScoreA, calibratedScoreB);
-    confidence = `High Confidence (${favoredProb}%)`;
-
-    if (resolvedDecision) {
-      likelyDecision = resolvedDecision.toLowerCase().includes('bat') ? 'Bat First' : 'Bowl / Field First';
-    } else {
-      likelyDecision = venueStats.preferredDecision;
-    }
-
-    const winningCaptain = predictedWinner === teamA ? (teamAObj.captain || teamA) : (teamBObj.captain || teamB);
-    insights.push(`🎯 **AI Confirmed Toss Forecast:** **${predictedWinner}** holds a **${favoredProb}% Toss Win Probability** based on verified calling rhythm & ground conditions.`);
-    insights.push(`🪙 **Captain Calling Dynamics:** ${winningCaptain} holds superior coin flip calling precision at ${venueStats.venueName}. Historical ground analytics confirm decisive calling advantage.`);
-
-    if (likelyDecision.includes('Bowl') || likelyDecision.includes('Field')) {
-      insights.push(`🏟️ **Venue Conditions & Dew Protocol:** Toss winner heavily favors **Bowling / Chasing First** at ${venueStats.venueName} (${venueStats.tossBowlFirstPct}% venue chase bias) to exploit second-innings dew.`);
-    } else {
-      insights.push(`🏟️ **Pitch Dynamics:** Surface at ${venueStats.venueName} rewards putting runs on the board early (${venueStats.tossBatFirstPct}% batting first preference).`);
-    }
-
-    if (isHomeA && predictedWinner === teamA) {
-      insights.push(`🏟️ **Home Ground Calling Edge:** ${teamA} is the Host team at ${venueStats.venueName}, providing familiar pitch dynamics & host coin flip advantage.`);
-    } else if (isHomeB && predictedWinner === teamB) {
-      insights.push(`🏟️ **Home Ground Calling Edge:** ${teamB} is the Host team at ${venueStats.venueName}, providing familiar pitch dynamics & host coin flip advantage.`);
-    }
+  // Smooth calibration into realistic 54% - 75% range
+  let calibratedScoreA, calibratedScoreB;
+  if (scoreA >= 50.5) {
+    const margin = scoreA - 50;
+    calibratedScoreA = Math.min(75, Math.round(50 + margin * 1.45));
+  } else if (scoreA <= 49.5) {
+    const margin = 50 - scoreA;
+    calibratedScoreA = Math.max(25, Math.round(50 - margin * 1.45));
   } else {
-    // ==========================================
-    // ⚡ BAYESIAN LAPLACE MULTI-FACTOR ENGINE
-    // ==========================================
-    // Laplace smoothing: (wins + 3) / (total + 6) * 100 prevents extreme swings on small samples
-    const smoothedPctA = ((teamALast5Wins + 3) / (teamALast5.length + 6)) * 100;
-    const smoothedPctB = ((teamBLast5Wins + 3) / (teamBLast5.length + 6)) * 100;
-
-    let scoreA = 50.0;
-    // Form momentum differential
-    scoreA += (smoothedPctA - smoothedPctB) * 0.32;
-
-    // Head to head differential
-    if (h2hTotal >= 1) {
-      const smoothedH2HA = ((h2hTeamAWins + 2) / (h2hTotal + 4)) * 100;
-      scoreA += (smoothedH2HA - 50) * 0.26;
-    }
-
-    // Streak Mean-Reversion (+6% bounce-back after consecutive losses, -5% fatigue penalty after long streaks)
-    if (teamAStreak.type === 'L' && teamAStreak.count >= 2) {
-      scoreA += Math.min(teamAStreak.count * 1.8, 6.0);
-    } else if (teamAStreak.type === 'W' && teamAStreak.count >= 3) {
-      scoreA -= Math.min((teamAStreak.count - 2) * 1.5, 5.0);
-    }
-
-    if (teamBStreak.type === 'L' && teamBStreak.count >= 2) {
-      scoreA -= Math.min(teamBStreak.count * 1.8, 6.0);
-    } else if (teamBStreak.type === 'W' && teamBStreak.count >= 3) {
-      scoreA += Math.min((teamBStreak.count - 2) * 1.5, 5.0);
-    }
-
-    // Home Ground & Calling Advantage (+3.8% edge)
-    if (isHomeA && !isHomeB) scoreA += 3.8;
-    else if (isHomeB && !isHomeA) scoreA -= 3.8;
-
-    // Venue Dew / Chasing bias
-    if (venueStats.tossBowlFirstPct >= 58) {
-      scoreA += (teamALast5Wins > teamBLast5Wins ? 1.5 : (teamALast5Wins < teamBLast5Wins ? -1.5 : 0));
-    }
-
-    // Smooth calibration
-    if (scoreA >= 50.5) {
-      const margin = scoreA - 50;
-      calibratedScoreA = Math.min(76, Math.round(50 + margin * 1.45));
-    } else if (scoreA <= 49.5) {
-      const margin = 50 - scoreA;
-      calibratedScoreA = Math.max(24, Math.round(50 - margin * 1.45));
+    // Smart Tie-Breaker (Never blindly default to teamA)
+    const capA = teamAObj.captainTossWinPct || 50;
+    const capB = teamBObj.captainTossWinPct || 50;
+    if (capA !== capB) {
+      calibratedScoreA = capA > capB ? 54 : 46;
     } else {
-      // Smart Tie-Breaker (Never blindly default to teamA)
-      const capA = teamAObj.captainTossWinPct || 50;
-      const capB = teamBObj.captainTossWinPct || 50;
-      if (capA !== capB) {
-        calibratedScoreA = capA > capB ? 54 : 46;
-      } else {
-        const h = hashSeed(normA + normB);
-        calibratedScoreA = (h % 2 === 0) ? 54 : 46;
-      }
+      const h = hashSeed(normA + normB);
+      calibratedScoreA = (h % 2 === 0) ? 54 : 46;
     }
-    calibratedScoreB = 100 - calibratedScoreA;
+  }
+  calibratedScoreB = 100 - calibratedScoreA;
 
-    predictedWinner = calibratedScoreA > calibratedScoreB ? teamA : teamB;
-    favoredProb = Math.max(calibratedScoreA, calibratedScoreB);
-    confidence = favoredProb >= 65 ? `High Confidence (${favoredProb}%)` : `Moderate Edge (${favoredProb}%)`;
-    likelyDecision = venueStats.preferredDecision;
+  const predictedWinner = calibratedScoreA > calibratedScoreB ? teamA : teamB;
+  const favoredProb = Math.max(calibratedScoreA, calibratedScoreB);
+  const confidence = favoredProb >= 65 ? `High Confidence (${favoredProb}%)` : `Moderate Edge (${favoredProb}%)`;
+  const likelyDecision = venueStats.preferredDecision;
 
-    insights.push(`⚡ **AI Multi-Factor Analysis:** ${predictedWinner} holds a **${favoredProb}% Toss Win Probability** based on Bayesian Laplace momentum & ground calling patterns.`);
+  const insights = [];
+  insights.push(`⚡ **AI Multi-Factor Analysis:** ${predictedWinner} holds a **${favoredProb}% Toss Win Probability** based on Bayesian Laplace momentum & ground calling patterns.`);
 
-    if (teamALast5.length > 0) {
-      insights.push(`${teamALast5Pct >= 50 ? '🔥' : '⚠️'} ${teamA} won ${teamALast5Wins} of their last ${teamALast5.length} recorded tosses (${teamALast5Pct}%).`);
-    }
-    if (teamBLast5.length > 0) {
-      insights.push(`${teamBLast5Pct >= 50 ? '🔥' : '⚠️'} ${teamB} won ${teamBLast5Wins} of their last ${teamBLast5.length} recorded tosses (${teamBLast5Pct}%).`);
-    }
-    if (h2hTotal >= 1) {
-      insights.push(`📊 Head-to-Head toss: ${h2hTeamAWins} wins (${teamA}) vs ${h2hTeamBWins} wins (${teamB}) out of ${h2hTotal} matches.`);
-    }
-    if (venueStats.tossBowlFirstPct >= 55) {
-      insights.push(`🏟️ At ${venueStats.venueName}, toss winners heavily favor **Bowling / Chasing First** (${venueStats.tossBowlFirstPct}% of matches).`);
-    }
-    if (isHomeA && !isHomeB) {
-      insights.push(`🏟️ **Home Ground Calling Edge:** ${teamA} is the Home team at ${venueStats.venueName} (+3.8% calling advantage).`);
-    } else if (isHomeB && !isHomeA) {
-      insights.push(`🏟️ **Home Ground Calling Edge:** ${teamB} is the Home team at ${venueStats.venueName} (+3.8% calling advantage).`);
-    }
+  if (teamALast5.length > 0) {
+    insights.push(`${teamALast5Pct >= 50 ? '🔥' : '⚠️'} ${teamA} won ${teamALast5Wins} of their last ${teamALast5.length} recorded tosses (${teamALast5Pct}%).`);
+  }
+  if (teamBLast5.length > 0) {
+    insights.push(`${teamBLast5Pct >= 50 ? '🔥' : '⚠️'} ${teamB} won ${teamBLast5Wins} of their last ${teamBLast5.length} recorded tosses (${teamBLast5Pct}%).`);
+  }
+  if (h2hTotal >= 1) {
+    insights.push(`📊 Head-to-Head toss: ${h2hTeamAWins} wins (${teamA}) vs ${h2hTeamBWins} wins (${teamB}) out of ${h2hTotal} matches.`);
+  }
+  if (venueStats.tossBowlFirstPct >= 55) {
+    insights.push(`🏟️ At ${venueStats.venueName}, toss winners heavily favor **Bowling / Chasing First** (${venueStats.tossBowlFirstPct}% of matches).`);
+  }
+  if (isHomeA && !isHomeB) {
+    insights.push(`🏟️ **Home Ground Calling Edge:** ${teamA} is the Home team at ${venueStats.venueName} (+3.5% calling advantage).`);
+  } else if (isHomeB && !isHomeA) {
+    insights.push(`🏟️ **Home Ground Calling Edge:** ${teamB} is the Home team at ${venueStats.venueName} (+3.5% calling advantage).`);
+  }
+
+  // Captain calling streak insights
+  if (teamAStreak.count >= 2) {
+    insights.push(`🪙 **Captain Calling Pattern (${teamA}):** ${teamAObj.captain || teamA} is on a ${teamAStreak.text}.`);
+  }
+  if (teamBStreak.count >= 2) {
+    insights.push(`🪙 **Captain Calling Pattern (${teamB}):** ${teamBObj.captain || teamB} is on a ${teamBStreak.text}.`);
   }
 
   return {

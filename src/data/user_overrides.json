@@ -1045,6 +1045,30 @@
       "tossDecision": "bowl",
       "matchWinner": "Glasgow Cosmic",
       "forcePending": false
+    },
+    "bathinda royals_fazilka falcons_2026-09-10": {
+      "tossWinner": "Bathinda Royals",
+      "tossDecision": "bowl",
+      "matchWinner": "Bathinda Royals",
+      "forcePending": false
+    },
+    "fazilka falcons_bathinda royals_2026-09-10": {
+      "tossWinner": "Bathinda Royals",
+      "tossDecision": "bowl",
+      "matchWinner": "Bathinda Royals",
+      "forcePending": false
+    },
+    "bathinda royals_ludhiana lions_2026-09-10": {
+      "tossWinner": "Bathinda Royals",
+      "tossDecision": "bowl",
+      "matchWinner": "Bathinda Royals",
+      "forcePending": false
+    },
+    "ludhiana lions_bathinda royals_2026-09-10": {
+      "tossWinner": "Bathinda Royals",
+      "tossDecision": "bowl",
+      "matchWinner": "Bathinda Royals",
+      "forcePending": false
     }
   },
   "deletedMatches": [

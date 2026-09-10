@@ -676,8 +676,8 @@ class MatchService {
         }
       }
 
-      // Deep Multi-Factor Toss Analysis with Ground-Truth Synchronization
-      const analysis = tossAnalytics.analyzeToss(cleanA, cleanB, m.venue, targetDate, tossWinner, tossDecision);
+      // Deep Multi-Factor Toss Analysis (Pure Pre-Toss Prediction)
+      const analysis = tossAnalytics.analyzeToss(cleanA, cleanB, m.venue, targetDate);
 
       if (!tossWinner && matchStatus === 'COMPLETED') {
         // If ground toss result was not manually entered, automatically resolve realistic winner
