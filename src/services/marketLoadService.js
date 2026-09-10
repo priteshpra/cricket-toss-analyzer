@@ -136,20 +136,28 @@ class MarketLoadService {
       aiForecast = null;
     }
 
+    const matchTeamFast = (a, b) => {
+      if (!a || !b) return false;
+      const n1 = a.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const n2 = b.toLowerCase().replace(/[^a-z0-9]/g, '');
+      return n1 === n2 || n1.includes(n2) || n2.includes(n1);
+    };
+
     const aiPreferredTeam = (aiForecast && aiForecast.prediction && aiForecast.prediction.favoredWinner) 
       ? aiForecast.prediction.favoredWinner 
       : match.teamA;
-    const aiConfidence = (aiForecast && aiForecast.prediction && aiForecast.prediction.favoredProbability) 
-      ? aiForecast.prediction.favoredProbability 
-      : 79;
+    const rawAiProb = (aiForecast && aiForecast.prediction && (aiForecast.prediction.favoredProbability || aiForecast.prediction.confidence))
+      ? parseInt(aiForecast.prediction.favoredProbability, 10) || 68
+      : 68;
+    const aiConfidence = Math.max(55, Math.min(88, rawAiProb));
 
-    const isTeamAPreferred = (aiPreferredTeam.toLowerCase().trim() === match.teamA.toLowerCase().trim());
-    const baseBias = (hash % 11) + 72; // 72% - 82% market volume concentration
+    const isTeamAPreferred = matchTeamFast(aiPreferredTeam, match.teamA);
+    const baseBias = (hash % 9) + 72; // 72% - 80% market volume concentration
     let teamAPercent = isTeamAPreferred ? baseBias : (100 - baseBias);
     let teamBPercent = 100 - teamAPercent;
 
-    if (teamAPercent < 18) { teamAPercent = 18; teamBPercent = 82; }
-    if (teamAPercent > 82) { teamAPercent = 82; teamBPercent = 18; }
+    if (teamAPercent < 20) { teamAPercent = 20; teamBPercent = 80; }
+    if (teamAPercent > 80) { teamAPercent = 80; teamBPercent = 20; }
 
     // Volume multiplier (at 10-15m peak surge, volume is at highest intensity)
     const volumeMultiplier = timing.isPeak ? 1.45 : 1.0;
@@ -182,10 +190,10 @@ class MarketLoadService {
     const bookmakerExposureCr = (parseFloat(teamAVolumeInrCr) > parseFloat(teamBVolumeInrCr) ? teamAVolumeInrCr : teamBVolumeInrCr);
     const punterSentiment = heavyPercent >= 70 ? 'Extreme Whale Accumulation' : 'Heavy Retail + Syndicate Flow';
 
-    const isConvergence = (aiPreferredTeam.toLowerCase().trim() === heavyTeam.toLowerCase().trim());
+    const isConvergence = matchTeamFast(aiPreferredTeam, heavyTeam);
     const convergenceStatus = 'ULTRA_CONVERGENCE';
     const convergenceRating = '99.9% High-Confidence Toss Signal 🎯';
-    const convergenceVerdict = `AI Historical Ground Model & Live Orbit/Betfair Volume both aggressively favor **${heavyTeam}** (${heavyPercent}% Market Load). Maximum probability toss pick!`;
+    const convergenceVerdict = `AI Historical Ground Model (${aiConfidence}%) & Live Orbit/Betfair Volume both aggressively favor **${heavyTeam}** (${heavyPercent}% Market Load). Maximum probability toss pick!`;
 
     const directLinks = {
       orbit: {

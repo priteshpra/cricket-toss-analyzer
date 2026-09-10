@@ -14,6 +14,104 @@ let topLoadedTeamsData = [];
 let bulkSelectedMatchesMap = new Map();
 let modalChartInstance = null;
 
+// Local Storage Vault for unbreakable persistence of custom matches across server restarts / git updates
+const VAULT_STORAGE_KEY = 'c_toss_custom_matches_vault_v1';
+
+function getVaultMatches() {
+  try {
+    const raw = localStorage.getItem(VAULT_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function saveVaultMatch(match) {
+  try {
+    const vault = getVaultMatches();
+    const date = match.date;
+    if (!vault[date]) vault[date] = [];
+    const exists = vault[date].some(m => 
+      (m.teamA && m.teamB && m.teamA.toLowerCase().trim() === match.teamA.toLowerCase().trim() && m.teamB.toLowerCase().trim() === match.teamB.toLowerCase().trim())
+    );
+    if (!exists) {
+      vault[date].push(match);
+      localStorage.setItem(VAULT_STORAGE_KEY, JSON.stringify(vault));
+    }
+  } catch (e) {}
+}
+
+function removeVaultMatch(teamA, teamB, date) {
+  try {
+    const vault = getVaultMatches();
+    if (vault[date]) {
+      vault[date] = vault[date].filter(m => 
+        !(m.teamA.toLowerCase().trim() === teamA.toLowerCase().trim() && m.teamB.toLowerCase().trim() === teamB.toLowerCase().trim()) &&
+        !(m.teamA.toLowerCase().trim() === teamB.toLowerCase().trim() && m.teamB.toLowerCase().trim() === teamA.toLowerCase().trim())
+      );
+      localStorage.setItem(VAULT_STORAGE_KEY, JSON.stringify(vault));
+    }
+  } catch (e) {}
+}
+
+function getDisplayTeamName(name) {
+  if (!name) return '';
+  const clean = name.trim();
+  const knownShorts = {
+    'South Africa': 'South Africa',
+    'South Africa Women': 'South Africa W',
+    'New Zealand': 'New Zealand',
+    'New Zealand Women': 'New Zealand W',
+    'Sri Lanka': 'Sri Lanka',
+    'Sri Lanka Women': 'Sri Lanka W',
+    'West Indies': 'West Indies',
+    'West Indies Women': 'West Indies W',
+    'United Arab Emirates': 'UAE',
+    'United Arab Emirates Women': 'UAE W',
+    'Hong Kong, China': 'Hong Kong',
+    'Hong Kong Women': 'Hong Kong W',
+    'India Women': 'India W',
+    'Bangladesh Women': 'Bangladesh W',
+    'England Women': 'England W',
+    'Australia Women': 'Australia W',
+    'Pakistan Women': 'Pakistan W',
+    'Ireland Women': 'Ireland W',
+    'Trinbago Knight Riders': 'Trinbago',
+    'Trinbago Knight Riders Women': 'Trinbago W',
+    'Antigua and Barbuda Falcons': 'Antigua Falcons',
+    'Guyana Amazon Warriors': 'Guyana',
+    'Guyana Amazon Warriors Women': 'Guyana W',
+    'Barbados Royals': 'Barbados',
+    'Barbados Royals Women': 'Barbados W',
+    'Meerut Mavericks': 'Meerut',
+    'Kanpur Superstars': 'Kanpur',
+    'Mohali Kings': 'Mohali',
+    'Bathinda Royals': 'Bathinda',
+    'Ludhiana Lions': 'Ludhiana',
+    'Fazilka Falcons': 'Fazilka',
+    'Jalandhar Warriors': 'Jalandhar',
+    'Amritsar Soormas': 'Amritsar',
+    'Aries Kollam Sailors': 'Kollam',
+    'Calicut Globstars': 'Calicut',
+    'Glasgow Cosmic': 'Glasgow',
+    'Rotterdam Dockers': 'Rotterdam',
+    'Amsterdam Flames': 'Amsterdam',
+    'Belfast Wolves': 'Belfast',
+    'Dublin Guardians': 'Dublin',
+    'Herbertpur Knightriders': 'Herbertpur',
+    'Selaqui Strikers': 'Selaqui',
+    'Ceylinco Express CC': 'Ceylinco',
+    'Stack CC': 'Stack CC',
+    'Forfarshire Cricket Club': 'Forfarshire',
+    'Svanholm Cricket Club': 'Svanholm'
+  };
+  if (knownShorts[clean]) return knownShorts[clean];
+  if (clean.toLowerCase().endsWith(' women')) {
+    return clean.slice(0, -6).trim() + ' W';
+  }
+  return clean.length > 20 ? clean.slice(0, 18) + '..' : clean;
+}
+
 // DOM Elements
 const navScheduleBtn = document.getElementById('nav-schedule-btn');
 const navMarketLoadBtn = document.getElementById('nav-market-load-btn');
@@ -491,6 +589,35 @@ async function loadMatches(date, league) {
 
     if (result.success && result.data) {
       loadedMatchesList = result.data.matches || [];
+
+      // Unbreakable fail-safe: Check if browser local vault has any custom matches for this date missing on server
+      const vault = getVaultMatches();
+      const vaultForDate = vault[date] || [];
+      if (vaultForDate.length > 0) {
+        vaultForDate.forEach(vm => {
+          const vA = (vm.teamA || '').toLowerCase().trim();
+          const vB = (vm.teamB || '').toLowerCase().trim();
+          const inServer = loadedMatchesList.some(sm => {
+            const sA = (sm.teamA || '').toLowerCase().trim();
+            const sB = (sm.teamB || '').toLowerCase().trim();
+            return (sA === vA && sB === vB) || (sA === vB && sB === vA);
+          });
+          if (!inServer && vA && vB) {
+            // Restore to server in background
+            fetch('/api/matches/add-custom', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(vm)
+            }).catch(() => {});
+            loadedMatchesList.unshift({
+              ...vm,
+              status: 'UPCOMING',
+              tossDone: false
+            });
+          }
+        });
+      }
+
       filterAndRenderMatches();
     }
   } catch (err) {
@@ -625,16 +752,17 @@ function createMatchCardElement(match) {
   };
   const leagueBadge = leagueNameMap[match.league] || match.league || 'T20';
 
-  // Analysis prediction (robust lookup from tossAnalysis or marketLoad)
+  // Analysis prediction (prioritize pure pre-toss statistical analysis)
   const tossAnalysis = match.tossAnalysis || (match.analysis && match.analysis.prediction) || {};
   const ml = match.marketLoad || {};
-  const favoredWinner = (ml.aiConvergence && ml.aiConvergence.aiForecastTeam)
-    || tossAnalysis.favoredWinner
+  const favoredWinner = tossAnalysis.favoredWinner
+    || (ml.aiConvergence && ml.aiConvergence.aiForecastTeam)
     || match.favoredWinner
     || match.teamA;
-  const favoredProbability = (ml.aiConvergence && ml.aiConvergence.aiConfidence)
-    ? parseInt(ml.aiConvergence.aiConfidence, 10)
-    : (tossAnalysis.teamBProbability && favoredWinner === match.teamB ? tossAnalysis.teamBProbability : (tossAnalysis.teamAProbability || 75));
+  const favoredProbability = tossAnalysis.favoredProbability
+    || (tossAnalysis.teamBProbability && favoredWinner === match.teamB ? tossAnalysis.teamBProbability : tossAnalysis.teamAProbability)
+    || (ml.aiConvergence && parseInt(ml.aiConvergence.aiConfidence, 10))
+    || 65;
 
   const isFavA = (favoredWinner.toLowerCase().trim() === match.teamA.toLowerCase().trim()) || favoredWinner.includes(match.teamA) || match.teamA.includes(favoredWinner);
   const isFavB = (favoredWinner.toLowerCase().trim() === match.teamB.toLowerCase().trim()) || favoredWinner.includes(match.teamB) || match.teamB.includes(favoredWinner);
@@ -674,8 +802,8 @@ function createMatchCardElement(match) {
             <i class="fa-solid fa-coins text-yellow-400 shrink-0"></i> <span class="truncate">Orbit: <strong class="text-emerald-300 font-mono">${totalInr}</strong></span>
             ${ml.timing ? `<span class="ml-1 px-1.5 py-0.2 rounded bg-slate-900 ${ml.timing.isPeak ? 'text-amber-300 border-amber-500/50' : 'text-slate-400 border-slate-800'} text-[9px] font-bold border shrink-0">${ml.timing.badge}</span>` : ''}
           </span>
-          <span class="px-2 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 text-[9px] sm:text-[10px] font-extrabold border border-emerald-500/40 shrink-0">
-            ${heavyPercent}% Load on ${heavyTeam.split(' ')[0]}
+          <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[9px] sm:text-[10px] font-extrabold border border-emerald-500/40 shrink-0 truncate max-w-[200px]">
+            ${heavyPercent}% Load on ${getDisplayTeamName(heavyTeam)}
           </span>
         </div>
 
@@ -686,9 +814,9 @@ function createMatchCardElement(match) {
             <div class="bg-orange-500 h-full transition-all" style="width: ${ml.orbitLoad.teamB.percent}%" title="${match.teamB}: ${ml.orbitLoad.teamB.percent}%"></div>
           </div>
           <div class="flex items-center justify-between text-[9px] font-mono text-slate-400">
-            <span class="text-blue-400 font-bold truncate max-w-[32%]">${match.teamA.split(' ')[0]}: ${ml.orbitLoad.teamA.percent}%</span>
+            <span class="text-blue-400 font-bold truncate max-w-[34%]">${getDisplayTeamName(match.teamA)}: ${ml.orbitLoad.teamA.percent}%</span>
             <span class="text-amber-300 font-bold shrink-0">Odds: ${ml.betfairOdds.teamA.back}/${ml.betfairOdds.teamB.back}</span>
-            <span class="text-orange-400 font-bold truncate max-w-[32%] text-right">${match.teamB.split(' ')[0]}: ${ml.orbitLoad.teamB.percent}%</span>
+            <span class="text-orange-400 font-bold truncate max-w-[34%] text-right">${getDisplayTeamName(match.teamB)}: ${ml.orbitLoad.teamB.percent}%</span>
           </div>
         </div>
 
@@ -696,7 +824,7 @@ function createMatchCardElement(match) {
         <div class="p-2 rounded-lg ${ml.aiConvergence.isAligned ? 'bg-emerald-950/90 border border-emerald-500/60' : 'bg-amber-950/90 border border-amber-500/60'} flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs">
           <div class="${ml.aiConvergence.isAligned ? 'text-emerald-300' : 'text-amber-300'} font-bold flex items-center gap-1.5 min-w-0">
             <i class="fa-solid ${ml.aiConvergence.isAligned ? 'fa-circle-check text-emerald-400' : 'fa-triangle-exclamation text-amber-400'} shrink-0"></i> 
-            <span class="truncate text-[11px] sm:text-xs">Toss: <strong class="text-white underline">${ml.aiConvergence.isAligned ? 'BET ON ' + ml.orbitLoad.heavyTeam : 'SKIP / PASS (Risky Load)'}</strong></span>
+            <span class="truncate text-[11px] sm:text-xs">Toss: <strong class="text-white underline">${ml.aiConvergence.isAligned ? 'BET ON ' + getDisplayTeamName(ml.orbitLoad.heavyTeam) : 'SKIP / PASS (Risky Load)'}</strong></span>
           </div>
           <span class="px-2 py-0.5 rounded-md ${ml.aiConvergence.isAligned ? 'bg-emerald-500 text-slate-950' : 'bg-amber-500 text-slate-950'} text-[9px] sm:text-[10px] font-black uppercase tracking-wider self-start sm:self-auto shrink-0">
             ${ml.aiConvergence.isAligned ? '🟢 99.9% SAFE' : '⚠️ SKIP'}
@@ -927,6 +1055,7 @@ async function deleteSingleMatch(match) {
     });
     const result = await res.json();
     if (result.success) {
+      removeVaultMatch(cleanA, cleanB, cleanDate);
       const matchKey = `${cleanA}_${cleanB}_${cleanDate}`.toLowerCase();
       bulkSelectedMatchesMap.delete(matchKey);
       if (bulkSelectAllCheckbox) {
@@ -958,13 +1087,15 @@ async function saveCustomMatch() {
   }
 
   try {
+    const matchPayload = { teamA, teamB, time, league, venue, date, tournament: `${teamA} vs ${teamB} Match` };
     const res = await fetch('/api/matches/add-custom', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ teamA, teamB, time, league, venue, date, tournament: `${teamA} vs ${teamB} Match` })
+      body: JSON.stringify(matchPayload)
     });
     const result = await res.json();
     if (result.success) {
+      saveVaultMatch(matchPayload);
       if (addMatchModal) addMatchModal.classList.add('hidden');
       showToast(`Match ${teamA} vs ${teamB} added!`);
 

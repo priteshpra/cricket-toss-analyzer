@@ -4,6 +4,24 @@ const scraperService = require('./scraperService');
 const tossAnalytics = require('./tossAnalytics');
 
 const OVERRIDES_FILE = path.join(__dirname, '../data/user_overrides.json');
+const BACKUP_OVERRIDES_FILE = path.join(__dirname, '../data/user_overrides_backup.json');
+
+/**
+ * Robust date normalizer: handles YYYY-MM-DD, YYYY-M-D, DD/MM/YYYY, DD-MM-YYYY
+ */
+function normalizeDateStr(dateStr) {
+  if (!dateStr) return new Date().toISOString().split('T')[0];
+  const s = String(dateStr).trim();
+  const ymd = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (ymd) {
+    return `${ymd[1]}-${String(ymd[2]).padStart(2, '0')}-${String(ymd[3]).padStart(2, '0')}`;
+  }
+  const dmy = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+  if (dmy) {
+    return `${dmy[3]}-${String(dmy[2]).padStart(2, '0')}-${String(dmy[1]).padStart(2, '0')}`;
+  }
+  return s;
+}
 
 let cachedTeamsVenues = null;
 let cachedHistoricalMatches = null;
@@ -51,9 +69,39 @@ function loadUserOverrides() {
       clearedDates = new Set(data.clearedDates || []);
       customUserMatches = data.customMatches || {};
       editedUserMatches = data.editedMatches || {};
-      applyEditsToFixtures();
-      return;
     }
+
+    // Safety Dual-Sync: Merge matches from persistent backup if any were accidentally overwritten or reset
+    if (fs.existsSync(BACKUP_OVERRIDES_FILE)) {
+      try {
+        const backupData = JSON.parse(fs.readFileSync(BACKUP_OVERRIDES_FILE, 'utf8'));
+        if (backupData.customMatches) {
+          Object.keys(backupData.customMatches).forEach(d => {
+            const cleanD = normalizeDateStr(d);
+            const bMatches = backupData.customMatches[d];
+            if (Array.isArray(bMatches) && bMatches.length > 0) {
+              if (!customUserMatches[cleanD] || customUserMatches[cleanD].length === 0) {
+                customUserMatches[cleanD] = bMatches;
+              } else {
+                bMatches.forEach(bm => {
+                  const exists = customUserMatches[cleanD].some(cm =>
+                    (cm.id && bm.id && cm.id === bm.id) ||
+                    (cm.teamA.toLowerCase().trim() === bm.teamA.toLowerCase().trim() && cm.teamB.toLowerCase().trim() === bm.teamB.toLowerCase().trim())
+                  );
+                  if (!exists) {
+                    customUserMatches[cleanD].push(bm);
+                  }
+                });
+              }
+            }
+          });
+        }
+      } catch (bErr) {
+        console.error("Warning reading backup overrides:", bErr.message);
+      }
+    }
+
+    applyEditsToFixtures();
   } catch (err) {
     console.error("Error loading user overrides from disk:", err);
   }
@@ -68,7 +116,10 @@ function saveUserOverrides() {
       customMatches: customUserMatches,
       editedMatches: editedUserMatches
     };
-    fs.writeFileSync(OVERRIDES_FILE, JSON.stringify(data, null, 2), 'utf8');
+    const jsonStr = JSON.stringify(data, null, 2);
+    fs.writeFileSync(OVERRIDES_FILE, jsonStr, 'utf8');
+    // Save redundant backup file to guarantee zero data loss across git operations
+    fs.writeFileSync(BACKUP_OVERRIDES_FILE, jsonStr, 'utf8');
   } catch (err) {
     console.error("Error saving user overrides to disk:", err);
   }
@@ -327,8 +378,8 @@ function calculateTossTime(timeStr) {
  */
 function generateDailyFixtures(dateStr, targetLeague = 'all') {
   const teamsVenues = getTeamsVenues();
+  const cleanDateStr = normalizeDateStr(dateStr);
   const fixtures = [];
-  const cleanDateStr = (dateStr || '').trim();
 
   // Universal helper to resolve any user edits for a match
   function resolveEditedMatch(teamA, teamB, date, fallbackTime, fallbackVenue, fallbackLeague, fallbackTourn) {
@@ -531,7 +582,7 @@ class MatchService {
     loadUserOverrides();
 
     const todayStr = new Date().toISOString().split('T')[0];
-    const targetDate = (dateStr || todayStr).trim();
+    const targetDate = normalizeDateStr(dateStr || todayStr);
     const teamsVenues = getTeamsVenues();
     const historicalMatches = getHistoricalMatches();
     
@@ -710,6 +761,7 @@ class MatchService {
         teamBCaptain: teamBCaptain,
         tossAnalysis: {
           favoredWinner: analysis.prediction.favoredWinner,
+          favoredProbability: analysis.prediction.favoredProbability,
           confidence: analysis.prediction.confidence,
           teamAProbability: analysis.teamA.probability,
           teamBProbability: analysis.teamB.probability,
@@ -745,7 +797,7 @@ class MatchService {
   updateTossResult(teamA, teamB, date, tossWinner, tossDecision, matchWinner) {
     const cleanA = (teamA || '').trim();
     const cleanB = (teamB || '').trim();
-    const cleanDate = (date || '').trim();
+    const cleanDate = normalizeDateStr(date);
     const cleanWinner = (tossWinner || '').trim();
     const key1 = `${cleanA.toLowerCase()}_${cleanB.toLowerCase()}_${cleanDate.toLowerCase()}`;
     const key2 = `${cleanB.toLowerCase()}_${cleanA.toLowerCase()}_${cleanDate.toLowerCase()}`;
@@ -812,7 +864,7 @@ class MatchService {
   resetTossToPending(teamA, teamB, date) {
     const cleanA = (teamA || '').trim();
     const cleanB = (teamB || '').trim();
-    const cleanDate = (date || '').trim();
+    const cleanDate = normalizeDateStr(date);
     const key1 = `${cleanA.toLowerCase()}_${cleanB.toLowerCase()}_${cleanDate.toLowerCase()}`;
     const key2 = `${cleanB.toLowerCase()}_${cleanA.toLowerCase()}_${cleanDate.toLowerCase()}`;
     const data = {
@@ -863,7 +915,7 @@ class MatchService {
   deleteMatch(teamA, teamB, date) {
     const cleanA = (teamA || '').trim();
     const cleanB = (teamB || '').trim();
-    const cleanDate = (date || '').trim();
+    const cleanDate = normalizeDateStr(date);
     const key1 = `${cleanA.toLowerCase()}_${cleanB.toLowerCase()}_${cleanDate.toLowerCase()}`;
     const key2 = `${cleanB.toLowerCase()}_${cleanA.toLowerCase()}_${cleanDate.toLowerCase()}`;
     deletedMatches.add(key1);
@@ -907,7 +959,7 @@ class MatchService {
    * Bulk Delete / Remove multiple matches or all matches for a date (Persisted to disk)
    */
   deleteMultipleMatches(matchesList, date) {
-    const targetDate = (date || '').trim();
+    const targetDate = normalizeDateStr(date);
     if (!Array.isArray(matchesList) || matchesList.length === 0) {
       if (targetDate) {
         // Delete all fixtures for this specific date
@@ -985,7 +1037,7 @@ class MatchService {
    * Add a custom match directly into schedule (Persisted to disk)
    */
   addCustomMatch(date, matchData) {
-    const cleanDate = (date || '').trim();
+    const cleanDate = normalizeDateStr(date);
     const cleanA = (matchData.teamA || '').trim();
     const cleanB = (matchData.teamB || '').trim();
     const cleanLeague = (matchData.league && matchData.league !== 'all') ? matchData.league : 'all';
@@ -1029,6 +1081,7 @@ class MatchService {
    */
   editMatchDetails(originalTeamA, originalTeamB, originalDate, newMatchData) {
     const cleanTime = newMatchData.time ? (newMatchData.time.toUpperCase().includes('IST') ? newMatchData.time.trim() : `${newMatchData.time.trim()} IST`) : '07:30 PM IST';
+    const cleanOrigDate = normalizeDateStr(originalDate);
     
     const edited = {
       teamA: newMatchData.teamA.trim(),
@@ -1039,10 +1092,10 @@ class MatchService {
       tournament: newMatchData.tournament || `${newMatchData.teamA.trim()} vs ${newMatchData.teamB.trim()} Match`
     };
 
-    const origKey1 = `${originalTeamA}_${originalTeamB}_${originalDate}`.toLowerCase();
-    const origKey2 = `${originalTeamB}_${originalTeamA}_${originalDate}`.toLowerCase();
-    const newKey1 = `${edited.teamA}_${edited.teamB}_${originalDate}`.toLowerCase();
-    const newKey2 = `${edited.teamB}_${edited.teamA}_${originalDate}`.toLowerCase();
+    const origKey1 = `${originalTeamA}_${originalTeamB}_${cleanOrigDate}`.toLowerCase();
+    const origKey2 = `${originalTeamB}_${originalTeamA}_${cleanOrigDate}`.toLowerCase();
+    const newKey1 = `${edited.teamA}_${edited.teamB}_${cleanOrigDate}`.toLowerCase();
+    const newKey2 = `${edited.teamB}_${edited.teamA}_${cleanOrigDate}`.toLowerCase();
 
     // 1. Store under original keys AND new keys for full multi-hop edit lookup
     editedUserMatches[origKey1] = edited;
