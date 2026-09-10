@@ -3,6 +3,7 @@ const router = express.Router();
 const matchService = require('../services/matchService');
 const tossAnalytics = require('../services/tossAnalytics');
 const marketLoadService = require('../services/marketLoadService');
+const telegramBetService = require('../services/telegramBetService');
 
 // Prevent browser/proxy caching for all API endpoints to guarantee 100% fresh data
 router.use((req, res, next) => {
@@ -305,4 +306,35 @@ router.get('/market-load/top-teams', async (req, res) => {
   }
 });
 
+/**
+ * GET /api/telegram-bets
+ * Query params: user (target username/id), type (bets_only | all), minAmount, limit
+ */
+router.get('/telegram-bets', (req, res) => {
+  try {
+    const { user, type, minAmount, limit } = req.query;
+    const data = telegramBetService.getBets({ user, type, minAmount, limit });
+    res.json(data);
+  } catch (err) {
+    console.error("Error in /api/telegram-bets:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * POST /api/telegram-bets/test
+ * Inject a simulated live bet to test audio and desktop notifications
+ */
+router.post('/telegram-bets/test', (req, res) => {
+  try {
+    const { userName, teamName, amount } = req.body || {};
+    const testBet = telegramBetService.injectTestBet({ userName, teamName, amount });
+    res.json({ success: true, message: "Test bet alert generated", bet: testBet });
+  } catch (err) {
+    console.error("Error in /api/telegram-bets/test:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 module.exports = router;
+

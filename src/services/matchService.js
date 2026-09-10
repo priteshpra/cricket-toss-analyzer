@@ -499,77 +499,8 @@ function generateDailyFixtures(dateStr, targetLeague = 'all') {
     return fixtures;
   }
 
-  // Fallback for other dates: cycle through leagues with distinct teams
-  const seed = cleanDateStr.split('-').reduce((acc, part) => acc + parseInt(part, 10), 0);
-  const activeLeagues = targetLeague === 'all' 
-    ? ['dehradun_t20', 'upt20', 'kcc', 'etpl', 'kcl', 'pca', 'cpl', 't20i', 'odi', 'womens_asia_cup'] 
-    : [targetLeague];
-
-  activeLeagues.forEach(lg => {
-    let lgTeams = teamsVenues.teams.filter(t => t.type === lg);
-    if (lg === 'womens_asia_cup') {
-      lgTeams = teamsVenues.teams.filter(t => t.type === 'womens_asia_cup' || t.name.includes('Women'));
-    }
-    if (lgTeams && lgTeams.length >= 2) {
-      const idxA = (seed * 3) % lgTeams.length;
-      let idxB = (seed * 5 + 1) % lgTeams.length;
-      if (idxB === idxA) idxB = (idxA + 1) % lgTeams.length;
-
-      const teamA = lgTeams[idxA];
-      const teamB = lgTeams[idxB];
-      let venue = "International Cricket Stadium";
-      let leagueName = "Championship Match";
-
-      if (lg === 'dehradun_t20') { venue = "Abhimanyu Cricket Academy, Dehradun"; leagueName = "Dehradun T20 League 2026"; }
-      else if (lg === 'upt20') { venue = "BRSABV Ekana Cricket Stadium, Lucknow"; leagueName = "Uttar Pradesh T20 League (UP T20 2026)"; }
-      else if (lg === 'kcc') { venue = "Sulaibiya Cricket Ground, Kuwait"; leagueName = "KCC T20 Summer League 2026"; }
-      else if (lg === 'etpl') { venue = "Sportpark Westvliet, The Hague"; leagueName = "European T20 Premier League 2026"; }
-      else if (lg === 'kcl') { venue = "Greenfield International Stadium, Thiruvananthapuram"; leagueName = "Kerala Cricket League (KCL 2026)"; }
-      else if (lg === 'pca') { venue = "PCA IS Bindra Stadium, Mohali"; leagueName = "Punjab T20 (Sher-e-Punjab 2026)"; }
-      else if (lg === 'cpl') { venue = "Warner Park, Basseterre, St Kitts"; leagueName = "Caribbean Premier League (CPL 2026)"; }
-      else if (lg === 'womens_asia_cup') { venue = "Dubai International Cricket Stadium"; leagueName = "Women's Asia Cup 2026"; }
-      else if (lg === 't20i') { venue = "Al Amerat Cricket Ground, Oman"; leagueName = "International T20I Series 2026"; }
-      else if (lg === 'odi') { venue = "Civil Service Cricket Club, Belfast"; leagueName = "One Day International (ODI 2026)"; }
-
-      const rawTime = (seed % 2 === 0 ? "02:30 PM IST" : "07:30 PM IST");
-      const cleanTeamA = teamA.name.trim();
-      const cleanTeamB = teamB.name.trim();
-      const delKey1 = `${cleanTeamA}_${cleanTeamB}_${cleanDateStr}`.toLowerCase();
-      const delKey2 = `${cleanTeamB}_${cleanTeamA}_${cleanDateStr}`.toLowerCase();
-      if (deletedMatches.has(delKey1) || deletedMatches.has(delKey2)) return;
-
-      const res = resolveEditedMatch(cleanTeamA, cleanTeamB, cleanDateStr, rawTime, venue, lg, leagueName);
-
-      const editedDel1 = `${res.teamA.trim()}_${res.teamB.trim()}_${cleanDateStr}`.toLowerCase();
-      const editedDel2 = `${res.teamB.trim()}_${res.teamA.trim()}_${cleanDateStr}`.toLowerCase();
-      if (deletedMatches.has(editedDel1) || deletedMatches.has(editedDel2)) return;
-
-      const teamObjA = teamsVenues.teams.find(t => t.name.toLowerCase() === res.teamA.toLowerCase()) || { badge: teamA.badge || '🏏', color: teamA.color || '#2563eb' };
-      const teamObjB = teamsVenues.teams.find(t => t.name.toLowerCase() === res.teamB.toLowerCase()) || { badge: teamB.badge || '🏏', color: teamB.color || '#dc2626' };
-
-      fixtures.push({
-        id: `sched_${cleanDateStr}_${lg}_dyn`,
-        date: cleanDateStr,
-        time: res.time,
-        tossTime: res.tossTime,
-        tournament: res.tournament,
-        league: res.league,
-        format: 'T20',
-        teamA: res.teamA.trim(),
-        teamB: res.teamB.trim(),
-        teamABadge: teamObjA.badge || '🏏',
-        teamBBadge: teamObjB.badge || '🏏',
-        teamAColor: teamObjA.color || '#2563eb',
-        teamBColor: teamObjB.color || '#dc2626',
-        venue: res.venue,
-        status: 'UPCOMING',
-        tossWinner: null,
-        tossDecision: null,
-        matchWinner: null
-      });
-    }
-  });
-
+  // For any date not in the official calendar, return ONLY user-added custom matches (or empty array if none)
+  // NEVER generate synthetic or fake random matches!
   return fixtures;
 }
 

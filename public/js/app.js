@@ -117,11 +117,13 @@ const navScheduleBtn = document.getElementById('nav-schedule-btn');
 const navMarketLoadBtn = document.getElementById('nav-market-load-btn');
 const navSimulatorBtn = document.getElementById('nav-simulator-btn');
 const navLeaderboardBtn = document.getElementById('nav-leaderboard-btn');
+const navTelegramBetBtn = document.getElementById('nav-telegram-bet-btn');
 
 const tabSchedule = document.getElementById('tab-schedule');
 const tabMarketLoad = document.getElementById('tab-market-load');
 const tabSimulator = document.getElementById('tab-simulator');
 const tabLeaderboard = document.getElementById('tab-leaderboard');
+const tabTelegramBet = document.getElementById('tab-telegram-bet');
 
 const datePicker = document.getElementById('match-date-picker');
 const dateYesterdayBtn = document.getElementById('date-yesterday');
@@ -246,6 +248,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadTeamsAndVenues();
   await loadMatches(currentDate, currentLeague);
   await loadLeaderboard();
+  initTelegramBetMonitoring();
 });
 
 function initDatePicker() {
@@ -260,11 +263,11 @@ function initDatePicker() {
 
 // Navigation Tabs
 function switchTab(activeTabId) {
-  [tabSchedule, tabMarketLoad, tabSimulator, tabLeaderboard].forEach(tab => {
+  [tabSchedule, tabMarketLoad, tabSimulator, tabLeaderboard, tabTelegramBet].forEach(tab => {
     if (tab) tab.classList.add('hidden');
   });
 
-  [navScheduleBtn, navMarketLoadBtn, navSimulatorBtn, navLeaderboardBtn].forEach(btn => {
+  [navScheduleBtn, navMarketLoadBtn, navSimulatorBtn, navLeaderboardBtn, navTelegramBetBtn].forEach(btn => {
     if (btn) {
       btn.classList.remove('bg-emerald-500/15', 'text-emerald-400', 'border-emerald-500/30');
       btn.classList.add('text-slate-300');
@@ -300,6 +303,18 @@ function switchTab(activeTabId) {
       navLeaderboardBtn.classList.remove('text-slate-300');
     }
     loadLeaderboard();
+  } else if (activeTabId === 'telegram-bet') {
+    if (tabTelegramBet) tabTelegramBet.classList.remove('hidden');
+    if (navTelegramBetBtn) {
+      navTelegramBetBtn.classList.add('bg-emerald-500/15', 'text-emerald-400', 'border-emerald-500/30');
+      navTelegramBetBtn.classList.remove('text-slate-300');
+    }
+    if (tgNavBadge) {
+      tgNavBadge.innerHTML = 'LIVE';
+      tgNavBadge.className = 'inline-flex items-center ml-1.5 px-1.5 py-0.5 rounded-full text-[9px] font-extrabold bg-sky-500/20 text-sky-300 border border-sky-500/40 animate-pulse';
+    }
+    stopTitleFlash();
+    loadTelegramBets(true);
   }
 }
 
@@ -309,6 +324,9 @@ function setupEventListeners() {
   if (navMarketLoadBtn) navMarketLoadBtn.addEventListener('click', () => switchTab('market-load'));
   if (navSimulatorBtn) navSimulatorBtn.addEventListener('click', () => switchTab('simulator'));
   if (navLeaderboardBtn) navLeaderboardBtn.addEventListener('click', () => switchTab('leaderboard'));
+  if (navTelegramBetBtn) navTelegramBetBtn.addEventListener('click', () => switchTab('telegram-bet'));
+
+  setupTelegramBetListeners();
 
   if (btnRefreshMarketLoad) btnRefreshMarketLoad.addEventListener('click', loadMarketLoadCenter);
 
@@ -426,6 +444,14 @@ function setupEventListeners() {
   // Add Match Modal
   if (btnOpenAddMatch) {
     btnOpenAddMatch.addEventListener('click', () => {
+      if (addMatchDate) addMatchDate.value = currentDate;
+      if (addMatchModal) addMatchModal.classList.remove('hidden');
+    });
+  }
+
+  const btnEmptyAddMatch = document.getElementById('btn-empty-add-match');
+  if (btnEmptyAddMatch) {
+    btnEmptyAddMatch.addEventListener('click', () => {
       if (addMatchDate) addMatchDate.value = currentDate;
       if (addMatchModal) addMatchModal.classList.remove('hidden');
     });
@@ -1804,4 +1830,1032 @@ function renderDeepDiveTossModal(analysis, marketLoad, teamA, teamB, venue) {
 
     </div>
   `;
+}
+
+// =============================================================================
+// TELEGRAM BET LIVE CHANNEL MONITOR & USER BET ALERTS SUBSYSTEM
+// Channel: @BetfairTossbookOrignal (https://web.telegram.org/k/#@BetfairTossbookOrignal)
+// =============================================================================
+
+let tgTrackedUsers = []; // array of lowercase strings e.g. ['btb1648', 'vip7186']
+let tgSoundChoice = 'bell';
+let tgFilterType = 'bets_only';
+let tgKnownPostIds = new Set();
+let tgPollTimer = null;
+let tgIsInitialLoad = true;
+let tgActivePunters = new Set();
+let tgLatestBets = [];
+
+// DOM Elements for TeleGramBet
+const tgFilterUsersInput = document.getElementById('tg-filter-users');
+const tgBtnSaveUsers = document.getElementById('tg-btn-save-users');
+const tgBtnClearUsers = document.getElementById('tg-btn-clear-users');
+const tgHideOtherUsersCheckbox = document.getElementById('tg-hide-other-users');
+const tgToggleChipsBtn = document.getElementById('tg-toggle-chips-btn');
+const tgChipsWrapper = document.getElementById('tg-chips-wrapper');
+const tgChipsToggleText = document.getElementById('tg-chips-toggle-text');
+const tgFilterTypeSelect = document.getElementById('tg-filter-type');
+const tgSoundSelect = document.getElementById('tg-sound-select');
+const tgSoundTestBtn = document.getElementById('tg-sound-test-btn');
+const tgBtnRequestPerm = document.getElementById('tg-btn-request-permission');
+const tgPermBtnText = document.getElementById('tg-perm-btn-text');
+const tgBtnTestAlert = document.getElementById('tg-btn-test-alert');
+const tgBtnRefresh = document.getElementById('tg-btn-refresh');
+const tgBetsContainer = document.getElementById('tg-bets-container');
+const tgEmptyState = document.getElementById('tg-empty-state');
+const tgFeedCountBadge = document.getElementById('tg-feed-count-badge');
+const tgLastPolledTime = document.getElementById('tg-last-polled-time');
+const tgStatusBadge = document.getElementById('tg-status-badge');
+const tgActiveTrackLabel = document.getElementById('tg-active-track-label');
+const tgActiveTrackName = document.getElementById('tg-active-track-name');
+const tgActiveUserChips = document.getElementById('tg-active-user-chips');
+const tgBtnClearAllChips = document.getElementById('tg-btn-clear-all-chips');
+const tgNewPunterInput = document.getElementById('tg-new-punter-input');
+const tgBtnAddPunter = document.getElementById('tg-btn-add-punter');
+const tgNavBadge = document.getElementById('tg-nav-badge');
+
+// Cross-tab / Cross-menu notification elements
+const tgCrossTabAlert = document.getElementById('tg-cross-tab-alert');
+const tgCloseAlertBtn = document.getElementById('tg-close-alert-btn');
+const tgAlertUser = document.getElementById('tg-alert-user');
+const tgAlertDetails = document.getElementById('tg-alert-details');
+const tgAlertTime = document.getElementById('tg-alert-time');
+const tgAlertViewBtn = document.getElementById('tg-alert-view-btn');
+
+let tgAudioCtx = null;
+let tgOriginalTitle = document.title;
+let tgTitleFlashInterval = null;
+let tgAlertSlideTimer = null;
+let tgWorker = null;
+
+let tgHideOtherUsers = localStorage.getItem('c_toss_tg_hide_other_users') !== 'false'; // Defaults to true
+let tgShowChips = localStorage.getItem('c_toss_tg_show_chips') !== 'false';
+let tgDismissedPunters = new Set(
+  JSON.parse(localStorage.getItem('c_toss_tg_dismissed_punters') || '[]')
+);
+let tgCustomPunters = new Set(
+  JSON.parse(localStorage.getItem('c_toss_tg_custom_punters') || '[]')
+);
+let tgHideAllPunters = localStorage.getItem('c_toss_tg_hide_all_punters') === 'true';
+
+/**
+ * Initialize TeleGramBet Monitoring
+ */
+function initTelegramBetMonitoring() {
+  // Load saved preferences from localStorage
+  const savedUsers = localStorage.getItem('c_toss_tg_tracked_users');
+  if (savedUsers) {
+    tgTrackedUsers = savedUsers.split(',').map(u => u.trim().toLowerCase().replace(/^@/, '')).filter(Boolean);
+    if (tgFilterUsersInput) tgFilterUsersInput.value = savedUsers;
+  }
+
+  const savedSound = localStorage.getItem('c_toss_tg_sound');
+  if (savedSound && tgSoundSelect) {
+    tgSoundChoice = savedSound;
+    tgSoundSelect.value = savedSound;
+  }
+
+  const savedFilterType = localStorage.getItem('c_toss_tg_filter_type');
+  if (savedFilterType && tgFilterTypeSelect) {
+    tgFilterType = savedFilterType;
+    tgFilterTypeSelect.value = savedFilterType;
+  }
+
+  if (tgHideOtherUsersCheckbox) {
+    tgHideOtherUsersCheckbox.checked = tgHideOtherUsers;
+  }
+
+  updateChipsVisibility();
+  updateTrackedUserBadge();
+  updateNotificationPermissionButton();
+
+  // Initial load
+  loadTelegramBets(false);
+
+  // Background Web Worker non-throttled polling (works in background tabs & minimized browser)
+  startBackgroundPollingWorker();
+}
+
+/**
+ * Update chips wrapper visibility
+ */
+function updateChipsVisibility() {
+  if (!tgChipsWrapper || !tgChipsToggleText) return;
+  if (tgShowChips) {
+    tgChipsWrapper.classList.remove('hidden');
+    tgChipsToggleText.textContent = 'Hide Punter ID Chips';
+  } else {
+    tgChipsWrapper.classList.add('hidden');
+    tgChipsToggleText.textContent = 'Show Punter ID Chips';
+  }
+}
+
+/**
+ * Setup Event Listeners for TeleGramBet
+ */
+function setupTelegramBetListeners() {
+  // Cross-Menu Floating Alert Buttons
+  if (tgCloseAlertBtn) {
+    tgCloseAlertBtn.addEventListener('click', hideCrossMenuBetAlert);
+  }
+
+  if (tgAlertViewBtn) {
+    tgAlertViewBtn.addEventListener('click', () => {
+      hideCrossMenuBetAlert();
+      switchTab('telegram-bet');
+    });
+  }
+
+  // Window focus resets title flash
+  window.addEventListener('focus', () => {
+    stopTitleFlash();
+  });
+
+  // Global click anywhere unlocks AudioContext for background tabs
+  document.addEventListener('click', () => {
+    unlockAudioContext();
+  });
+
+  // Save Tracked Users
+  if (tgBtnSaveUsers) {
+    tgBtnSaveUsers.addEventListener('click', () => {
+      saveTrackedUsersFromInput();
+    });
+  }
+
+  // Clear Tracked Users (Show All)
+  if (tgBtnClearUsers) {
+    tgBtnClearUsers.addEventListener('click', () => {
+      if (tgFilterUsersInput) tgFilterUsersInput.value = '';
+      saveTrackedUsersFromInput();
+      showToast('🧹 Filter cleared - Showing all channel updates', 'info');
+    });
+  }
+
+  // Hide / Remove other users checkbox
+  if (tgHideOtherUsersCheckbox) {
+    tgHideOtherUsersCheckbox.addEventListener('change', (e) => {
+      tgHideOtherUsers = e.target.checked;
+      localStorage.setItem('c_toss_tg_hide_other_users', tgHideOtherUsers);
+      renderTelegramBets(tgLatestBets);
+      if (tgHideOtherUsers && tgTrackedUsers.length > 0) {
+        showToast('🚫 Baki sabhi users hide kar diye gaye hain (Only tracked user visible)', 'info');
+      } else {
+        showToast('👁️ All users are now visible in the feed', 'info');
+      }
+    });
+  }
+
+  // Toggle Chips button
+  if (tgToggleChipsBtn) {
+    tgToggleChipsBtn.addEventListener('click', () => {
+      tgShowChips = !tgShowChips;
+      localStorage.setItem('c_toss_tg_show_chips', tgShowChips);
+      updateChipsVisibility();
+    });
+  }
+
+  // Remove All Punter IDs
+  if (tgBtnClearAllChips) {
+    tgBtnClearAllChips.addEventListener('click', () => {
+      tgHideAllPunters = true;
+      localStorage.setItem('c_toss_tg_hide_all_punters', 'true');
+      renderActiveUserChips();
+      showToast('🗑️ Active Punter IDs list remove kar di gayi hai', 'info');
+    });
+  }
+
+  // Add New Custom Punter ID
+  if (tgBtnAddPunter) {
+    tgBtnAddPunter.addEventListener('click', handleAddNewCustomPunter);
+  }
+  if (tgNewPunterInput) {
+    tgNewPunterInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        handleAddNewCustomPunter();
+      }
+    });
+  }
+
+  if (tgFilterUsersInput) {
+    tgFilterUsersInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        saveTrackedUsersFromInput();
+      }
+    });
+  }
+
+  // Filter Type change
+  if (tgFilterTypeSelect) {
+    tgFilterTypeSelect.addEventListener('change', (e) => {
+      tgFilterType = e.target.value;
+      localStorage.setItem('c_toss_tg_filter_type', tgFilterType);
+      renderTelegramBets(tgLatestBets);
+    });
+  }
+
+  // Sound Selector
+  if (tgSoundSelect) {
+    tgSoundSelect.addEventListener('change', (e) => {
+      tgSoundChoice = e.target.value;
+      localStorage.setItem('c_toss_tg_sound', tgSoundChoice);
+      playAlertSound(tgSoundChoice);
+    });
+  }
+
+  // Sound test button
+  if (tgSoundTestBtn) {
+    tgSoundTestBtn.addEventListener('click', () => {
+      playAlertSound(tgSoundChoice);
+    });
+  }
+
+  // Notification Permission
+  if (tgBtnRequestPerm) {
+    tgBtnRequestPerm.addEventListener('click', requestDesktopNotificationPermission);
+  }
+
+  // Manual Refresh
+  if (tgBtnRefresh) {
+    tgBtnRefresh.addEventListener('click', () => {
+      loadTelegramBets(true);
+      showToast('🔄 Refreshing @BetfairTossbookOrignal feed...', 'info');
+    });
+  }
+
+  // Test Alert Button (Simulates a live bet from tracked user)
+  if (tgBtnTestAlert) {
+    tgBtnTestAlert.addEventListener('click', triggerTestBetAlert);
+  }
+}
+
+/**
+ * Save tracked users from input
+ */
+function saveTrackedUsersFromInput() {
+  const raw = tgFilterUsersInput ? tgFilterUsersInput.value.trim() : '';
+  if (!raw || raw === '*') {
+    tgTrackedUsers = [];
+    localStorage.removeItem('c_toss_tg_tracked_users');
+    showToast('👁️ Now monitoring ALL bets in @BetfairTossbookOrignal', 'info');
+  } else {
+    tgTrackedUsers = raw.split(',').map(u => u.trim().toLowerCase().replace(/^@/, '')).filter(Boolean);
+    localStorage.setItem('c_toss_tg_tracked_users', raw);
+    showToast(`🎯 Tracking target user(s): ${raw}`, 'success');
+  }
+  updateTrackedUserBadge();
+  renderTelegramBets(tgLatestBets);
+  renderActiveUserChips();
+}
+
+/**
+ * Update UI banner showing which user is actively tracked
+ */
+function updateTrackedUserBadge() {
+  if (!tgActiveTrackLabel || !tgActiveTrackName) return;
+  if (tgTrackedUsers && tgTrackedUsers.length > 0) {
+    tgActiveTrackLabel.classList.remove('hidden');
+    const uText = tgTrackedUsers.map(u => u.toUpperCase()).join(', ');
+    tgActiveTrackName.innerHTML = `${uText} ${tgHideOtherUsers ? '<span class="text-[10px] ml-1.5 px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-normal">🚫 Baki sabhi users removed</span>' : ''}`;
+  } else {
+    tgActiveTrackLabel.classList.add('hidden');
+  }
+}
+
+/**
+ * Update the Notification permission button state
+ */
+function updateNotificationPermissionButton() {
+  if (!tgBtnRequestPerm || !tgPermBtnText) return;
+  if (!('Notification' in window)) {
+    tgPermBtnText.textContent = 'Notifications Not Supported';
+    tgBtnRequestPerm.disabled = true;
+    return;
+  }
+  if (Notification.permission === 'granted') {
+    tgPermBtnText.textContent = 'Desktop Alerts: Active ✅';
+    tgBtnRequestPerm.classList.remove('text-emerald-400', 'border-emerald-500/40');
+    tgBtnRequestPerm.classList.add('text-sky-300', 'border-sky-500/40', 'bg-sky-500/10');
+  } else if (Notification.permission === 'denied') {
+    tgPermBtnText.textContent = 'Alerts Blocked in Browser ❌';
+    tgBtnRequestPerm.classList.add('text-rose-400', 'border-rose-500/40');
+  } else {
+    tgPermBtnText.textContent = 'Enable Desktop Push Alerts';
+  }
+}
+
+/**
+ * Request desktop push notification permission
+ */
+function requestDesktopNotificationPermission() {
+  if (!('Notification' in window)) {
+    alert('Browser notifications are not supported on this browser.');
+    return;
+  }
+  Notification.requestPermission().then(permission => {
+    updateNotificationPermissionButton();
+    if (permission === 'granted') {
+      showToast('🔔 Browser Push Notifications Enabled!', 'success');
+      try {
+        new Notification('🏏 BetfairTossbook Alerts Active', {
+          body: 'You will be alerted instantly when tracked bets are placed!',
+          icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🪙</text></svg>'
+        });
+      } catch (e) {}
+    } else {
+      showToast('⚠️ Push notification permission denied in browser.', 'error');
+    }
+  });
+}
+
+/**
+ * Web Audio API Alert Sound Synthesizer
+ */
+function playAlertSound(type = 'bell') {
+  if (type === 'mute') return;
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    const ctx = new AudioContext();
+    if (ctx.state === 'suspended') {
+      ctx.resume();
+    }
+
+    if (type === 'bell') {
+      // Crystal bell chime (twin sine harmonic)
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc1.type = 'sine';
+      osc2.type = 'sine';
+      osc1.frequency.setValueAtTime(880, ctx.currentTime);
+      osc2.frequency.setValueAtTime(1760, ctx.currentTime);
+      gain.gain.setValueAtTime(0.35, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
+      osc1.connect(gain);
+      osc2.connect(gain);
+      gain.connect(ctx.destination);
+      osc1.start();
+      osc2.start();
+      osc1.stop(ctx.currentTime + 1.2);
+      osc2.stop(ctx.currentTime + 1.2);
+    } else if (type === 'chime') {
+      // Melodic 4-note arpeggio
+      const notes = [523.25, 659.25, 783.99, 1046.50];
+      notes.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.09);
+        gain.gain.setValueAtTime(0.25, ctx.currentTime + idx * 0.09);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.09 + 0.5);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime + idx * 0.09);
+        osc.stop(ctx.currentTime + idx * 0.09 + 0.5);
+      });
+    } else if (type === 'radar') {
+      // Tech radar ping
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1300, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(650, ctx.currentTime + 0.25);
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.25);
+    } else if (type === 'siren') {
+      // High urgency siren
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(600, ctx.currentTime);
+      osc.frequency.linearRampToValueAtTime(950, ctx.currentTime + 0.2);
+      osc.frequency.linearRampToValueAtTime(600, ctx.currentTime + 0.4);
+      osc.frequency.linearRampToValueAtTime(950, ctx.currentTime + 0.6);
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.8);
+    }
+  } catch (err) {
+    console.warn('[TeleGramBet] Web Audio error:', err);
+  }
+}
+
+/**
+ * Unlock Web Audio Context on user interaction so audio works in background tabs
+ */
+function unlockAudioContext() {
+  try {
+    if (!tgAudioCtx) {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (AudioContextClass) tgAudioCtx = new AudioContextClass();
+    }
+    if (tgAudioCtx && tgAudioCtx.state === 'suspended') {
+      tgAudioCtx.resume();
+    }
+  } catch (e) {}
+}
+
+/**
+ * Start non-throttled Web Worker background polling (ensures alerts fire even in other browser tabs)
+ */
+function startBackgroundPollingWorker() {
+  if (tgWorker) return;
+  try {
+    const workerScript = `
+      let timer = null;
+      self.onmessage = function(e) {
+        if (e.data === 'start') {
+          if (timer) clearInterval(timer);
+          timer = setInterval(function() {
+            self.postMessage('poll');
+          }, 7000);
+        } else if (e.data === 'stop') {
+          if (timer) clearInterval(timer);
+        }
+      };
+    `;
+    const blob = new Blob([workerScript], { type: 'application/javascript' });
+    tgWorker = new Worker(URL.createObjectURL(blob));
+    tgWorker.onmessage = function(e) {
+      if (e.data === 'poll') {
+        loadTelegramBets(false);
+      }
+    };
+    tgWorker.postMessage('start');
+  } catch (err) {
+    console.warn('[TeleGramBet] Web Worker fallback to window.setInterval:', err);
+    if (tgPollTimer) clearInterval(tgPollTimer);
+    tgPollTimer = setInterval(() => loadTelegramBets(false), 7000);
+  }
+}
+
+/**
+ * Flash browser tab title when user is on another browser tab
+ */
+function startTitleFlash(bet) {
+  if (tgTitleFlashInterval) clearInterval(tgTitleFlashInterval);
+  let toggle = false;
+  const user = bet.userName || 'TRACKED USER';
+  const sel = bet.teamName || 'TOSS';
+  const alertTitle = `🚨 (${user}) BET ON ${sel}!`;
+
+  tgTitleFlashInterval = setInterval(() => {
+    document.title = toggle ? alertTitle : '🪙 Betfair Alert! • TossMaster';
+    toggle = !toggle;
+  }, 850);
+}
+
+/**
+ * Stop flashing title and restore original title
+ */
+function stopTitleFlash() {
+  if (tgTitleFlashInterval) {
+    clearInterval(tgTitleFlashInterval);
+    tgTitleFlashInterval = null;
+    document.title = tgOriginalTitle || 'TossMaster • Cricket Toss Analyzer & Live Market Load';
+  }
+}
+
+/**
+ * Show rich top-right floating alert when user is on another menu inside the app
+ */
+function showCrossMenuBetAlert(bet) {
+  // 1. Update header nav button badge
+  if (tgNavBadge) {
+    tgNavBadge.innerHTML = `🚨 NEW BET: ${bet.userName}!`;
+    tgNavBadge.className = 'inline-flex items-center ml-1.5 px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-rose-500 text-white border border-rose-400 shadow-lg shadow-rose-500/50 animate-bounce';
+  }
+
+  // 2. Show floating alert box
+  if (tgCrossTabAlert && tgAlertUser && tgAlertDetails) {
+    tgAlertUser.textContent = bet.userName || 'Tracked User';
+    tgAlertDetails.innerHTML = `Selection: <span class="text-emerald-400 font-extrabold">${bet.teamName || 'Toss'}</span> • Amount: <span class="text-amber-400 font-extrabold">${bet.amount || 'N/A'}</span>`;
+    if (tgAlertTime) tgAlertTime.textContent = bet.displayTime || 'Just now';
+
+    tgCrossTabAlert.classList.remove('translate-x-full', 'opacity-0');
+    tgCrossTabAlert.classList.add('translate-x-0', 'opacity-100');
+
+    if (tgAlertSlideTimer) clearTimeout(tgAlertSlideTimer);
+    tgAlertSlideTimer = setTimeout(() => {
+      hideCrossMenuBetAlert();
+    }, 15000); // Visible for 15s
+  }
+}
+
+/**
+ * Hide rich top-right floating alert
+ */
+function hideCrossMenuBetAlert() {
+  if (!tgCrossTabAlert) return;
+  tgCrossTabAlert.classList.add('translate-x-full', 'opacity-0');
+  tgCrossTabAlert.classList.remove('translate-x-0', 'opacity-100');
+}
+
+/**
+ * Dispatch Desktop Push Notification (Windows Native Alert)
+ */
+function sendDesktopNotification(bet) {
+  if (!('Notification' in window)) return;
+  if (Notification.permission !== 'granted') {
+    // If not granted yet, attempt request so user gets future alerts
+    Notification.requestPermission().then(updateNotificationPermissionButton);
+    return;
+  }
+  try {
+    const isTarget = isUserTracked(bet.userName);
+    const title = isTarget 
+      ? `🎯 TARGET USER BET: ${bet.userName} placed bet!` 
+      : `⚡ NEW BET: ${bet.userName}`;
+    const body = `${bet.teamName ? `Selection: ${bet.teamName}` : ''} | Amount: ${bet.amount || 'N/A'}\nChannel: @BetfairTossbookOrignal`;
+
+    const notification = new Notification(title, {
+      body,
+      icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🪙</text></svg>',
+      tag: bet.postId || `bet_${Date.now()}`,
+      requireInteraction: true // Keeps alert on screen until clicked
+    });
+
+    notification.onclick = () => {
+      window.focus();
+      switchTab('telegram-bet');
+      if (bet.webTelegramUrl) {
+        window.open(bet.webTelegramUrl, '_blank');
+      }
+    };
+  } catch (e) {
+    console.warn('[TeleGramBet] Notification dispatch error:', e);
+  }
+}
+
+/**
+ * Check if a username matches the user's tracked list
+ */
+function isUserTracked(userName) {
+  if (!userName || !tgTrackedUsers || tgTrackedUsers.length === 0) return false;
+  const clean = userName.toLowerCase().replace(/^@/, '').trim();
+  return tgTrackedUsers.some(target => clean.includes(target) || target.includes(clean));
+}
+
+/**
+ * Fetch latest bets from server endpoint
+ */
+async function loadTelegramBets(forceNotice = false) {
+  try {
+    const res = await fetch(`/api/telegram-bets?limit=60&_t=${Date.now()}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    if (data && data.bets) {
+      processIncomingBets(data.bets, forceNotice);
+      updateTelegramStatusBadge(data.status, data.lastFetchTime);
+    }
+  } catch (err) {
+    console.warn('[TeleGramBet] Polling error:', err.message);
+    if (tgStatusBadge) {
+      tgStatusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400"></span> Reconnecting...`;
+      tgStatusBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center gap-1.5';
+    }
+  }
+}
+
+/**
+ * Process bets and trigger alerts on new incoming bets
+ */
+function processIncomingBets(bets, forceNotice = false) {
+  if (!Array.isArray(bets)) return;
+  tgLatestBets = bets;
+
+  let triggeredAlert = false;
+  const newBetsFound = [];
+
+  for (const bet of bets) {
+    // Collect punter names for quick chips
+    if (bet.userName && bet.userName !== 'System / Admin' && bet.userName !== 'Anonymous') {
+      tgActivePunters.add(bet.userName);
+    }
+
+    if (!tgKnownPostIds.has(bet.postId)) {
+      tgKnownPostIds.add(bet.postId);
+      newBetsFound.push(bet);
+    }
+  }
+
+  // If this is NOT initial load, check if any newly arrived bet triggers an alert
+  if (!tgIsInitialLoad && newBetsFound.length > 0) {
+    for (const newBet of newBetsFound) {
+      const isTarget = isUserTracked(newBet.userName);
+      const isBet = newBet.type === 'BET_PLACED';
+
+      // If user is tracking specific handles and this bet matches
+      if (isTarget) {
+        triggeredAlert = true;
+        playAlertSound(tgSoundChoice);
+        sendDesktopNotification(newBet);
+        startTitleFlash(newBet);
+        showCrossMenuBetAlert(newBet);
+        showToast(`🎯 TARGET USER BET! ${newBet.userName} placed bet on ${newBet.teamName || 'Toss'} (${newBet.amount})!`, 'success');
+        break; // Alert fired once per poll batch
+      } else if (tgTrackedUsers.length === 0 && isBet) {
+        // If tracking ALL bets, alert for any bet placed
+        if (!triggeredAlert) {
+          triggeredAlert = true;
+          playAlertSound(tgSoundChoice);
+          sendDesktopNotification(newBet);
+          startTitleFlash(newBet);
+          showCrossMenuBetAlert(newBet);
+          showToast(`⚡ New Bet Placed: ${newBet.userName} on ${newBet.teamName || 'Toss'} (${newBet.amount})`, 'info');
+        }
+      }
+    }
+  }
+
+  tgIsInitialLoad = false;
+
+  renderActiveUserChips();
+  renderTelegramBets(bets);
+
+  if (forceNotice && !triggeredAlert) {
+    showToast(`✅ Loaded ${bets.length} recent messages from @BetfairTossbookOrignal`, 'success');
+  }
+}
+
+/**
+ * Render quick chips of active punter IDs with individual remove and clear all options
+ */
+function renderActiveUserChips() {
+  if (!tgActiveUserChips) return;
+
+  if (tgHideAllPunters) {
+    tgActiveUserChips.innerHTML = `
+      <div class="text-[11px] text-slate-500 italic flex items-center gap-2 py-1">
+        <span>🚫 Active Punter IDs list remove kar di gayi hai.</span>
+        <button id="tg-btn-restore-chips" type="button" class="text-sky-400 hover:underline font-bold text-xs cursor-pointer">
+          <i class="fa-solid fa-arrows-rotate mr-1"></i> Restore Karein
+        </button>
+      </div>
+    `;
+    const btnRestore = document.getElementById('tg-btn-restore-chips');
+    if (btnRestore) {
+      btnRestore.addEventListener('click', () => {
+        tgHideAllPunters = false;
+        tgDismissedPunters.clear();
+        localStorage.removeItem('c_toss_tg_hide_all_punters');
+        localStorage.removeItem('c_toss_tg_dismissed_punters');
+        renderActiveUserChips();
+        showToast('Active Punter IDs restore ho gaye', 'info');
+      });
+    }
+    return;
+  }
+
+  // Combine detected punters from channel and custom added punters
+  const allPunters = new Set([...tgCustomPunters, ...tgActivePunters]);
+  const punters = Array.from(allPunters).filter(p => !tgDismissedPunters.has(p)).slice(0, 25);
+
+  if (punters.length === 0) {
+    tgActiveUserChips.innerHTML = `
+      <div class="text-[11px] text-slate-500 italic flex items-center gap-2 py-1">
+        <span>Active Punter IDs list empty hai. Upar "+ Naya Punter ID" se add karein.</span>
+        ${tgDismissedPunters.size > 0 ? `
+          <button id="tg-btn-restore-chips" type="button" class="text-sky-400 hover:underline font-bold text-xs cursor-pointer">
+            <i class="fa-solid fa-arrows-rotate mr-1"></i> Reset Removed IDs
+          </button>
+        ` : ''}
+      </div>
+    `;
+    const btnRestore = document.getElementById('tg-btn-restore-chips');
+    if (btnRestore) {
+      btnRestore.addEventListener('click', () => {
+        tgDismissedPunters.clear();
+        localStorage.removeItem('c_toss_tg_dismissed_punters');
+        renderActiveUserChips();
+        showToast('Removed IDs reset ho gaye', 'info');
+      });
+    }
+    return;
+  }
+
+  tgActiveUserChips.innerHTML = punters.map(p => {
+    const isSelected = isUserTracked(p);
+    const isCustom = tgCustomPunters.has(p);
+    const activeClass = isSelected 
+      ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 shadow-sm ring-1 ring-amber-400/40' 
+      : (isCustom ? 'bg-emerald-950/70 text-emerald-300 border-emerald-500/40' : 'bg-slate-900/90 hover:bg-slate-800 text-slate-300 border-slate-700/80');
+    return `
+      <div class="inline-flex items-center rounded-lg border ${activeClass} transition-all overflow-hidden text-[11px] font-bold shadow-sm">
+        <button type="button" class="tg-punter-chip px-2.5 py-1 hover:bg-white/10 transition-colors cursor-pointer flex items-center gap-1" data-user="${p}" title="Track ${p}">
+          ${isSelected ? '🎯 ' : (isCustom ? '⭐ ' : '+ ')}${p}
+        </button>
+        <button type="button" class="tg-punter-remove-btn px-1.5 py-1 hover:bg-rose-600/40 text-slate-400 hover:text-rose-300 transition-colors cursor-pointer border-l border-slate-700" data-remove-user="${p}" title="${p} ko list se remove karein">
+          <i class="fa-solid fa-xmark text-[10px]"></i>
+        </button>
+      </div>
+    `;
+  }).join('');
+
+  // Wire chip click to toggle user
+  tgActiveUserChips.querySelectorAll('.tg-punter-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const clickedUser = btn.getAttribute('data-user');
+      toggleTrackedUser(clickedUser);
+    });
+  });
+
+  // Wire remove click to remove individual user
+  tgActiveUserChips.querySelectorAll('.tg-punter-remove-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const userToRemove = btn.getAttribute('data-remove-user');
+      removePunterChip(userToRemove);
+    });
+  });
+}
+
+/**
+ * Remove an individual punter from active chips
+ */
+function removePunterChip(userName) {
+  if (!userName) return;
+  const upper = userName.toUpperCase();
+  tgDismissedPunters.add(upper);
+  tgDismissedPunters.add(userName);
+  if (tgCustomPunters.has(upper)) {
+    tgCustomPunters.delete(upper);
+    localStorage.setItem('c_toss_tg_custom_punters', JSON.stringify(Array.from(tgCustomPunters)));
+  }
+  localStorage.setItem('c_toss_tg_dismissed_punters', JSON.stringify(Array.from(tgDismissedPunters)));
+  renderActiveUserChips();
+  showToast(`🗑️ ${userName} ko Active Punter IDs se remove kar diya gaya`, 'info');
+}
+
+/**
+ * Add a new custom punter ID and start tracking
+ */
+function handleAddNewCustomPunter() {
+  if (!tgNewPunterInput) return;
+  const raw = tgNewPunterInput.value.trim().toUpperCase().replace(/^@/, '');
+  if (!raw) {
+    showToast('Kripya valid Punter ID enter karein (e.g. BTB1648)', 'error');
+    return;
+  }
+
+  // Restore if was hidden or dismissed
+  if (tgDismissedPunters.has(raw)) {
+    tgDismissedPunters.delete(raw);
+    localStorage.setItem('c_toss_tg_dismissed_punters', JSON.stringify(Array.from(tgDismissedPunters)));
+  }
+  if (tgHideAllPunters) {
+    tgHideAllPunters = false;
+    localStorage.removeItem('c_toss_tg_hide_all_punters');
+  }
+
+  tgCustomPunters.add(raw);
+  localStorage.setItem('c_toss_tg_custom_punters', JSON.stringify(Array.from(tgCustomPunters)));
+  tgActivePunters.add(raw);
+
+  // Automatically add to tracked users input and save
+  const currentVal = tgFilterUsersInput ? tgFilterUsersInput.value.trim() : '';
+  let users = currentVal ? currentVal.split(',').map(u => u.trim()).filter(Boolean) : [];
+  if (!users.some(u => u.toLowerCase() === raw.toLowerCase())) {
+    users.push(raw);
+  }
+  if (tgFilterUsersInput) tgFilterUsersInput.value = users.join(', ');
+  saveTrackedUsersFromInput();
+
+  tgNewPunterInput.value = '';
+  renderActiveUserChips();
+  showToast(`✅ Punter ID "${raw}" add ho gaya aur tracking active ho gayi!`, 'success');
+}
+
+/**
+ * Toggle a user in the tracked list
+ */
+function toggleTrackedUser(userName) {
+  if (!userName) return;
+  const clean = userName.trim();
+  const currentVal = tgFilterUsersInput ? tgFilterUsersInput.value.trim() : '';
+  let users = currentVal ? currentVal.split(',').map(u => u.trim()).filter(Boolean) : [];
+
+  const idx = users.findIndex(u => u.toLowerCase() === clean.toLowerCase());
+  if (idx >= 0) {
+    users.splice(idx, 1);
+  } else {
+    users.push(clean);
+  }
+
+  const newVal = users.join(', ');
+  if (tgFilterUsersInput) tgFilterUsersInput.value = newVal;
+  saveTrackedUsersFromInput();
+}
+
+/**
+ * Render the live bets stream
+ */
+function renderTelegramBets(bets) {
+  if (!tgBetsContainer) return;
+
+  // Filter based on user selection
+  let displayBets = [...bets];
+
+  if (tgFilterType === 'bets_only') {
+    displayBets = displayBets.filter(b => b.type === 'BET_PLACED');
+  }
+
+  // BAKI USER REMOVED LOGIC:
+  // If target user is specified and tgHideOtherUsers is active (default true),
+  // REMOVE all other users completely from the list!
+  if (tgHideOtherUsers && tgTrackedUsers && tgTrackedUsers.length > 0) {
+    displayBets = displayBets.filter(b => isUserTracked(b.userName));
+  }
+
+  // Update count badge
+  if (tgFeedCountBadge) {
+    const userSuffix = (tgHideOtherUsers && tgTrackedUsers.length > 0) ? ' (Filtered User)' : '';
+    tgFeedCountBadge.textContent = `${displayBets.length} Bets${userSuffix}`;
+  }
+
+  if (tgLastPolledTime) {
+    tgLastPolledTime.textContent = new Date().toLocaleTimeString('en-US', {
+      timeZone: 'Asia/Kolkata',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
+    });
+  }
+
+  if (displayBets.length === 0) {
+    tgBetsContainer.innerHTML = '';
+    if (tgEmptyState) {
+      tgEmptyState.classList.remove('hidden');
+      const uNames = tgTrackedUsers.map(u => u.toUpperCase()).join(', ');
+      tgEmptyState.innerHTML = `
+        <div class="w-14 h-14 rounded-2xl bg-slate-800/80 flex items-center justify-center mx-auto text-amber-400 text-2xl">
+          <i class="fa-solid fa-user-slash"></i>
+        </div>
+        <h4 class="text-sm font-bold text-slate-200">Baki users remove kar diye gaye hain</h4>
+        <p class="text-xs text-amber-400 font-semibold max-w-sm mx-auto">
+          Currently filtering strictly for: <strong class="text-white">${uNames || 'Tracked User'}</strong>
+        </p>
+        <p class="text-[11px] text-slate-500">Jaise hi is user ki bet aayegi, yahan turant show hogi aur notification sound bajega.</p>
+        <div class="pt-1">
+          <button type="button" id="tg-btn-empty-clear" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold border border-slate-700 cursor-pointer">
+            <i class="fa-solid fa-arrows-rotate mr-1"></i> Show All Channel Bets (Reset Filter)
+          </button>
+        </div>
+      `;
+      const btnEmptyClear = document.getElementById('tg-btn-empty-clear');
+      if (btnEmptyClear) {
+        btnEmptyClear.addEventListener('click', () => {
+          if (tgFilterUsersInput) tgFilterUsersInput.value = '';
+          saveTrackedUsersFromInput();
+        });
+      }
+    }
+    return;
+  }
+
+  if (tgEmptyState) tgEmptyState.classList.add('hidden');
+
+  tgBetsContainer.innerHTML = displayBets.map((bet, idx) => {
+    const isTarget = isUserTracked(bet.userName);
+    const isBet = bet.type === 'BET_PLACED';
+    const isDeposit = bet.type === 'DEPOSIT_WITHDRAWAL';
+
+    let cardBorder = 'border-slate-800/80 bg-slate-900/50';
+    let targetBadge = '';
+
+    if (isTarget) {
+      cardBorder = 'border-amber-500/80 bg-gradient-to-r from-amber-950/40 via-slate-900/90 to-amber-950/40 ring-1 ring-amber-400 shadow-lg shadow-amber-500/10';
+      targetBadge = `
+        <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-500/20 text-amber-300 border border-amber-500/50 flex items-center gap-1 animate-pulse">
+          🎯 TRACKED USER MATCH
+        </span>
+      `;
+    } else if (bet.isTest) {
+      cardBorder = 'border-purple-500/80 bg-purple-950/30';
+      targetBadge = `
+        <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-purple-500/20 text-purple-300 border border-purple-500/50 flex items-center gap-1">
+          🧪 TEST ALERT
+        </span>
+      `;
+    }
+
+    let typeBadge = '';
+    if (isBet) {
+      typeBadge = `<span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">⚡ BET PLACED</span>`;
+    } else if (isDeposit) {
+      typeBadge = `<span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">💳 DEPOSIT / WD</span>`;
+    } else {
+      typeBadge = `<span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-700/50 text-slate-300 border border-slate-600">📢 UPDATE</span>`;
+    }
+
+    return `
+      <div class="rounded-xl p-3 sm:p-4 border transition-all ${cardBorder} hover:border-slate-600">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+          
+          <!-- User and Team Selection Info -->
+          <div class="flex items-start sm:items-center gap-3">
+            <div class="w-9 h-9 rounded-xl ${isTarget ? 'bg-gradient-to-tr from-amber-600 to-yellow-400' : 'bg-gradient-to-tr from-slate-700 to-slate-800'} flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-md">
+              ${isTarget ? '🎯' : (isBet ? '🏏' : '💳')}
+            </div>
+
+            <div>
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="font-extrabold text-sm ${isTarget ? 'text-amber-300 font-mono text-base' : 'text-white font-mono'}">
+                  ${bet.userName || 'Anonymous'}
+                </span>
+                ${targetBadge}
+                ${typeBadge}
+              </div>
+
+              <div class="text-xs text-slate-300 mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
+                ${bet.teamName ? `
+                  <span class="font-bold text-white bg-slate-800/80 px-2 py-0.5 rounded-md border border-slate-700/70">
+                    Selection: <span class="text-emerald-400 font-extrabold">${bet.teamName}</span>
+                  </span>
+                ` : ''}
+                ${bet.amount ? `
+                  <span class="font-extrabold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
+                    Amount: ${bet.amount}
+                  </span>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+
+          <!-- Time & Direct Link -->
+          <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-800/60">
+            <div class="text-right">
+              <span class="text-xs font-mono text-slate-400 block">${bet.displayTime || 'Just now'}</span>
+              <span class="text-[10px] text-slate-500 block">IST</span>
+            </div>
+
+            <a href="${bet.messageUrl || bet.webTelegramUrl}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 text-xs font-bold border border-sky-500/30 transition-all flex items-center gap-1 cursor-pointer">
+              <i class="fa-brands fa-telegram text-xs"></i> View Post
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Raw Text Preview (collapsed if long) -->
+        ${bet.rawText && bet.type === 'ANNOUNCEMENT' ? `
+          <div class="mt-2.5 pt-2 border-t border-slate-800/60 text-[11px] text-slate-400 line-clamp-2 leading-relaxed font-mono">
+            ${bet.rawText.replace(/\n/g, ' ')}
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+/**
+ * Update connection status badge
+ */
+function updateTelegramStatusBadge(status, lastTime) {
+  if (!tgStatusBadge) return;
+  if (status === 'connected' || status === 'connected_cached') {
+    tgStatusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Live Connected`;
+    tgStatusBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5';
+  } else {
+    tgStatusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400"></span> Standby / Polling`;
+    tgStatusBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center gap-1.5';
+  }
+}
+
+/**
+ * Trigger a simulated test bet alert to verify notifications and audio
+ */
+async function triggerTestBetAlert() {
+  try {
+    const testUser = tgTrackedUsers.length > 0 ? tgTrackedUsers[0].toUpperCase() : 'VIP7186';
+    const res = await fetch('/api/telegram-bets/test', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userName: testUser,
+        teamName: 'INDIA W (TOSS WIN)',
+        amount: '₹10,000'
+      })
+    });
+    const data = await res.json();
+    if (data && data.bet) {
+      playAlertSound(tgSoundChoice);
+      sendDesktopNotification(data.bet);
+      startTitleFlash(data.bet);
+      showCrossMenuBetAlert(data.bet);
+      showToast(`🧪 Test Alert Fired for ${data.bet.userName} on ${data.bet.teamName}!`, 'success');
+      loadTelegramBets(false);
+    }
+  } catch (err) {
+    showToast(`Error triggering test alert: ${err.message}`, 'error');
+  }
 }

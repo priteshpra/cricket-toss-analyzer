@@ -1069,6 +1069,18 @@
       "tossDecision": "bowl",
       "matchWinner": "Bathinda Royals",
       "forcePending": false
+    },
+    "belfast wolves_amsterdam flames_2026-09-10": {
+      "tossWinner": "Belfast Wolves",
+      "tossDecision": "bowl",
+      "matchWinner": "Belfast Wolves",
+      "forcePending": false
+    },
+    "amsterdam flames_belfast wolves_2026-09-10": {
+      "tossWinner": "Belfast Wolves",
+      "tossDecision": "bowl",
+      "matchWinner": "Belfast Wolves",
+      "forcePending": false
     }
   },
   "deletedMatches": [
@@ -1999,10 +2011,10 @@
         "time": "06:45 PM IST",
         "tossTime": "06:15 PM IST",
         "venue": "The Village, Dublin",
-        "status": "UPCOMING",
-        "tossWinner": null,
-        "tossDecision": null,
-        "matchWinner": null
+        "status": "COMPLETED",
+        "tossWinner": "Belfast Wolves",
+        "tossDecision": "bowl",
+        "matchWinner": "Belfast Wolves"
       },
       {
         "id": "custom_2026-09-10_1788963286176",
