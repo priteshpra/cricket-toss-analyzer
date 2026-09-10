@@ -11,7 +11,7 @@ let teamsList = [];
 let venuesList = [];
 let leaderboardData = [];
 let topLoadedTeamsData = [];
-let bulkSelectedMatchKeys = new Set();
+let bulkSelectedMatchesMap = new Map();
 let modalChartInstance = null;
 
 // DOM Elements
@@ -288,12 +288,19 @@ function setupEventListeners() {
   // Bulk Actions
   if (bulkSelectAllCheckbox) {
     bulkSelectAllCheckbox.addEventListener('change', (e) => {
+      const isChecked = e.target.checked;
       const checkboxes = document.querySelectorAll('.match-bulk-checkbox');
       checkboxes.forEach(cb => {
-        cb.checked = e.target.checked;
+        cb.checked = isChecked;
         const key = cb.getAttribute('data-match-key');
-        if (e.target.checked) bulkSelectedMatchKeys.add(key);
-        else bulkSelectedMatchKeys.delete(key);
+        const teamA = cb.getAttribute('data-team-a');
+        const teamB = cb.getAttribute('data-team-b');
+        const date = cb.getAttribute('data-date') || currentDate;
+        if (isChecked && key && teamA && teamB) {
+          bulkSelectedMatchesMap.set(key, { teamA: teamA.trim(), teamB: teamB.trim(), date: date.trim() });
+        } else if (key) {
+          bulkSelectedMatchesMap.delete(key);
+        }
       });
       updateBulkActionBarUI();
     });
@@ -301,7 +308,7 @@ function setupEventListeners() {
 
   if (btnCancelBulkSelection) {
     btnCancelBulkSelection.addEventListener('click', () => {
-      bulkSelectedMatchKeys.clear();
+      bulkSelectedMatchesMap.clear();
       if (bulkSelectAllCheckbox) bulkSelectAllCheckbox.checked = false;
       document.querySelectorAll('.match-bulk-checkbox').forEach(cb => cb.checked = false);
       updateBulkActionBarUI();
@@ -427,7 +434,8 @@ function setDate(dateStr) {
     if (displayDateLabel) displayDateLabel.textContent = currentDate;
   }
 
-  bulkSelectedMatchKeys.clear();
+  bulkSelectedMatchesMap.clear();
+  if (bulkSelectAllCheckbox) bulkSelectAllCheckbox.checked = false;
   updateBulkActionBarUI();
   loadMatches(currentDate, currentLeague);
 }
@@ -488,8 +496,9 @@ function filterAndRenderMatches() {
   if (!matchesContainer) return;
   matchesContainer.innerHTML = '';
 
-  const pendingMatches = loadedMatchesList.filter(m => !m.tossWinner || m.status === 'UPCOMING');
-  const doneMatches = loadedMatchesList.filter(m => !!m.tossWinner || m.status === 'COMPLETED');
+  const isMatchTossDone = (m) => Boolean(m.tossWinner && m.tossWinner.trim()) || m.status === 'COMPLETED' || Boolean(m.tossDone);
+  const pendingMatches = loadedMatchesList.filter(m => !isMatchTossDone(m));
+  const doneMatches = loadedMatchesList.filter(m => isMatchTossDone(m));
 
   if (pendingCountBadge) pendingCountBadge.textContent = pendingMatches.length;
   if (doneCountBadge) doneCountBadge.textContent = doneMatches.length;
@@ -499,11 +508,20 @@ function filterAndRenderMatches() {
   let passCount = 0;
   let failCount = 0;
   doneMatches.forEach(m => {
-    const predictedWinner = m.analysis && m.analysis.prediction ? m.analysis.prediction.favoredWinner : (m.favoredWinner || '');
+    const tossAnalysis = m.tossAnalysis || (m.analysis && m.analysis.prediction) || {};
+    const ml = m.marketLoad || {};
+    const predictedWinner = (ml.aiConvergence && ml.aiConvergence.aiForecastTeam)
+      || tossAnalysis.favoredWinner
+      || m.favoredWinner
+      || m.teamA
+      || '';
+
     if (m.tossWinner && predictedWinner) {
-      const isPass = m.tossWinner.toLowerCase().trim() === predictedWinner.toLowerCase().trim() ||
-                     m.tossWinner.toLowerCase().includes(predictedWinner.toLowerCase()) ||
-                     predictedWinner.toLowerCase().includes(m.tossWinner.toLowerCase());
+      const tossWinClean = m.tossWinner.toLowerCase().trim();
+      const predWinClean = predictedWinner.toLowerCase().trim();
+      const isPass = tossWinClean === predWinClean ||
+                     tossWinClean.includes(predWinClean) ||
+                     predWinClean.includes(tossWinClean);
       if (isPass) passCount++;
       else failCount++;
     }
@@ -533,6 +551,19 @@ function filterAndRenderMatches() {
 
   if (totalMatchesCount) totalMatchesCount.textContent = displayedMatches.length;
 
+  // Sync bulk select all checkbox with current rendered matches
+  if (bulkSelectAllCheckbox) {
+    if (displayedMatches.length > 0) {
+      const allDisplayedSelected = displayedMatches.every(m => {
+        const key = `${(m.teamA || '').trim()}_${(m.teamB || '').trim()}_${(m.date || currentDate).trim()}`.toLowerCase();
+        return bulkSelectedMatchesMap.has(key);
+      });
+      bulkSelectAllCheckbox.checked = allDisplayedSelected;
+    } else {
+      bulkSelectAllCheckbox.checked = false;
+    }
+  }
+
   if (displayedMatches.length === 0) {
     if (emptyState) emptyState.classList.remove('hidden');
     return;
@@ -551,8 +582,11 @@ function createMatchCardElement(match) {
   const card = document.createElement('div');
   card.className = 'glass-panel rounded-2xl p-4 sm:p-5 border border-slate-800/80 hover:border-slate-700 transition-all duration-300 relative flex flex-col justify-between shadow-xl';
 
-  const matchKey = `${match.teamA}_${match.teamB}_${match.date || currentDate}`;
-  const isSelected = bulkSelectedMatchKeys.has(matchKey);
+  const matchTeamA = (match.teamA || '').trim();
+  const matchTeamB = (match.teamB || '').trim();
+  const matchDate = (match.date || currentDate).trim();
+  const matchKey = `${matchTeamA}_${matchTeamB}_${matchDate}`.toLowerCase();
+  const isSelected = bulkSelectedMatchesMap.has(matchKey);
 
   // Status Badge
   const isDone = !!match.tossWinner || match.status === 'COMPLETED';
@@ -675,7 +709,7 @@ function createMatchCardElement(match) {
       <!-- Top Header Row -->
       <div class="flex items-center justify-between gap-1.5 sm:gap-2 mb-2 sm:mb-2.5 flex-wrap">
         <div class="flex items-center gap-1.5 sm:gap-2">
-          <input type="checkbox" class="match-bulk-checkbox w-4 h-4 rounded bg-slate-900 border-slate-700 text-rose-500 focus:ring-0 cursor-pointer" data-match-key="${matchKey}" ${isSelected ? 'checked' : ''}>
+          <input type="checkbox" class="match-bulk-checkbox w-4 h-4 rounded bg-slate-900 border-slate-700 text-rose-500 focus:ring-0 cursor-pointer" data-match-key="${matchKey}" data-team-a="${matchTeamA}" data-team-b="${matchTeamB}" data-date="${matchDate}" ${isSelected ? 'checked' : ''}>
           <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 border border-slate-700 text-[10px] font-extrabold uppercase">
             ${leagueBadge}
           </span>
@@ -762,8 +796,19 @@ function createMatchCardElement(match) {
   // Attach Checkbox event
   const checkbox = card.querySelector('.match-bulk-checkbox');
   checkbox.addEventListener('change', (e) => {
-    if (e.target.checked) bulkSelectedMatchKeys.add(matchKey);
-    else bulkSelectedMatchKeys.delete(matchKey);
+    if (e.target.checked) {
+      bulkSelectedMatchesMap.set(matchKey, {
+        teamA: matchTeamA,
+        teamB: matchTeamB,
+        date: matchDate
+      });
+    } else {
+      bulkSelectedMatchesMap.delete(matchKey);
+    }
+    if (bulkSelectAllCheckbox) {
+      const allCbs = document.querySelectorAll('.match-bulk-checkbox');
+      bulkSelectAllCheckbox.checked = allCbs.length > 0 && Array.from(allCbs).every(cb => cb.checked);
+    }
     updateBulkActionBarUI();
   });
 
@@ -778,7 +823,7 @@ function createMatchCardElement(match) {
 
 function updateBulkActionBarUI() {
   if (!bulkActionsBar || !bulkSelectedCount || !btnDeleteSelectedCount) return;
-  const count = bulkSelectedMatchKeys.size;
+  const count = bulkSelectedMatchesMap.size;
   bulkSelectedCount.textContent = count;
   btnDeleteSelectedCount.textContent = count;
 
@@ -791,19 +836,13 @@ function updateBulkActionBarUI() {
 
 // Delete Selected Matches (Bulk)
 async function deleteSelectedMatches() {
-  const count = bulkSelectedMatchKeys.size;
+  const count = bulkSelectedMatchesMap.size;
   if (count === 0) return;
 
   const confirmed = confirm(`Are you sure you want to delete ${count} selected matches?`);
   if (!confirmed) return;
 
-  const matchesToDelete = [];
-  bulkSelectedMatchKeys.forEach(key => {
-    const parts = key.split('_');
-    if (parts.length >= 2) {
-      matchesToDelete.push({ teamA: parts[0], teamB: parts[1], date: currentDate });
-    }
-  });
+  const matchesToDelete = Array.from(bulkSelectedMatchesMap.values());
 
   try {
     const res = await fetch('/api/matches/delete-bulk', {
@@ -813,7 +852,8 @@ async function deleteSelectedMatches() {
     });
     const result = await res.json();
     if (result.success) {
-      bulkSelectedMatchKeys.clear();
+      bulkSelectedMatchesMap.clear();
+      if (bulkSelectAllCheckbox) bulkSelectAllCheckbox.checked = false;
       updateBulkActionBarUI();
       showToast(`${count} matches successfully deleted!`);
       await loadMatches(currentDate, currentLeague);
@@ -829,7 +869,11 @@ async function deleteAllMatchesForDate() {
   const confirmed = confirm(`Delete ALL ${loadedMatchesList.length} matches for ${currentDate}?`);
   if (!confirmed) return;
 
-  const matchesToDelete = loadedMatchesList.map(m => ({ teamA: m.teamA, teamB: m.teamB, date: currentDate }));
+  const matchesToDelete = loadedMatchesList.map(m => ({
+    teamA: (m.teamA || '').trim(),
+    teamB: (m.teamB || '').trim(),
+    date: (m.date || currentDate).trim()
+  }));
 
   try {
     const res = await fetch('/api/matches/delete-bulk', {
@@ -839,7 +883,8 @@ async function deleteAllMatchesForDate() {
     });
     const result = await res.json();
     if (result.success) {
-      bulkSelectedMatchKeys.clear();
+      bulkSelectedMatchesMap.clear();
+      if (bulkSelectAllCheckbox) bulkSelectAllCheckbox.checked = false;
       updateBulkActionBarUI();
       showToast(`All matches for ${currentDate} removed.`);
       await loadMatches(currentDate, currentLeague);
@@ -852,18 +897,29 @@ async function deleteAllMatchesForDate() {
 
 // Delete Single Match
 async function deleteSingleMatch(match) {
-  const confirmed = confirm(`Delete ${match.teamA} vs ${match.teamB} from schedule?`);
+  const cleanA = (match.teamA || '').trim();
+  const cleanB = (match.teamB || '').trim();
+  const cleanDate = (match.date || currentDate).trim();
+
+  const confirmed = confirm(`Delete ${cleanA} vs ${cleanB} from schedule?`);
   if (!confirmed) return;
 
   try {
     const res = await fetch('/api/matches/delete', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ teamA: match.teamA, teamB: match.teamB, date: match.date || currentDate })
+      body: JSON.stringify({ teamA: cleanA, teamB: cleanB, date: cleanDate })
     });
     const result = await res.json();
     if (result.success) {
-      showToast(result.message || 'Match removed successfully');
+      const matchKey = `${cleanA}_${cleanB}_${cleanDate}`.toLowerCase();
+      bulkSelectedMatchesMap.delete(matchKey);
+      if (bulkSelectAllCheckbox) {
+        const allCbs = document.querySelectorAll('.match-bulk-checkbox');
+        bulkSelectAllCheckbox.checked = allCbs.length > 0 && Array.from(allCbs).every(cb => cb.checked);
+      }
+      updateBulkActionBarUI();
+      showToast(`Match ${cleanA} vs ${cleanB} deleted`);
       await loadMatches(currentDate, currentLeague);
     }
   } catch (err) {

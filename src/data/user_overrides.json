@@ -949,6 +949,30 @@
       "tossDecision": "bowl",
       "matchWinner": "Mohali Kings",
       "forcePending": false
+    },
+    "mussoorie thunder_haridwar spring elmas_2026-09-10": {
+      "tossWinner": "Mussoorie Thunder",
+      "tossDecision": "bowl",
+      "matchWinner": "Mussoorie Thunder",
+      "forcePending": false
+    },
+    "haridwar spring elmas_mussoorie thunder_2026-09-10": {
+      "tossWinner": "Mussoorie Thunder",
+      "tossDecision": "bowl",
+      "matchWinner": "Mussoorie Thunder",
+      "forcePending": false
+    },
+    "guyana amazon warriors_saint lucia kings_2026-09-10": {
+      "tossWinner": "Guyana Amazon Warriors",
+      "tossDecision": "bat",
+      "matchWinner": "Guyana Amazon Warriors",
+      "forcePending": false
+    },
+    "saint lucia kings_guyana amazon warriors_2026-09-10": {
+      "tossWinner": "Guyana Amazon Warriors",
+      "tossDecision": "bat",
+      "matchWinner": "Guyana Amazon Warriors",
+      "forcePending": false
     }
   },
   "deletedMatches": [
@@ -1131,8 +1155,17 @@
     "south africa a_bangladesh a_2026-09-09",
     "bangladesh a_south africa a_2026-09-09",
     "rwanda_kenya_2026-09-09",
-    "kenya_rwanda_2026-09-09"
+    "kenya_rwanda_2026-09-09",
+    "dehradun warriors_vikasnagar dhamaka_2026-09-10",
+    "vikasnagar dhamaka_dehradun warriors_2026-09-10",
+    "jalandhar warriors_amritsar soormas_2026-09-10",
+    "amritsar soormas_jalandhar warriors_2026-09-10",
+    "mohali kings_amritsar soormas_2026-09-10",
+    "amritsar soormas_mohali kings_2026-09-10",
+    "rotterdam dockers_glasgow cosmic_2026-09-10",
+    "glasgow cosmic_rotterdam dockers_2026-09-10"
   ],
+  "clearedDates": [],
   "customMatches": {
     "2026-09-04": [
       {
@@ -1846,22 +1879,6 @@
         "time": "08:00 PM IST",
         "tossTime": "07:30 PM IST",
         "venue": "Dubai International Cricket Stadium, Dubai",
-        "status": "UPCOMING",
-        "tossWinner": null,
-        "tossDecision": null,
-        "matchWinner": null
-      },
-      {
-        "id": "custom_2026-09-10_1788963059037",
-        "date": "2026-09-10",
-        "teamA": "Rotterdam Dockers",
-        "teamB": "Glasgow Cosmic",
-        "league": "etpl",
-        "tournament": "Rotterdam Dockers vs Glasgow Cosmic Match",
-        "format": "T20",
-        "time": "03:00 PM IST",
-        "tossTime": "02:30 PM IST",
-        "venue": "The Village, Dublin",
         "status": "UPCOMING",
         "tossWinner": null,
         "tossDecision": null,

@@ -9,6 +9,7 @@ let cachedTeamsVenues = null;
 let cachedHistoricalMatches = null;
 let userTossOverrides = {};
 let deletedMatches = new Set();
+let clearedDates = new Set();
 let customUserMatches = {};
 let editedUserMatches = {};
 
@@ -24,8 +25,8 @@ function applyEditsToFixtures() {
 
     if (OFFICIAL_DATE_FIXTURES[dateStr]) {
       const match = OFFICIAL_DATE_FIXTURES[dateStr].find(m => {
-        const k1 = `${m.teamA}_${m.teamB}_${dateStr}`.toLowerCase();
-        const k2 = `${m.teamB}_${m.teamA}_${dateStr}`.toLowerCase();
+        const k1 = `${(m.teamA || '').trim()}_${(m.teamB || '').trim()}_${dateStr}`.toLowerCase();
+        const k2 = `${(m.teamB || '').trim()}_${(m.teamA || '').trim()}_${dateStr}`.toLowerCase();
         return k1 === key.toLowerCase() || k2 === key.toLowerCase();
       });
       if (match) {
@@ -47,6 +48,7 @@ function loadUserOverrides() {
       const data = JSON.parse(fs.readFileSync(OVERRIDES_FILE, 'utf8'));
       userTossOverrides = data.tossOverrides || {};
       deletedMatches = new Set(data.deletedMatches || []);
+      clearedDates = new Set(data.clearedDates || []);
       customUserMatches = data.customMatches || {};
       editedUserMatches = data.editedMatches || {};
       applyEditsToFixtures();
@@ -62,6 +64,7 @@ function saveUserOverrides() {
     const data = {
       tossOverrides: userTossOverrides,
       deletedMatches: Array.from(deletedMatches),
+      clearedDates: Array.from(clearedDates),
       customMatches: customUserMatches,
       editedMatches: editedUserMatches
     };
@@ -390,18 +393,26 @@ function generateDailyFixtures(dateStr, targetLeague = 'all') {
     });
   }
 
+  // If date has been explicitly cleared by user, return empty fixtures
+  const cleanDateStr = (dateStr || '').trim();
+  if (clearedDates.has(cleanDateStr)) {
+    return fixtures;
+  }
+
   // 2. Check official calendar
-  const daySchedule = OFFICIAL_DATE_FIXTURES[dateStr];
-  if (daySchedule && daySchedule.length > 0) {
+  if (OFFICIAL_DATE_FIXTURES.hasOwnProperty(cleanDateStr)) {
+    const daySchedule = OFFICIAL_DATE_FIXTURES[cleanDateStr] || [];
     daySchedule.forEach((m, idx) => {
-      const delKey1 = `${m.teamA}_${m.teamB}_${dateStr}`.toLowerCase();
-      const delKey2 = `${m.teamB}_${m.teamA}_${dateStr}`.toLowerCase();
+      const cleanA = (m.teamA || '').trim();
+      const cleanB = (m.teamB || '').trim();
+      const delKey1 = `${cleanA}_${cleanB}_${cleanDateStr}`.toLowerCase();
+      const delKey2 = `${cleanB}_${cleanA}_${cleanDateStr}`.toLowerCase();
       if (deletedMatches.has(delKey1) || deletedMatches.has(delKey2)) return;
 
-      const res = resolveEditedMatch(m.teamA, m.teamB, dateStr, m.time, m.venue, m.league, m.tournament);
+      const res = resolveEditedMatch(cleanA, cleanB, cleanDateStr, m.time, m.venue, m.league, m.tournament);
 
-      const editedDel1 = `${res.teamA}_${res.teamB}_${dateStr}`.toLowerCase();
-      const editedDel2 = `${res.teamB}_${res.teamA}_${dateStr}`.toLowerCase();
+      const editedDel1 = `${res.teamA.trim()}_${res.teamB.trim()}_${cleanDateStr}`.toLowerCase();
+      const editedDel2 = `${res.teamB.trim()}_${res.teamA.trim()}_${cleanDateStr}`.toLowerCase();
       if (deletedMatches.has(editedDel1) || deletedMatches.has(editedDel2)) return;
 
       if (targetLeague === 'all' || res.league === targetLeague || (targetLeague === 't20i' && m.format === 'T20')) {
@@ -409,15 +420,15 @@ function generateDailyFixtures(dateStr, targetLeague = 'all') {
         const teamObjB = teamsVenues.teams.find(t => t.name.toLowerCase() === res.teamB.toLowerCase()) || { badge: '🏏', color: '#dc2626' };
 
         fixtures.push({
-          id: `sched_${dateStr}_${res.league || 'fix'}_${idx + 1}`,
-          date: dateStr,
+          id: `sched_${cleanDateStr}_${res.league || 'fix'}_${idx + 1}`,
+          date: cleanDateStr,
           time: res.time,
           tossTime: res.tossTime,
           tournament: res.tournament,
           league: res.league,
           format: m.format || 'T20',
-          teamA: res.teamA,
-          teamB: res.teamB,
+          teamA: res.teamA.trim(),
+          teamB: res.teamB.trim(),
           teamABadge: teamObjA.badge,
           teamBBadge: teamObjB.badge,
           teamAColor: teamObjA.color,
@@ -431,13 +442,12 @@ function generateDailyFixtures(dateStr, targetLeague = 'all') {
       }
     });
 
-    if (fixtures.length > 0) {
-      return fixtures;
-    }
+    // For an official date, ALWAYS return the official fixtures list (do not fallback to random fixtures if user deleted them)
+    return fixtures;
   }
 
   // Fallback for other dates: cycle through leagues with distinct teams
-  const seed = dateStr.split('-').reduce((acc, part) => acc + parseInt(part, 10), 0);
+  const seed = cleanDateStr.split('-').reduce((acc, part) => acc + parseInt(part, 10), 0);
   const activeLeagues = targetLeague === 'all' 
     ? ['dehradun_t20', 'upt20', 'kcc', 'etpl', 'kcl', 'pca', 'cpl', 't20i', 'odi', 'womens_asia_cup'] 
     : [targetLeague];
@@ -469,29 +479,31 @@ function generateDailyFixtures(dateStr, targetLeague = 'all') {
       else if (lg === 'odi') { venue = "Civil Service Cricket Club, Belfast"; leagueName = "One Day International (ODI 2026)"; }
 
       const rawTime = (seed % 2 === 0 ? "02:30 PM IST" : "07:30 PM IST");
-      const delKey1 = `${teamA.name}_${teamB.name}_${dateStr}`.toLowerCase();
-      const delKey2 = `${teamB.name}_${teamA.name}_${dateStr}`.toLowerCase();
+      const cleanTeamA = teamA.name.trim();
+      const cleanTeamB = teamB.name.trim();
+      const delKey1 = `${cleanTeamA}_${cleanTeamB}_${cleanDateStr}`.toLowerCase();
+      const delKey2 = `${cleanTeamB}_${cleanTeamA}_${cleanDateStr}`.toLowerCase();
       if (deletedMatches.has(delKey1) || deletedMatches.has(delKey2)) return;
 
-      const res = resolveEditedMatch(teamA.name, teamB.name, dateStr, rawTime, venue, lg, leagueName);
+      const res = resolveEditedMatch(cleanTeamA, cleanTeamB, cleanDateStr, rawTime, venue, lg, leagueName);
 
-      const editedDel1 = `${res.teamA}_${res.teamB}_${dateStr}`.toLowerCase();
-      const editedDel2 = `${res.teamB}_${res.teamA}_${dateStr}`.toLowerCase();
+      const editedDel1 = `${res.teamA.trim()}_${res.teamB.trim()}_${cleanDateStr}`.toLowerCase();
+      const editedDel2 = `${res.teamB.trim()}_${res.teamA.trim()}_${cleanDateStr}`.toLowerCase();
       if (deletedMatches.has(editedDel1) || deletedMatches.has(editedDel2)) return;
 
       const teamObjA = teamsVenues.teams.find(t => t.name.toLowerCase() === res.teamA.toLowerCase()) || { badge: teamA.badge || '🏏', color: teamA.color || '#2563eb' };
       const teamObjB = teamsVenues.teams.find(t => t.name.toLowerCase() === res.teamB.toLowerCase()) || { badge: teamB.badge || '🏏', color: teamB.color || '#dc2626' };
 
       fixtures.push({
-        id: `sched_${dateStr}_${lg}_dyn`,
-        date: dateStr,
+        id: `sched_${cleanDateStr}_${lg}_dyn`,
+        date: cleanDateStr,
         time: res.time,
         tossTime: res.tossTime,
         tournament: res.tournament,
         league: res.league,
         format: 'T20',
-        teamA: res.teamA,
-        teamB: res.teamB,
+        teamA: res.teamA.trim(),
+        teamB: res.teamB.trim(),
         teamABadge: teamObjA.badge || '🏏',
         teamBBadge: teamObjB.badge || '🏏',
         teamAColor: teamObjA.color || '#2563eb',
@@ -514,10 +526,19 @@ class MatchService {
    */
   async getMatchesByDate(dateStr, leagueFilter = 'all') {
     const todayStr = new Date().toISOString().split('T')[0];
-    const targetDate = dateStr || todayStr;
+    const targetDate = (dateStr || todayStr).trim();
     const teamsVenues = getTeamsVenues();
     const historicalMatches = getHistoricalMatches();
     
+    // If the entire date was cleared by the user, return 0 matches immediately
+    if (clearedDates.has(targetDate)) {
+      return {
+        date: targetDate,
+        total: 0,
+        matches: []
+      };
+    }
+
     let matches = [];
 
     // 1. Scheduled fixtures from official calendar for this date
@@ -531,17 +552,17 @@ class MatchService {
         if (liveMatches && liveMatches.length > 0) {
           liveMatches.forEach(lm => {
             const existing = matches.find(m => 
-              (m.teamA.toLowerCase() === lm.teamA.toLowerCase() && m.teamB.toLowerCase() === lm.teamB.toLowerCase()) ||
-              (m.teamA.toLowerCase() === lm.teamB.toLowerCase() && m.teamB.toLowerCase() === lm.teamA.toLowerCase())
+              (m.teamA.toLowerCase().trim() === lm.teamA.toLowerCase().trim() && m.teamB.toLowerCase().trim() === lm.teamB.toLowerCase().trim()) ||
+              (m.teamA.toLowerCase().trim() === lm.teamB.toLowerCase().trim() && m.teamB.toLowerCase().trim() === lm.teamA.toLowerCase().trim())
             );
             if (existing) {
               if (lm.liveScore) existing.liveScore = lm.liveScore;
               if (lm.tossWinner) {
-                existing.tossWinner = lm.tossWinner;
+                existing.tossWinner = lm.tossWinner.trim();
                 existing.tossDecision = lm.tossDecision;
                 existing.status = 'COMPLETED';
               }
-            } else if (scheduledAll.length === 0) {
+            } else if (scheduledAll.length === 0 && !clearedDates.has(targetDate)) {
               matches.push(lm);
             }
           });
@@ -556,17 +577,17 @@ class MatchService {
     if (dbMatches.length > 0) {
       dbMatches.forEach(dbm => {
         const existing = matches.find(m => 
-          (m.teamA.toLowerCase() === dbm.teamA.toLowerCase() && m.teamB.toLowerCase() === dbm.teamB.toLowerCase()) ||
-          (m.teamA.toLowerCase() === dbm.teamB.toLowerCase() && m.teamB.toLowerCase() === dbm.teamA.toLowerCase())
+          (m.teamA.toLowerCase().trim() === dbm.teamA.toLowerCase().trim() && m.teamB.toLowerCase().trim() === dbm.teamB.toLowerCase().trim()) ||
+          (m.teamA.toLowerCase().trim() === dbm.teamB.toLowerCase().trim() && m.teamB.toLowerCase().trim() === dbm.teamA.toLowerCase().trim())
         );
         if (existing) {
           if (!existing.tossWinner && dbm.tossWinner) {
-            existing.tossWinner = dbm.tossWinner;
+            existing.tossWinner = dbm.tossWinner.trim();
             existing.tossDecision = dbm.tossDecision;
             existing.status = 'COMPLETED';
             existing.matchWinner = dbm.matchWinner;
           }
-        } else if (scheduledAll.length === 0) {
+        } else if (scheduledAll.length === 0 && !clearedDates.has(targetDate)) {
           matches.push(dbm);
         }
       });
@@ -575,16 +596,20 @@ class MatchService {
     // 4. Filter out deleted matches and attach Toss Prediction & Analytics
     const validMatches = matches.filter(m => {
       if (!m || !m.teamA || !m.teamB) return false;
-      const delKey1 = `${m.teamA}_${m.teamB}_${targetDate}`.toLowerCase();
-      const delKey2 = `${m.teamB}_${m.teamA}_${targetDate}`.toLowerCase();
+      const cleanA = (m.teamA || '').trim().toLowerCase();
+      const cleanB = (m.teamB || '').trim().toLowerCase();
+      const delKey1 = `${cleanA}_${cleanB}_${targetDate.toLowerCase()}`;
+      const delKey2 = `${cleanB}_${cleanA}_${targetDate.toLowerCase()}`;
       return !deletedMatches.has(delKey1) && !deletedMatches.has(delKey2);
     });
 
     const enrichedMatches = validMatches.map(m => {
-      const analysis = tossAnalytics.analyzeToss(m.teamA, m.teamB, m.venue);
+      const cleanA = (m.teamA || '').trim();
+      const cleanB = (m.teamB || '').trim();
+      const analysis = tossAnalytics.analyzeToss(cleanA, cleanB, m.venue);
       
-      const teamAObj = teamsVenues.teams.find(t => t.name.toLowerCase() === m.teamA.toLowerCase() || (t.short && t.short.toLowerCase() === m.teamA.toLowerCase())) || { badge: "🏏", color: "#3b82f6", captain: "" };
-      const teamBObj = teamsVenues.teams.find(t => t.name.toLowerCase() === m.teamB.toLowerCase() || (t.short && t.short.toLowerCase() === m.teamB.toLowerCase())) || { badge: "🏏", color: "#ef4444", captain: "" };
+      const teamAObj = teamsVenues.teams.find(t => t.name.toLowerCase() === cleanA.toLowerCase() || (t.short && t.short.toLowerCase() === cleanA.toLowerCase())) || { badge: "🏏", color: "#3b82f6", captain: "" };
+      const teamBObj = teamsVenues.teams.find(t => t.name.toLowerCase() === cleanB.toLowerCase() || (t.short && t.short.toLowerCase() === cleanB.toLowerCase())) || { badge: "🏏", color: "#ef4444", captain: "" };
 
       const teamACaptain = m.teamACaptain || teamAObj.captain || "";
       const teamBCaptain = m.teamBCaptain || teamBObj.captain || "";
@@ -594,13 +619,13 @@ class MatchService {
 
       const tossPassed = isTossTimePassed(targetDate, assignedTime, assignedTossTime);
       let matchStatus = m.status || (tossPassed ? 'COMPLETED' : 'UPCOMING');
-      let tossWinner = m.tossWinner || null;
+      let tossWinner = m.tossWinner ? m.tossWinner.trim() : null;
       let tossDecision = m.tossDecision || null;
-      let matchWinner = m.matchWinner || null;
+      let matchWinner = m.matchWinner ? m.matchWinner.trim() : null;
 
       // Check if user manually corrected / verified this toss result or reset to pending
-      const overrideKey1 = `${m.teamA}_${m.teamB}_${targetDate}`.toLowerCase();
-      const overrideKey2 = `${m.teamB}_${m.teamA}_${targetDate}`.toLowerCase();
+      const overrideKey1 = `${cleanA.toLowerCase()}_${cleanB.toLowerCase()}_${targetDate.toLowerCase()}`;
+      const overrideKey2 = `${cleanB.toLowerCase()}_${cleanA.toLowerCase()}_${targetDate.toLowerCase()}`;
       const ovr = userTossOverrides[overrideKey1] || userTossOverrides[overrideKey2];
       if (ovr) {
         if (ovr.forcePending) {
@@ -609,9 +634,9 @@ class MatchService {
           matchWinner = null;
           matchStatus = 'UPCOMING';
         } else {
-          tossWinner = ovr.tossWinner || tossWinner;
+          tossWinner = ovr.tossWinner ? ovr.tossWinner.trim() : tossWinner;
           tossDecision = ovr.tossDecision || tossDecision;
-          matchWinner = ovr.matchWinner || matchWinner;
+          matchWinner = ovr.matchWinner ? ovr.matchWinner.trim() : (tossWinner || matchWinner);
           matchStatus = 'COMPLETED';
         }
       } else if (m.status === 'COMPLETED' || (!m.status && tossPassed)) {
@@ -619,21 +644,26 @@ class MatchService {
         if (!tossWinner) {
           // If ground toss result was not manually entered, automatically resolve realistic winner
           const pickA = analysis.teamA.probability >= analysis.teamB.probability;
-          tossWinner = pickA ? m.teamA : m.teamB;
+          tossWinner = pickA ? cleanA : cleanB;
           tossDecision = analysis.prediction.likelyDecision && analysis.prediction.likelyDecision.toLowerCase().includes('bat') ? 'bat' : 'bowl';
           matchWinner = tossWinner;
         }
       }
 
+      const isDone = matchStatus === 'COMPLETED' || Boolean(tossWinner);
+
       return {
         ...m,
+        date: m.date || targetDate,
+        teamA: cleanA,
+        teamB: cleanB,
         time: assignedTime,
         tossTime: assignedTossTime,
-        status: matchStatus,
+        status: isDone ? 'COMPLETED' : 'UPCOMING',
         tossWinner: tossWinner,
         tossDecision: tossDecision,
         matchWinner: matchWinner,
-        tossDone: matchStatus === 'COMPLETED' || !!tossWinner,
+        tossDone: isDone,
         tournament: m.tournament || (m.league ? m.league.toUpperCase() : "Cricket Championship"),
         teamABadge: m.teamABadge || teamAObj.badge,
         teamBBadge: m.teamBBadge || teamBObj.badge,
@@ -679,22 +709,26 @@ class MatchService {
    * Update / Correct Real Ground Toss Result (Persisted to disk)
    */
   updateTossResult(teamA, teamB, date, tossWinner, tossDecision, matchWinner) {
-    const key1 = `${teamA}_${teamB}_${date}`.toLowerCase();
-    const key2 = `${teamB}_${teamA}_${date}`.toLowerCase();
+    const cleanA = (teamA || '').trim();
+    const cleanB = (teamB || '').trim();
+    const cleanDate = (date || '').trim();
+    const cleanWinner = (tossWinner || '').trim();
+    const key1 = `${cleanA.toLowerCase()}_${cleanB.toLowerCase()}_${cleanDate.toLowerCase()}`;
+    const key2 = `${cleanB.toLowerCase()}_${cleanA.toLowerCase()}_${cleanDate.toLowerCase()}`;
     const data = {
-      tossWinner: tossWinner.trim(),
+      tossWinner: cleanWinner,
       tossDecision: tossDecision ? tossDecision.trim().toLowerCase() : 'bowl',
-      matchWinner: matchWinner ? matchWinner.trim() : tossWinner.trim(),
+      matchWinner: matchWinner ? matchWinner.trim() : cleanWinner,
       forcePending: false
     };
     userTossOverrides[key1] = data;
     userTossOverrides[key2] = data;
 
     // Update in-memory schedule if present
-    if (OFFICIAL_DATE_FIXTURES[date]) {
-      const match = OFFICIAL_DATE_FIXTURES[date].find(m => 
-        (m.teamA.toLowerCase() === teamA.toLowerCase() && m.teamB.toLowerCase() === teamB.toLowerCase()) ||
-        (m.teamA.toLowerCase() === teamB.toLowerCase() && m.teamB.toLowerCase() === teamA.toLowerCase())
+    if (OFFICIAL_DATE_FIXTURES[cleanDate]) {
+      const match = OFFICIAL_DATE_FIXTURES[cleanDate].find(m => 
+        ((m.teamA || '').trim().toLowerCase() === cleanA.toLowerCase() && (m.teamB || '').trim().toLowerCase() === cleanB.toLowerCase()) ||
+        ((m.teamA || '').trim().toLowerCase() === cleanB.toLowerCase() && (m.teamB || '').trim().toLowerCase() === cleanA.toLowerCase())
       );
       if (match) {
         match.tossWinner = data.tossWinner;
@@ -704,10 +738,10 @@ class MatchService {
       }
     }
 
-    if (customUserMatches[date]) {
-      const cm = customUserMatches[date].find(m => 
-        (m.teamA.toLowerCase() === teamA.toLowerCase() && m.teamB.toLowerCase() === teamB.toLowerCase()) ||
-        (m.teamA.toLowerCase() === teamB.toLowerCase() && m.teamB.toLowerCase() === teamA.toLowerCase())
+    if (customUserMatches[cleanDate]) {
+      const cm = customUserMatches[cleanDate].find(m => 
+        ((m.teamA || '').trim().toLowerCase() === cleanA.toLowerCase() && (m.teamB || '').trim().toLowerCase() === cleanB.toLowerCase()) ||
+        ((m.teamA || '').trim().toLowerCase() === cleanB.toLowerCase() && (m.teamB || '').trim().toLowerCase() === cleanA.toLowerCase())
       );
       if (cm) {
         cm.tossWinner = data.tossWinner;
@@ -727,8 +761,11 @@ class MatchService {
    * Reset a completed match back to "Toss Pending (Upcoming)" (Persisted to disk)
    */
   resetTossToPending(teamA, teamB, date) {
-    const key1 = `${teamA}_${teamB}_${date}`.toLowerCase();
-    const key2 = `${teamB}_${teamA}_${date}`.toLowerCase();
+    const cleanA = (teamA || '').trim();
+    const cleanB = (teamB || '').trim();
+    const cleanDate = (date || '').trim();
+    const key1 = `${cleanA.toLowerCase()}_${cleanB.toLowerCase()}_${cleanDate.toLowerCase()}`;
+    const key2 = `${cleanB.toLowerCase()}_${cleanA.toLowerCase()}_${cleanDate.toLowerCase()}`;
     const data = {
       tossWinner: null,
       tossDecision: null,
@@ -739,10 +776,10 @@ class MatchService {
     userTossOverrides[key1] = data;
     userTossOverrides[key2] = data;
 
-    if (OFFICIAL_DATE_FIXTURES[date]) {
-      const match = OFFICIAL_DATE_FIXTURES[date].find(m => 
-        (m.teamA.toLowerCase() === teamA.toLowerCase() && m.teamB.toLowerCase() === teamB.toLowerCase()) ||
-        (m.teamA.toLowerCase() === teamB.toLowerCase() && m.teamB.toLowerCase() === teamA.toLowerCase())
+    if (OFFICIAL_DATE_FIXTURES[cleanDate]) {
+      const match = OFFICIAL_DATE_FIXTURES[cleanDate].find(m => 
+        ((m.teamA || '').trim().toLowerCase() === cleanA.toLowerCase() && (m.teamB || '').trim().toLowerCase() === cleanB.toLowerCase()) ||
+        ((m.teamA || '').trim().toLowerCase() === cleanB.toLowerCase() && (m.teamB || '').trim().toLowerCase() === cleanA.toLowerCase())
       );
       if (match) {
         match.tossWinner = null;
@@ -752,10 +789,10 @@ class MatchService {
       }
     }
 
-    if (customUserMatches[date]) {
-      const cm = customUserMatches[date].find(m => 
-        (m.teamA.toLowerCase() === teamA.toLowerCase() && m.teamB.toLowerCase() === teamB.toLowerCase()) ||
-        (m.teamA.toLowerCase() === teamB.toLowerCase() && m.teamB.toLowerCase() === teamA.toLowerCase())
+    if (customUserMatches[cleanDate]) {
+      const cm = customUserMatches[cleanDate].find(m => 
+        ((m.teamA || '').trim().toLowerCase() === cleanA.toLowerCase() && (m.teamB || '').trim().toLowerCase() === cleanB.toLowerCase()) ||
+        ((m.teamA || '').trim().toLowerCase() === cleanB.toLowerCase() && (m.teamB || '').trim().toLowerCase() === cleanA.toLowerCase())
       );
       if (cm) {
         cm.tossWinner = null;
@@ -768,86 +805,97 @@ class MatchService {
     // Persist permanently to disk!
     saveUserOverrides();
 
-    return { success: true, message: `Match ${teamA} vs ${teamB} moved back to Toss Pending!`, key: key1, data };
+    return { success: true, message: `Match ${cleanA} vs ${cleanB} moved back to Toss Pending!`, key: key1, data };
   }
 
   /**
    * Delete / Remove match from fixtures (Persisted to disk)
    */
   deleteMatch(teamA, teamB, date) {
-    const key1 = `${teamA}_${teamB}_${date}`.toLowerCase();
-    const key2 = `${teamB}_${teamA}_${date}`.toLowerCase();
+    const cleanA = (teamA || '').trim();
+    const cleanB = (teamB || '').trim();
+    const cleanDate = (date || '').trim();
+    const key1 = `${cleanA.toLowerCase()}_${cleanB.toLowerCase()}_${cleanDate.toLowerCase()}`;
+    const key2 = `${cleanB.toLowerCase()}_${cleanA.toLowerCase()}_${cleanDate.toLowerCase()}`;
     deletedMatches.add(key1);
     deletedMatches.add(key2);
 
     // Also check if this match had original unedited names in editedUserMatches
     Object.keys(editedUserMatches).forEach(k => {
       const ed = editedUserMatches[k];
-      if (ed && k.endsWith(`_${date.toLowerCase()}`)) {
+      if (ed && k.endsWith(`_${cleanDate.toLowerCase()}`)) {
         if (
-          (ed.teamA.toLowerCase() === teamA.toLowerCase() && ed.teamB.toLowerCase() === teamB.toLowerCase()) ||
-          (ed.teamA.toLowerCase() === teamB.toLowerCase() && ed.teamB.toLowerCase() === teamA.toLowerCase())
+          (ed.teamA.trim().toLowerCase() === cleanA.toLowerCase() && ed.teamB.trim().toLowerCase() === cleanB.toLowerCase()) ||
+          (ed.teamA.trim().toLowerCase() === cleanB.toLowerCase() && ed.teamB.trim().toLowerCase() === cleanA.toLowerCase())
         ) {
           deletedMatches.add(k);
         }
       }
     });
 
-    if (OFFICIAL_DATE_FIXTURES[date]) {
-      OFFICIAL_DATE_FIXTURES[date] = OFFICIAL_DATE_FIXTURES[date].filter(m => 
-        !(m.teamA.toLowerCase() === teamA.toLowerCase() && m.teamB.toLowerCase() === teamB.toLowerCase()) &&
-        !(m.teamA.toLowerCase() === teamB.toLowerCase() && m.teamB.toLowerCase() === teamA.toLowerCase())
+    if (OFFICIAL_DATE_FIXTURES[cleanDate]) {
+      OFFICIAL_DATE_FIXTURES[cleanDate] = OFFICIAL_DATE_FIXTURES[cleanDate].filter(m => 
+        !((m.teamA || '').trim().toLowerCase() === cleanA.toLowerCase() && (m.teamB || '').trim().toLowerCase() === cleanB.toLowerCase()) &&
+        !((m.teamA || '').trim().toLowerCase() === cleanB.toLowerCase() && (m.teamB || '').trim().toLowerCase() === cleanA.toLowerCase())
       );
     }
 
     // If present in customUserMatches, remove
-    if (customUserMatches[date]) {
-      customUserMatches[date] = customUserMatches[date].filter(m => 
-        !(m.teamA.toLowerCase() === teamA.toLowerCase() && m.teamB.toLowerCase() === teamB.toLowerCase()) &&
-        !(m.teamA.toLowerCase() === teamB.toLowerCase() && m.teamB.toLowerCase() === teamA.toLowerCase())
+    if (customUserMatches[cleanDate]) {
+      customUserMatches[cleanDate] = customUserMatches[cleanDate].filter(m => 
+        !((m.teamA || '').trim().toLowerCase() === cleanA.toLowerCase() && (m.teamB || '').trim().toLowerCase() === cleanB.toLowerCase()) &&
+        !((m.teamA || '').trim().toLowerCase() === cleanB.toLowerCase() && (m.teamB || '').trim().toLowerCase() === cleanA.toLowerCase())
       );
     }
 
     // Persist permanently to disk!
     saveUserOverrides();
 
-    return { success: true, message: `Match ${teamA} vs ${teamB} removed successfully from schedule!`, key: key1 };
+    return { success: true, message: `Match ${cleanA} vs ${cleanB} removed successfully from schedule!`, key: key1 };
   }
 
   /**
    * Bulk Delete / Remove multiple matches or all matches for a date (Persisted to disk)
    */
   deleteMultipleMatches(matchesList, date) {
+    const targetDate = (date || '').trim();
     if (!Array.isArray(matchesList) || matchesList.length === 0) {
-      if (date) {
+      if (targetDate) {
         // Delete all fixtures for this specific date
-        if (OFFICIAL_DATE_FIXTURES[date]) {
-          OFFICIAL_DATE_FIXTURES[date].forEach(m => {
-            deletedMatches.add(`${m.teamA}_${m.teamB}_${date}`.toLowerCase());
-            deletedMatches.add(`${m.teamB}_${m.teamA}_${date}`.toLowerCase());
+        clearedDates.add(targetDate);
+        if (OFFICIAL_DATE_FIXTURES[targetDate]) {
+          OFFICIAL_DATE_FIXTURES[targetDate].forEach(m => {
+            const cleanA = (m.teamA || '').trim().toLowerCase();
+            const cleanB = (m.teamB || '').trim().toLowerCase();
+            deletedMatches.add(`${cleanA}_${cleanB}_${targetDate.toLowerCase()}`);
+            deletedMatches.add(`${cleanB}_${cleanA}_${targetDate.toLowerCase()}`);
           });
-          OFFICIAL_DATE_FIXTURES[date] = [];
+          OFFICIAL_DATE_FIXTURES[targetDate] = [];
         }
-        if (customUserMatches[date]) {
-          customUserMatches[date].forEach(m => {
-            deletedMatches.add(`${m.teamA}_${m.teamB}_${date}`.toLowerCase());
-            deletedMatches.add(`${m.teamB}_${m.teamA}_${date}`.toLowerCase());
+        if (customUserMatches[targetDate]) {
+          customUserMatches[targetDate].forEach(m => {
+            const cleanA = (m.teamA || '').trim().toLowerCase();
+            const cleanB = (m.teamB || '').trim().toLowerCase();
+            deletedMatches.add(`${cleanA}_${cleanB}_${targetDate.toLowerCase()}`);
+            deletedMatches.add(`${cleanB}_${cleanA}_${targetDate.toLowerCase()}`);
           });
-          customUserMatches[date] = [];
+          customUserMatches[targetDate] = [];
         }
         saveUserOverrides();
-        return { success: true, message: `All matches for ${date} removed successfully!` };
+        return { success: true, message: `All matches for ${targetDate} removed successfully!` };
       }
       return { success: false, message: 'No matches or date specified for bulk deletion' };
     }
 
     let deleteCount = 0;
     matchesList.forEach(m => {
-      const matchDate = m.date || date;
-      if (!m.teamA || !m.teamB || !matchDate) return;
+      const matchDate = (m.date || targetDate || '').trim();
+      const teamA = (m.teamA || '').trim();
+      const teamB = (m.teamB || '').trim();
+      if (!teamA || !teamB || !matchDate) return;
 
-      const key1 = `${m.teamA}_${m.teamB}_${matchDate}`.toLowerCase();
-      const key2 = `${m.teamB}_${m.teamA}_${matchDate}`.toLowerCase();
+      const key1 = `${teamA.toLowerCase()}_${teamB.toLowerCase()}_${matchDate.toLowerCase()}`;
+      const key2 = `${teamB.toLowerCase()}_${teamA.toLowerCase()}_${matchDate.toLowerCase()}`;
       deletedMatches.add(key1);
       deletedMatches.add(key2);
       deleteCount++;
@@ -857,8 +905,8 @@ class MatchService {
         const ed = editedUserMatches[k];
         if (ed && k.endsWith(`_${matchDate.toLowerCase()}`)) {
           if (
-            (ed.teamA.toLowerCase() === m.teamA.toLowerCase() && ed.teamB.toLowerCase() === m.teamB.toLowerCase()) ||
-            (ed.teamA.toLowerCase() === m.teamB.toLowerCase() && ed.teamB.toLowerCase() === m.teamA.toLowerCase())
+            (ed.teamA.trim().toLowerCase() === teamA.toLowerCase() && ed.teamB.trim().toLowerCase() === teamB.toLowerCase()) ||
+            (ed.teamA.trim().toLowerCase() === teamB.toLowerCase() && ed.teamB.trim().toLowerCase() === teamA.toLowerCase())
           ) {
             deletedMatches.add(k);
           }
@@ -867,15 +915,15 @@ class MatchService {
 
       if (OFFICIAL_DATE_FIXTURES[matchDate]) {
         OFFICIAL_DATE_FIXTURES[matchDate] = OFFICIAL_DATE_FIXTURES[matchDate].filter(fix => 
-          !(fix.teamA.toLowerCase() === m.teamA.toLowerCase() && fix.teamB.toLowerCase() === m.teamB.toLowerCase()) &&
-          !(fix.teamA.toLowerCase() === m.teamB.toLowerCase() && fix.teamB.toLowerCase() === m.teamA.toLowerCase())
+          !(fix.teamA.trim().toLowerCase() === teamA.toLowerCase() && fix.teamB.trim().toLowerCase() === teamB.toLowerCase()) &&
+          !(fix.teamA.trim().toLowerCase() === teamB.toLowerCase() && fix.teamB.trim().toLowerCase() === teamA.toLowerCase())
         );
       }
 
       if (customUserMatches[matchDate]) {
         customUserMatches[matchDate] = customUserMatches[matchDate].filter(cm => 
-          !(cm.teamA.toLowerCase() === m.teamA.toLowerCase() && cm.teamB.toLowerCase() === m.teamB.toLowerCase()) &&
-          !(cm.teamA.toLowerCase() === m.teamB.toLowerCase() && cm.teamB.toLowerCase() === m.teamA.toLowerCase())
+          !(cm.teamA.trim().toLowerCase() === teamA.toLowerCase() && cm.teamB.trim().toLowerCase() === teamB.toLowerCase()) &&
+          !(cm.teamA.trim().toLowerCase() === teamB.toLowerCase() && cm.teamB.trim().toLowerCase() === teamA.toLowerCase())
         );
       }
     });
@@ -888,8 +936,10 @@ class MatchService {
    * Add a custom match directly into schedule (Persisted to disk)
    */
   addCustomMatch(date, matchData) {
-    if (!customUserMatches[date]) {
-      customUserMatches[date] = [];
+    const cleanDate = (date || '').trim();
+    clearedDates.delete(cleanDate);
+    if (!customUserMatches[cleanDate]) {
+      customUserMatches[cleanDate] = [];
     }
     const cleanTime = matchData.time ? (matchData.time.toUpperCase().includes('IST') ? matchData.time.trim() : `${matchData.time.trim()} IST`) : '07:30 PM IST';
     const newMatch = {
