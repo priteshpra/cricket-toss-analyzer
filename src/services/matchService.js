@@ -328,6 +328,7 @@ function calculateTossTime(timeStr) {
 function generateDailyFixtures(dateStr, targetLeague = 'all') {
   const teamsVenues = getTeamsVenues();
   const fixtures = [];
+  const cleanDateStr = (dateStr || '').trim();
 
   // Universal helper to resolve any user edits for a match
   function resolveEditedMatch(teamA, teamB, date, fallbackTime, fallbackVenue, fallbackLeague, fallbackTourn) {
@@ -354,35 +355,37 @@ function generateDailyFixtures(dateStr, targetLeague = 'all') {
   }
 
   // 1. Add user custom matches for this date
-  if (customUserMatches[dateStr] && Array.isArray(customUserMatches[dateStr])) {
-    customUserMatches[dateStr].forEach((cm, idx) => {
-      const delKey1 = `${cm.teamA}_${cm.teamB}_${dateStr}`.toLowerCase();
-      const delKey2 = `${cm.teamB}_${cm.teamA}_${dateStr}`.toLowerCase();
+  if (customUserMatches[cleanDateStr] && Array.isArray(customUserMatches[cleanDateStr])) {
+    customUserMatches[cleanDateStr].forEach((cm, idx) => {
+      const cmA = (cm.teamA || '').trim();
+      const cmB = (cm.teamB || '').trim();
+      const delKey1 = `${cmA}_${cmB}_${cleanDateStr}`.toLowerCase();
+      const delKey2 = `${cmB}_${cmA}_${cleanDateStr}`.toLowerCase();
       if (deletedMatches.has(delKey1) || deletedMatches.has(delKey2)) return;
 
-      const res = resolveEditedMatch(cm.teamA, cm.teamB, dateStr, cm.time, cm.venue, cm.league, cm.tournament);
+      const res = resolveEditedMatch(cmA, cmB, cleanDateStr, cm.time, cm.venue, cm.league, cm.tournament);
 
-      const editedDel1 = `${res.teamA}_${res.teamB}_${dateStr}`.toLowerCase();
-      const editedDel2 = `${res.teamB}_${res.teamA}_${dateStr}`.toLowerCase();
+      const editedDel1 = `${res.teamA.trim()}_${res.teamB.trim()}_${cleanDateStr}`.toLowerCase();
+      const editedDel2 = `${res.teamB.trim()}_${res.teamA.trim()}_${cleanDateStr}`.toLowerCase();
       if (deletedMatches.has(editedDel1) || deletedMatches.has(editedDel2)) return;
 
       if (targetLeague === 'all' || res.league === targetLeague || (targetLeague === 't20i' && cm.format === 'T20')) {
         const teamObjA = teamsVenues.teams.find(t => t.name.toLowerCase() === res.teamA.toLowerCase()) || { badge: '🏏', color: '#2563eb' };
         const teamObjB = teamsVenues.teams.find(t => t.name.toLowerCase() === res.teamB.toLowerCase()) || { badge: '🏏', color: '#dc2626' };
         fixtures.push({
-          id: cm.id || `custom_${dateStr}_${idx + 1}`,
-          date: dateStr,
+          id: cm.id || `custom_${cleanDateStr}_${idx + 1}`,
+          date: cleanDateStr,
           time: res.time,
           tossTime: res.tossTime,
           tournament: res.tournament,
           league: res.league,
           format: cm.format || 'T20',
-          teamA: res.teamA,
-          teamB: res.teamB,
-          teamABadge: teamObjA.badge,
-          teamBBadge: teamObjB.badge,
-          teamAColor: teamObjA.color,
-          teamBColor: teamObjB.color,
+          teamA: res.teamA.trim(),
+          teamB: res.teamB.trim(),
+          teamABadge: teamObjA.badge || '🏏',
+          teamBBadge: teamObjB.badge || '🏏',
+          teamAColor: teamObjA.color || '#2563eb',
+          teamBColor: teamObjB.color || '#dc2626',
           venue: res.venue,
           status: cm.status || (cm.tossWinner ? 'COMPLETED' : 'UPCOMING'),
           tossWinner: cm.tossWinner || null,
@@ -394,7 +397,6 @@ function generateDailyFixtures(dateStr, targetLeague = 'all') {
   }
 
   // If date has been explicitly cleared by user, return empty fixtures
-  const cleanDateStr = (dateStr || '').trim();
   if (clearedDates.has(cleanDateStr)) {
     return fixtures;
   }
@@ -682,16 +684,13 @@ class MatchService {
       };
     });
 
-    // 5. Sort matches: LIVE first, UPCOMING next, COMPLETED last (latest/active matches on top)
+    // 5. Sort matches: active LIVE matches first, then strictly chronological by match time (morning to night)
     enrichedMatches.sort((a, b) => {
-      const statusOrder = { 'LIVE': 1, 'UPCOMING': 2, 'COMPLETED': 3 };
-      const rankA = statusOrder[a.status] || 2;
-      const rankB = statusOrder[b.status] || 2;
+      // Keep active LIVE matches on top if currently playing
+      if (a.status === 'LIVE' && b.status !== 'LIVE') return -1;
+      if (b.status === 'LIVE' && a.status !== 'LIVE') return 1;
 
-      if (rankA !== rankB) {
-        return rankA - rankB; // Active & upcoming matches on top!
-      }
-
+      // Pure chronological ordering by match time (morning -> evening)
       const timeDiff = parseTimeToMinutes(a.time) - parseTimeToMinutes(b.time);
       if (timeDiff !== 0) return timeDiff;
       return a.teamA.localeCompare(b.teamA);
@@ -937,18 +936,29 @@ class MatchService {
    */
   addCustomMatch(date, matchData) {
     const cleanDate = (date || '').trim();
+    const cleanA = (matchData.teamA || '').trim();
+    const cleanB = (matchData.teamB || '').trim();
+    const cleanLeague = (matchData.league && matchData.league !== 'all') ? matchData.league : 'all';
+
     clearedDates.delete(cleanDate);
+
+    // Unblock from deletedMatches so it is guaranteed to show in fixtures
+    const key1 = `${cleanA.toLowerCase()}_${cleanB.toLowerCase()}_${cleanDate.toLowerCase()}`;
+    const key2 = `${cleanB.toLowerCase()}_${cleanA.toLowerCase()}_${cleanDate.toLowerCase()}`;
+    deletedMatches.delete(key1);
+    deletedMatches.delete(key2);
+
     if (!customUserMatches[cleanDate]) {
       customUserMatches[cleanDate] = [];
     }
     const cleanTime = matchData.time ? (matchData.time.toUpperCase().includes('IST') ? matchData.time.trim() : `${matchData.time.trim()} IST`) : '07:30 PM IST';
     const newMatch = {
-      id: `custom_${date}_${Date.now()}`,
-      date: date,
-      teamA: matchData.teamA.trim(),
-      teamB: matchData.teamB.trim(),
-      league: matchData.league || 'all',
-      tournament: matchData.tournament || `${matchData.teamA.trim()} vs ${matchData.teamB.trim()} Match`,
+      id: `custom_${cleanDate}_${Date.now()}`,
+      date: cleanDate,
+      teamA: cleanA,
+      teamB: cleanB,
+      league: cleanLeague,
+      tournament: matchData.tournament || `${cleanA} vs ${cleanB} Match`,
       format: matchData.format || 'T20',
       time: cleanTime,
       tossTime: calculateTossTime(cleanTime),
@@ -959,7 +969,7 @@ class MatchService {
       matchWinner: null
     };
 
-    customUserMatches[date].push(newMatch);
+    customUserMatches[cleanDate].push(newMatch);
     saveUserOverrides();
     return { success: true, message: `Match ${newMatch.teamA} vs ${newMatch.teamB} successfully added!`, match: newMatch };
   }

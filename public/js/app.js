@@ -935,7 +935,7 @@ async function saveCustomMatch() {
   const time = addMatchTime ? addMatchTime.value.trim() : '07:30 PM IST';
   const league = addMatchLeague ? addMatchLeague.value : 'dehradun_t20';
   const venue = addMatchVenue ? addMatchVenue.value.trim() : 'International Cricket Stadium';
-  const date = addMatchDate ? addMatchDate.value : currentDate;
+  const date = (addMatchDate && addMatchDate.value && addMatchDate.value.trim()) ? addMatchDate.value.trim() : currentDate;
 
   if (!teamA || !teamB) {
     alert('Please provide both Team 1 and Team 2 names');
@@ -952,6 +952,25 @@ async function saveCustomMatch() {
     if (result.success) {
       if (addMatchModal) addMatchModal.classList.add('hidden');
       showToast(`Match ${teamA} vs ${teamB} added!`);
+
+      // 1. Reset league filter to 'all' so new match is immediately visible in schedule
+      if (currentLeague !== 'all') {
+        currentLeague = 'all';
+        if (leagueFilter) leagueFilter.value = 'all';
+      }
+
+      // 2. If viewing Toss Done tab, switch to Toss Pending so the new upcoming match is immediately visible
+      if (currentTossStatus === 'done') {
+        currentTossStatus = 'pending';
+        updateTossStatusFilterUI();
+      }
+
+      // 3. Clear modal inputs for clean next addition
+      if (addMatchTeamA) addMatchTeamA.value = '';
+      if (addMatchTeamB) addMatchTeamB.value = '';
+      if (addMatchVenue) addMatchVenue.value = '';
+
+      // 4. Reload schedule for target date
       if (date === currentDate) {
         await loadMatches(currentDate, currentLeague);
       } else {
