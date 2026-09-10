@@ -963,15 +963,15 @@
       "forcePending": false
     },
     "guyana amazon warriors_saint lucia kings_2026-09-10": {
-      "tossWinner": "Guyana Amazon Warriors",
+      "tossWinner": "Saint Lucia Kings",
       "tossDecision": "bat",
-      "matchWinner": "Guyana Amazon Warriors",
+      "matchWinner": "Saint Lucia Kings",
       "forcePending": false
     },
     "saint lucia kings_guyana amazon warriors_2026-09-10": {
-      "tossWinner": "Guyana Amazon Warriors",
+      "tossWinner": "Saint Lucia Kings",
       "tossDecision": "bat",
-      "matchWinner": "Guyana Amazon Warriors",
+      "matchWinner": "Saint Lucia Kings",
       "forcePending": false
     },
     "verified alpha_verified beta_2026-09-10": {
@@ -984,6 +984,66 @@
       "tossWinner": "Verified Alpha",
       "tossDecision": "bowl",
       "matchWinner": "Verified Alpha",
+      "forcePending": false
+    },
+    "hong kong, china_united arab emirates_2026-09-10": {
+      "tossWinner": "United Arab Emirates",
+      "tossDecision": "bowl",
+      "matchWinner": "United Arab Emirates",
+      "forcePending": false
+    },
+    "united arab emirates_hong kong, china_2026-09-10": {
+      "tossWinner": "United Arab Emirates",
+      "tossDecision": "bowl",
+      "matchWinner": "United Arab Emirates",
+      "forcePending": false
+    },
+    "nepal_oman_2026-09-10": {
+      "tossWinner": "Oman",
+      "tossDecision": "bowl",
+      "matchWinner": "Oman",
+      "forcePending": false
+    },
+    "oman_nepal_2026-09-10": {
+      "tossWinner": "Oman",
+      "tossDecision": "bowl",
+      "matchWinner": "Oman",
+      "forcePending": false
+    },
+    "india_australia_australia": {
+      "tossWinner": "bat",
+      "tossDecision": "2026-09-10",
+      "matchWinner": "Australia",
+      "forcePending": false
+    },
+    "australia_india_australia": {
+      "tossWinner": "bat",
+      "tossDecision": "2026-09-10",
+      "matchWinner": "Australia",
+      "forcePending": false
+    },
+    "india_australia_2026-09-10": {
+      "tossWinner": "Australia",
+      "tossDecision": "bat",
+      "matchWinner": "Australia",
+      "forcePending": false
+    },
+    "australia_india_2026-09-10": {
+      "tossWinner": "Australia",
+      "tossDecision": "bat",
+      "matchWinner": "Australia",
+      "forcePending": false
+    },
+    "rotterdam dockers_glasgow cosmic_2026-09-10": {
+      "tossWinner": "Glasgow Cosmic",
+      "tossDecision": "bowl",
+      "matchWinner": "Glasgow Cosmic",
+      "forcePending": false
+    },
+    "glasgow cosmic_rotterdam dockers_2026-09-10": {
+      "tossWinner": "Glasgow Cosmic",
+      "tossDecision": "bowl",
+      "matchWinner": "Glasgow Cosmic",
       "forcePending": false
     }
   },
@@ -1174,12 +1234,14 @@
     "amritsar soormas_jalandhar warriors_2026-09-10",
     "mohali kings_amritsar soormas_2026-09-10",
     "amritsar soormas_mohali kings_2026-09-10",
-    "rotterdam dockers_glasgow cosmic_2026-09-10",
-    "glasgow cosmic_rotterdam dockers_2026-09-10",
     "australia_england_2026-09-10",
     "england_australia_2026-09-10",
     "verified alpha_verified beta_2026-09-10",
-    "verified beta_verified alpha_2026-09-10"
+    "verified beta_verified alpha_2026-09-10",
+    "india_australia_2026-09-10",
+    "australia_india_2026-09-10",
+    "mussoorie thunder_haridwar spring elmas_2026-09-10",
+    "haridwar spring elmas_mussoorie thunder_2026-09-10"
   ],
   "clearedDates": [],
   "customMatches": {
@@ -1927,10 +1989,10 @@
         "time": "07:00 PM IST",
         "tossTime": "06:30 PM IST",
         "venue": "YSD-UKM Cricket Oval, Bangi",
-        "status": "UPCOMING",
-        "tossWinner": null,
-        "tossDecision": null,
-        "matchWinner": null
+        "status": "COMPLETED",
+        "tossWinner": "United Arab Emirates",
+        "tossDecision": "bowl",
+        "matchWinner": "United Arab Emirates"
       },
       {
         "id": "custom_2026-09-10_1788963306879",
@@ -1943,10 +2005,26 @@
         "time": "07:00 PM IST",
         "tossTime": "06:30 PM IST",
         "venue": "Bayuemas Oval, Kuala Lumpur",
-        "status": "UPCOMING",
-        "tossWinner": null,
-        "tossDecision": null,
-        "matchWinner": null
+        "status": "COMPLETED",
+        "tossWinner": "Oman",
+        "tossDecision": "bowl",
+        "matchWinner": "Oman"
+      },
+      {
+        "id": "custom_2026-09-10_1789042096252",
+        "date": "2026-09-10",
+        "teamA": "Rotterdam Dockers",
+        "teamB": "Glasgow Cosmic",
+        "league": "etpl",
+        "tournament": "Rotterdam Dockers vs Glasgow Cosmic Match",
+        "format": "T20",
+        "time": "02:30 PM IST",
+        "tossTime": "02:00 PM IST",
+        "venue": "The Village, Dublin",
+        "status": "COMPLETED",
+        "tossWinner": "Glasgow Cosmic",
+        "tossDecision": "bowl",
+        "matchWinner": "Glasgow Cosmic"
       }
     ]
   },

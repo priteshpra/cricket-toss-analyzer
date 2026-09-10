@@ -179,13 +179,13 @@ router.get('/live', async (req, res) => {
  */
 router.get('/analysis', (req, res) => {
   try {
-    const { teamA, teamB, venue } = req.query;
+    const { teamA, teamB, venue, date } = req.query;
     if (!teamA || !teamB) {
       return res.status(400).json({ success: false, error: "teamA and teamB query params are required" });
     }
 
-    const analysis = tossAnalytics.analyzeToss(teamA, teamB, venue || "");
-    const marketLoad = marketLoadService.getMarketLoadForMatch({ teamA, teamB, venue });
+    const analysis = tossAnalytics.analyzeToss(teamA, teamB, venue || "", date || "");
+    const marketLoad = marketLoadService.getMarketLoadForMatch({ teamA, teamB, venue, date, tossAnalysis: analysis.prediction });
     res.json({ success: true, analysis, marketLoad });
   } catch (err) {
     console.error("Error in /api/analysis:", err);

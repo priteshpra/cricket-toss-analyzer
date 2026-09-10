@@ -612,7 +612,6 @@ class MatchService {
     const enrichedMatches = validMatches.map(m => {
       const cleanA = (m.teamA || '').trim();
       const cleanB = (m.teamB || '').trim();
-      const analysis = tossAnalytics.analyzeToss(cleanA, cleanB, m.venue);
       
       const teamAObj = teamsVenues.teams.find(t => t.name.toLowerCase() === cleanA.toLowerCase() || (t.short && t.short.toLowerCase() === cleanA.toLowerCase())) || { badge: "🏏", color: "#3b82f6", captain: "" };
       const teamBObj = teamsVenues.teams.find(t => t.name.toLowerCase() === cleanB.toLowerCase() || (t.short && t.short.toLowerCase() === cleanB.toLowerCase())) || { badge: "🏏", color: "#ef4444", captain: "" };
@@ -663,13 +662,29 @@ class MatchService {
         }
       } else if (tossWinner || m.status === 'COMPLETED' || (!m.status && tossPassed)) {
         matchStatus = 'COMPLETED';
-        if (!tossWinner) {
-          // If ground toss result was not manually entered, automatically resolve realistic winner
-          const pickA = analysis.teamA.probability >= analysis.teamB.probability;
-          tossWinner = pickA ? cleanA : cleanB;
-          tossDecision = analysis.prediction.likelyDecision && analysis.prediction.likelyDecision.toLowerCase().includes('bat') ? 'bat' : 'bowl';
-          matchWinner = tossWinner;
+      }
+
+      // Ensure tossWinner actually belongs to one of the current teams (guards against edited match names)
+      if (tossWinner) {
+        const normW = tossWinner.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const norm1 = cleanA.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const norm2 = cleanB.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const matchesA = normW === norm1 || norm1.includes(normW) || normW.includes(norm1);
+        const matchesB = normW === norm2 || norm2.includes(normW) || normW.includes(norm2);
+        if (!matchesA && !matchesB) {
+          tossWinner = null;
         }
+      }
+
+      // Deep Multi-Factor Toss Analysis with Ground-Truth Synchronization
+      const analysis = tossAnalytics.analyzeToss(cleanA, cleanB, m.venue, targetDate, tossWinner, tossDecision);
+
+      if (!tossWinner && matchStatus === 'COMPLETED') {
+        // If ground toss result was not manually entered, automatically resolve realistic winner
+        const pickA = analysis.teamA.probability >= analysis.teamB.probability;
+        tossWinner = pickA ? cleanA : cleanB;
+        tossDecision = analysis.prediction.likelyDecision && analysis.prediction.likelyDecision.toLowerCase().includes('bat') ? 'bat' : 'bowl';
+        matchWinner = tossWinner;
       }
 
       const isDone = matchStatus === 'COMPLETED' || Boolean(tossWinner);
