@@ -4,6 +4,16 @@ const matchService = require('../services/matchService');
 const tossAnalytics = require('../services/tossAnalytics');
 const marketLoadService = require('../services/marketLoadService');
 
+// Prevent browser/proxy caching for all API endpoints to guarantee 100% fresh data
+router.use((req, res, next) => {
+  res.set({
+    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0'
+  });
+  next();
+});
+
 /**
  * GET /api/matches
  * Query params: date (YYYY-MM-DD), league (optional)

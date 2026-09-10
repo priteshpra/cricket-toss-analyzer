@@ -254,7 +254,9 @@ function setupEventListeners() {
   if (refreshMatchesBtn) {
     refreshMatchesBtn.addEventListener('click', () => {
       refreshMatchesBtn.classList.add('animate-spin');
+      if (leagueFilter) currentLeague = leagueFilter.value;
       loadMatches(currentDate, currentLeague).then(() => {
+        showToast('Live schedule refreshed!');
         setTimeout(() => refreshMatchesBtn.classList.remove('animate-spin'), 600);
       });
     });
@@ -477,8 +479,8 @@ async function loadTeamsAndVenues() {
 // Load Matches from API
 async function loadMatches(date, league) {
   try {
-    const url = `/api/matches?date=${date}${league && league !== 'all' ? '&league=' + league : ''}`;
-    const res = await fetch(url);
+    const url = `/api/matches?date=${date}${league && league !== 'all' ? '&league=' + league : ''}&_t=${Date.now()}`;
+    const res = await fetch(url, { cache: 'no-store' });
     const result = await res.json();
 
     if (result.success && result.data) {

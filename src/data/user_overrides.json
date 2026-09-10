@@ -973,6 +973,18 @@
       "tossDecision": "bat",
       "matchWinner": "Guyana Amazon Warriors",
       "forcePending": false
+    },
+    "verified alpha_verified beta_2026-09-10": {
+      "tossWinner": "Verified Alpha",
+      "tossDecision": "bowl",
+      "matchWinner": "Verified Alpha",
+      "forcePending": false
+    },
+    "verified beta_verified alpha_2026-09-10": {
+      "tossWinner": "Verified Alpha",
+      "tossDecision": "bowl",
+      "matchWinner": "Verified Alpha",
+      "forcePending": false
     }
   },
   "deletedMatches": [
@@ -1165,7 +1177,9 @@
     "rotterdam dockers_glasgow cosmic_2026-09-10",
     "glasgow cosmic_rotterdam dockers_2026-09-10",
     "australia_england_2026-09-10",
-    "england_australia_2026-09-10"
+    "england_australia_2026-09-10",
+    "verified alpha_verified beta_2026-09-10",
+    "verified beta_verified alpha_2026-09-10"
   ],
   "clearedDates": [],
   "customMatches": {

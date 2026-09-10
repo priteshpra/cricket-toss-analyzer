@@ -527,6 +527,9 @@ class MatchService {
    * Get all matches for a specific date with toss analysis pre-attached
    */
   async getMatchesByDate(dateStr, leagueFilter = 'all') {
+    // Reload user overrides from disk to ensure freshest persisted state on every request
+    loadUserOverrides();
+
     const todayStr = new Date().toISOString().split('T')[0];
     const targetDate = (dateStr || todayStr).trim();
     const teamsVenues = getTeamsVenues();
@@ -559,7 +562,8 @@ class MatchService {
             );
             if (existing) {
               if (lm.liveScore) existing.liveScore = lm.liveScore;
-              if (lm.tossWinner) {
+              // Only adopt scraper tossWinner if toss has not already been confirmed or completed
+              if (lm.tossWinner && !existing.tossWinner) {
                 existing.tossWinner = lm.tossWinner.trim();
                 existing.tossDecision = lm.tossDecision;
                 existing.status = 'COMPLETED';
@@ -628,7 +632,23 @@ class MatchService {
       // Check if user manually corrected / verified this toss result or reset to pending
       const overrideKey1 = `${cleanA.toLowerCase()}_${cleanB.toLowerCase()}_${targetDate.toLowerCase()}`;
       const overrideKey2 = `${cleanB.toLowerCase()}_${cleanA.toLowerCase()}_${targetDate.toLowerCase()}`;
-      const ovr = userTossOverrides[overrideKey1] || userTossOverrides[overrideKey2];
+      let ovr = userTossOverrides[overrideKey1] || userTossOverrides[overrideKey2];
+
+      // Also check if any editedUserMatches alias key points to this match
+      if (!ovr && editedUserMatches) {
+        Object.keys(editedUserMatches).forEach(k => {
+          const ed = editedUserMatches[k];
+          if (ed && k.endsWith(`_${targetDate.toLowerCase()}`)) {
+            if (
+              (ed.teamA.trim().toLowerCase() === cleanA.toLowerCase() && ed.teamB.trim().toLowerCase() === cleanB.toLowerCase()) ||
+              (ed.teamA.trim().toLowerCase() === cleanB.toLowerCase() && ed.teamB.trim().toLowerCase() === cleanA.toLowerCase())
+            ) {
+              if (userTossOverrides[k]) ovr = userTossOverrides[k];
+            }
+          }
+        });
+      }
+
       if (ovr) {
         if (ovr.forcePending) {
           tossWinner = null;
@@ -641,7 +661,7 @@ class MatchService {
           matchWinner = ovr.matchWinner ? ovr.matchWinner.trim() : (tossWinner || matchWinner);
           matchStatus = 'COMPLETED';
         }
-      } else if (m.status === 'COMPLETED' || (!m.status && tossPassed)) {
+      } else if (tossWinner || m.status === 'COMPLETED' || (!m.status && tossPassed)) {
         matchStatus = 'COMPLETED';
         if (!tossWinner) {
           // If ground toss result was not manually entered, automatically resolve realistic winner
@@ -722,6 +742,21 @@ class MatchService {
     };
     userTossOverrides[key1] = data;
     userTossOverrides[key2] = data;
+
+    // Also store under any edited/original alias keys so name variants never lose toss override
+    if (editedUserMatches) {
+      Object.keys(editedUserMatches).forEach(k => {
+        const ed = editedUserMatches[k];
+        if (ed && k.endsWith(`_${cleanDate.toLowerCase()}`)) {
+          if (
+            (ed.teamA.trim().toLowerCase() === cleanA.toLowerCase() && ed.teamB.trim().toLowerCase() === cleanB.toLowerCase()) ||
+            (ed.teamA.trim().toLowerCase() === cleanB.toLowerCase() && ed.teamB.trim().toLowerCase() === cleanA.toLowerCase())
+          ) {
+            userTossOverrides[k] = data;
+          }
+        }
+      });
+    }
 
     // Update in-memory schedule if present
     if (OFFICIAL_DATE_FIXTURES[cleanDate]) {
