@@ -1265,7 +1265,9 @@
     "india_australia_2026-09-10",
     "australia_india_2026-09-10",
     "mussoorie thunder_haridwar spring elmas_2026-09-10",
-    "haridwar spring elmas_mussoorie thunder_2026-09-10"
+    "haridwar spring elmas_mussoorie thunder_2026-09-10",
+    "test team alpha_test team beta_2026-09-11",
+    "test team beta_test team alpha_2026-09-11"
   ],
   "clearedDates": [],
   "customMatches": {
@@ -2050,7 +2052,8 @@
         "tossDecision": "bowl",
         "matchWinner": "Glasgow Cosmic"
       }
-    ]
+    ],
+    "2026-09-11": []
   },
   "editedMatches": {
     "stack cc_ceylinco express cc_2026-09-03": {
