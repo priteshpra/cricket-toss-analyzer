@@ -846,14 +846,14 @@ function createMatchCardElement(match) {
           </div>
         </div>
 
-        <!-- 🎯 Ultra-Clear Direct Bet Advisory Banner -->
+        <!-- 🎯 Direct Toss & Load Advisory Banner -->
         <div class="p-2 rounded-lg ${ml.aiConvergence.isAligned ? 'bg-emerald-950/90 border border-emerald-500/60' : 'bg-amber-950/90 border border-amber-500/60'} flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs">
           <div class="${ml.aiConvergence.isAligned ? 'text-emerald-300' : 'text-amber-300'} font-bold flex items-center gap-1.5 min-w-0">
             <i class="fa-solid ${ml.aiConvergence.isAligned ? 'fa-circle-check text-emerald-400' : 'fa-triangle-exclamation text-amber-400'} shrink-0"></i> 
-            <span class="truncate text-[11px] sm:text-xs">Toss: <strong class="text-white underline">${ml.aiConvergence.isAligned ? 'BET ON ' + getDisplayTeamName(ml.orbitLoad.heavyTeam) : 'SKIP / PASS (Risky Load)'}</strong></span>
+            <span class="truncate text-[11px] sm:text-xs">Toss: <strong class="text-white underline">${ml.aiConvergence.isAligned ? 'Model Leans ' + getDisplayTeamName(ml.orbitLoad.heavyTeam) : 'Heavy Load Trap on ' + getDisplayTeamName(ml.orbitLoad.heavyTeam)}</strong></span>
           </div>
           <span class="px-2 py-0.5 rounded-md ${ml.aiConvergence.isAligned ? 'bg-emerald-500 text-slate-950' : 'bg-amber-500 text-slate-950'} text-[9px] sm:text-[10px] font-black uppercase tracking-wider self-start sm:self-auto shrink-0">
-            ${ml.aiConvergence.isAligned ? '🟢 99.9% SAFE' : '⚠️ SKIP'}
+            ${ml.aiConvergence.isAligned ? '🎯 STATISTICAL EDGE' : '⚡ CONTRARIAN TRAP'}
           </span>
         </div>
 
@@ -1386,8 +1386,8 @@ function renderMarketLoadMatches(marketLoads = []) {
 
     const isAligned = ml.aiConvergence.isAligned;
     const convergenceBadge = isAligned
-      ? `<span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-black uppercase tracking-wider animate-pulse">🎯 99.9% ULTRA-CONVERGENCE SAFE SIGNAL</span>`
-      : `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-black uppercase tracking-wider">⚠️ CONTRARIAN WHALE DIVERGENCE</span>`;
+      ? `<span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-black uppercase tracking-wider">🎯 STATISTICAL CONSENSUS</span>`
+      : `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-black uppercase tracking-wider">⚡ CONTRARIAN LOAD TRAP ALERT</span>`;
 
     card.innerHTML = `
       <!-- Card Header -->
@@ -1584,7 +1584,7 @@ function renderSimulationResult(analysis, marketLoad, teamA, teamB, venue) {
           <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] sm:text-xs font-black uppercase tracking-wider">
             AI TOSS WINNER FORECAST
           </span>
-          ${isAligned ? '<span class="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/40 text-[10px] sm:text-xs font-black uppercase tracking-wider">99.9% MARKET ALIGNED 🎯</span>' : ''}
+          ${isAligned ? '<span class="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/40 text-[10px] sm:text-xs font-black uppercase tracking-wider">MARKET ALIGNED 🎯</span>' : ''}
         </div>
 
         <h3 class="text-xl sm:text-3xl md:text-4xl font-extrabold text-white font-heading my-2 break-words">

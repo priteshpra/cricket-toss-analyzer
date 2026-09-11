@@ -325,71 +325,92 @@ function analyzeToss(teamA, teamB, venueName = "", date = "") {
   // ⚡ BAYESIAN LAPLACE MULTI-FACTOR ENGINE
   // ==========================================
   // Laplace smoothing: (wins + 3) / (total + 6) * 100 prevents extreme swings on small samples
-  const smoothedPctA = ((teamALast5Wins + 3) / (teamALast5.length + 6)) * 100;
-  const smoothedPctB = ((teamBLast5Wins + 3) / (teamBLast5.length + 6)) * 100;
+  const hasDataA = teamALast5.length > 0;
+  const hasDataB = teamBLast5.length > 0;
+  const smoothedPctA = hasDataA ? ((teamALast5Wins + 3) / (teamALast5.length + 6)) * 100 : 50.0;
+  const smoothedPctB = hasDataB ? ((teamBLast5Wins + 3) / (teamBLast5.length + 6)) * 100 : 50.0;
 
   let scoreA = 50.0;
-  // Form momentum differential (balanced weight 0.18)
-  scoreA += (smoothedPctA - smoothedPctB) * 0.18;
+  // Form momentum differential (weight 0.25)
+  scoreA += (smoothedPctA - smoothedPctB) * 0.25;
 
   // Head to head differential
   if (h2hTotal >= 1) {
     const smoothedH2HA = ((h2hTeamAWins + 2) / (h2hTotal + 4)) * 100;
-    scoreA += (smoothedH2HA - 50) * 0.22;
+    scoreA += (smoothedH2HA - 50) * 0.18;
   }
 
-  // Realistic Streak Mean-Reversion:
-  // After 3+ consecutive wins, coin-flip fatigue heavily sets in (-10% to -12%)
-  // After 2+ consecutive losses, calling bounce-back boost occurs (+6% to +9%)
-  if (teamAStreak.type === 'L' && teamAStreak.count >= 2) {
-    scoreA += Math.min(teamAStreak.count * 2.8, 9.0);
-  } else if (teamAStreak.type === 'W' && teamAStreak.count >= 3) {
-    scoreA -= Math.min((teamAStreak.count - 1) * 2.6, 12.0);
+  // Captain Calling Momentum:
+  // Successful captains on winning streaks have established calling consistency (+1% to +3% edge).
+  // Captains on multi-loss slumps show hesitation (-1% to -2.5%).
+  if (teamAStreak.type === 'W' && teamAStreak.count >= 2) {
+    scoreA += Math.min(teamAStreak.count * 1.0, 3.5);
+  } else if (teamAStreak.type === 'L' && teamAStreak.count >= 2) {
+    scoreA -= Math.min(teamAStreak.count * 0.8, 2.5);
   }
 
-  if (teamBStreak.type === 'L' && teamBStreak.count >= 2) {
-    scoreA -= Math.min(teamBStreak.count * 2.8, 9.0);
-  } else if (teamBStreak.type === 'W' && teamBStreak.count >= 3) {
-    scoreA += Math.min((teamBStreak.count - 1) * 2.6, 12.0);
+  if (teamBStreak.type === 'W' && teamBStreak.count >= 2) {
+    scoreA -= Math.min(teamBStreak.count * 1.0, 3.5);
+  } else if (teamBStreak.type === 'L' && teamBStreak.count >= 2) {
+    scoreA += Math.min(teamBStreak.count * 0.8, 2.5);
   }
 
-  // Home Ground & Calling Advantage (+3.5% edge)
-  if (isHomeA && !isHomeB) scoreA += 3.5;
-  else if (isHomeB && !isHomeA) scoreA -= 3.5;
+  // Home Ground & Calling Advantage (+2.5% realistic edge)
+  if (isHomeA && !isHomeB) scoreA += 2.5;
+  else if (isHomeB && !isHomeA) scoreA -= 2.5;
 
   // Venue Dew / Chasing bias
   if (venueStats.tossBowlFirstPct >= 58) {
-    scoreA += (teamALast5Wins > teamBLast5Wins ? 1.5 : (teamALast5Wins < teamBLast5Wins ? -1.5 : 0));
+    scoreA += (teamALast5Wins > teamBLast5Wins ? 1.0 : (teamALast5Wins < teamBLast5Wins ? -1.0 : 0));
   }
 
-  // Smooth calibration into realistic 54% - 75% range
+  // Realistic Coin-Toss Calibration (Realistic 51% - 58% maximum statistical range)
   let calibratedScoreA, calibratedScoreB;
-  if (scoreA >= 50.5) {
+  const isBothNoData = !hasDataA && !hasDataB;
+
+  if (isBothNoData) {
+    // Both teams have zero past matches in database: mathematically 50/50
+    calibratedScoreA = 50;
+    calibratedScoreB = 50;
+  } else if (scoreA >= 50.5) {
     const margin = scoreA - 50;
-    calibratedScoreA = Math.min(75, Math.round(50 + margin * 1.45));
+    calibratedScoreA = Math.min(58, Math.round(50 + margin * 1.15));
+    calibratedScoreB = 100 - calibratedScoreA;
   } else if (scoreA <= 49.5) {
     const margin = 50 - scoreA;
-    calibratedScoreA = Math.max(25, Math.round(50 - margin * 1.45));
+    calibratedScoreA = Math.max(42, Math.round(50 - margin * 1.15));
+    calibratedScoreB = 100 - calibratedScoreA;
   } else {
-    // Smart Tie-Breaker (Never blindly default to teamA)
+    // Smart Tie-Breaker
     const capA = teamAObj.captainTossWinPct || 50;
     const capB = teamBObj.captainTossWinPct || 50;
     if (capA !== capB) {
-      calibratedScoreA = capA > capB ? 54 : 46;
+      calibratedScoreA = capA > capB ? 52 : 48;
     } else {
       const h = hashSeed(normA + normB);
-      calibratedScoreA = (h % 2 === 0) ? 54 : 46;
+      calibratedScoreA = (h % 2 === 0) ? 52 : 48;
     }
+    calibratedScoreB = 100 - calibratedScoreA;
   }
-  calibratedScoreB = 100 - calibratedScoreA;
 
-  const predictedWinner = calibratedScoreA > calibratedScoreB ? teamA : teamB;
+  const predictedWinner = calibratedScoreA >= calibratedScoreB ? teamA : teamB;
   const favoredProb = Math.max(calibratedScoreA, calibratedScoreB);
-  const confidence = favoredProb >= 65 ? `High Confidence (${favoredProb}%)` : `Moderate Edge (${favoredProb}%)`;
+  let confidence;
+  if (isBothNoData) {
+    confidence = 'Even 50-50 Split (Limited Data)';
+  } else if (favoredProb >= 56) {
+    confidence = `Moderate Statistical Edge (${favoredProb}%)`;
+  } else {
+    confidence = `Marginal Edge (${favoredProb}%)`;
+  }
   const likelyDecision = venueStats.preferredDecision;
 
   const insights = [];
-  insights.push(`⚡ **AI Multi-Factor Analysis:** ${predictedWinner} holds a **${favoredProb}% Toss Win Probability** based on Bayesian Laplace momentum & ground calling patterns.`);
+  if (isBothNoData) {
+    insights.push(`⚖️ **Pure 50-50 Toss:** Both ${teamA} and ${teamB} have limited historical records. True coin toss probability is an even 50/50.`);
+  } else {
+    insights.push(`⚡ **AI Multi-Factor Analysis:** ${predictedWinner} holds a **${favoredProb}% Toss Win Probability** based on Bayesian Laplace momentum & ground calling patterns.`);
+  }
 
   if (teamALast5.length > 0) {
     insights.push(`${teamALast5Pct >= 50 ? '🔥' : '⚠️'} ${teamA} won ${teamALast5Wins} of their last ${teamALast5.length} recorded tosses (${teamALast5Pct}%).`);
